@@ -46,6 +46,96 @@ struct test test_lst[TEST_LEN] = {
   {0.0f, 1000000},
 };
 
+/// Test cases for `agg_cnt` function.
+struct test test_cnt[TEST_LEN] = {
+  {0.0f, 10},
+  {0.0f, 100},
+  {0.0f, 1000},
+  {0.0f, 10000},
+  {0.0f, 100000},
+  {0.0f, 1000000},
+};
+
+/// Test cases for `agg_sum` function.
+struct test test_sum[TEST_LEN] = {
+  {0.0f, 10},
+  {0.0f, 100},
+  {0.0f, 1000},
+  {0.0f, 10000},
+  {0.0f, 100000},
+  {0.0f, 1000000},
+};
+
+/// Test cases for `agg_min` function.
+struct test test_min[TEST_LEN] = {
+  {0.0f, 10},
+  {0.0f, 100},
+  {0.0f, 1000},
+  {0.0f, 10000},
+  {0.0f, 100000},
+  {0.0f, 1000000},
+};
+
+/// Test cases for `agg_max` function.
+struct test test_max[TEST_LEN] = {
+  {0.0f, 10},
+  {0.0f, 100},
+  {0.0f, 1000},
+  {0.0f, 10000},
+  {0.0f, 100000},
+  {0.0f, 1000000},
+};
+
+/// Test cases for `agg_avg` function.
+struct test test_avg[TEST_LEN] = {
+  {1.0e-5, 10},
+  {1.0e-5, 100},
+  {1.0e-5, 1000},
+  {1.0e-5, 10000},
+  {1.0e-5, 100000},
+  {1.0e-5, 1000000},
+};
+
+/// Test cases for `agg_var` function.
+struct test test_var[TEST_LEN] = {
+  {1.0e0,  10},
+  {1.0e-1, 100},
+  {1.0e-1, 1000},
+  {1.0e-1, 10000},
+  {1.0e-1, 100000},
+  {1.0e-1, 1000000},
+};
+
+/// Test cases for `agg_dev` function.
+struct test test_dev[TEST_LEN] = {
+  {1.0e0,  10},
+  {1.0e-1, 100},
+  {1.0e-2, 1000},
+  {1.0e-3, 10000},
+  {1.0e-4, 100000},
+  {1.0e-5, 1000000},
+};
+
+/// Test cases for `agg_skw` function.
+struct test test_skw[TEST_LEN] = {
+  {1.0e2, 10},
+  {1.0e1, 100},
+  {1.0e1, 1000},
+  {1.0e1, 10000},
+  {1.0e1, 100000},
+  {1.0e1, 1000000},
+};
+
+/// Test cases for `agg_krt` function.
+struct test test_krt[TEST_LEN] = {
+  {1.0e2, 10},
+  {1.0e2, 100},
+  {1.0e1, 1000},
+  {1.0e1, 10000},
+  {1.0e1, 100000},
+  {1.0e1, 1000000},
+};
+
 /// Compute the first value in the stream given the full stream information.
 /// @return success/failure indication
 ///
@@ -416,6 +506,7 @@ run_test(const char* name,
     for (ctr = 0; ctr < TEST_TRY; ctr++) {
       ret  = verify(agg, &ts[idx], impl);
       if (ret == false) {
+        printf("\n");
         return false;
       }
     }
@@ -447,6 +538,42 @@ main(void)
 
   agg_lst(&agg);
   res = run_test("lst", &agg, test_lst, impl_lst);
+  fin = fin && res;
+
+  agg_cnt(&agg);
+  res = run_test("cnt", &agg, test_cnt, impl_cnt);
+  fin = fin && res;
+
+  agg_sum(&agg);
+  res = run_test("sum", &agg, test_sum, impl_sum);
+  fin = fin && res;
+
+  agg_min(&agg);
+  res = run_test("min", &agg, test_min, impl_min);
+  fin = fin && res;
+
+  agg_max(&agg);
+  res = run_test("max", &agg, test_max, impl_max);
+  fin = fin && res;
+
+  agg_avg(&agg);
+  res = run_test("avg", &agg, test_avg, impl_avg);
+  fin = fin && res;
+
+  agg_var(&agg);
+  res = run_test("var", &agg, test_var, impl_var);
+  fin = fin && res;
+
+  agg_dev(&agg);
+  res = run_test("dev", &agg, test_dev, impl_dev);
+  fin = fin && res;
+
+  agg_skw(&agg);
+  res = run_test("skw", &agg, test_skw, impl_skw);
+  fin = fin && res;
+
+  agg_krt(&agg);
+  res = run_test("krt", &agg, test_krt, impl_krt);
   fin = fin && res;
 
   // Ensure that the process succeeds only and only if all tests passed.
