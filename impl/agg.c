@@ -10,19 +10,19 @@
 
 
 /// Aggregate function types.
-#define AGG_TYP_FST 0x0 // First.
-#define AGG_TYP_LST 0x1 // Last.
-#define AGG_TYP_CNT 0x2 // Count.
-#define AGG_TYP_SUM 0x3 // Sum.
-#define AGG_TYP_MIN 0x4 // Minimum.
-#define AGG_TYP_MAX 0x5 // Maximum.
-#define AGG_TYP_AVG 0x6 // Average.
-#define AGG_TYP_VAR 0x7 // Variance.
-#define AGG_TYP_DEV 0x8 // Standard deviation.
-#define AGG_TYP_SKW 0x9 // Skewness.
-#define AGG_TYP_KRT 0xa // Kurtosis.
-//#define AGG_TYP_QTL 0xb // Quantile.
-//#define AGG_TYP_USR 0xc // User-defined.
+#define AGG_FNC_FST 0x0 // First.
+#define AGG_FNC_LST 0x1 // Last.
+#define AGG_FNC_CNT 0x2 // Count.
+#define AGG_FNC_SUM 0x3 // Sum.
+#define AGG_FNC_MIN 0x4 // Minimum.
+#define AGG_FNC_MAX 0x5 // Maximum.
+#define AGG_FNC_AVG 0x6 // Average.
+#define AGG_FNC_VAR 0x7 // Variance.
+#define AGG_FNC_DEV 0x8 // Standard deviation.
+#define AGG_FNC_SKW 0x9 // Skewness.
+#define AGG_FNC_KRT 0xa // Kurtosis.
+//#define AGG_FNC_QTL 0xb // Quantile.
+//#define AGG_FNC_USR 0xc // User-defined.
 
 /// Update the first value of the stream.
 ///
@@ -394,7 +394,7 @@ void
 agg_fst(struct agg* agg)
 {
   common_init(agg);
-  agg->ag_typ = AGG_TYP_FST;
+  agg->ag_typ = AGG_FNC_FST;
 }
 
 /// Start aggregating the last value.
@@ -404,7 +404,7 @@ void
 agg_lst(struct agg* agg)
 {
   common_init(agg);
-  agg->ag_typ = AGG_TYP_LST;
+  agg->ag_typ = AGG_FNC_LST;
 }
 
 /// Start aggregating the number of values in the stream.
@@ -414,7 +414,7 @@ void
 agg_cnt(struct agg* agg)
 {
   common_init(agg);
-  agg->ag_typ = AGG_TYP_CNT;
+  agg->ag_typ = AGG_FNC_CNT;
 }
 
 /// Start aggregating the sum of all values.
@@ -424,7 +424,7 @@ void
 agg_sum(struct agg* agg)
 {
   common_init(agg);
-  agg->ag_typ = AGG_TYP_SUM;
+  agg->ag_typ = AGG_FNC_SUM;
 }
 
 /// Start aggregating the minimal value.
@@ -434,7 +434,7 @@ void
 agg_min(struct agg* agg)
 {
   common_init(agg);
-  agg->ag_typ = AGG_TYP_MIN;
+  agg->ag_typ = AGG_FNC_MIN;
 }
 
 /// Start aggregating the maximal value.
@@ -444,7 +444,7 @@ void
 agg_max(struct agg* agg)
 {
   common_init(agg);
-  agg->ag_typ = AGG_TYP_MAX;
+  agg->ag_typ = AGG_FNC_MAX;
 }
 
 /// Start aggregating the average value.
@@ -454,7 +454,7 @@ void
 agg_avg(struct agg* agg)
 {
   common_init(agg);
-  agg->ag_typ = AGG_TYP_AVG;
+  agg->ag_typ = AGG_FNC_AVG;
 }
 
 /// Start aggregating the variance of values.
@@ -464,7 +464,7 @@ void
 agg_var(struct agg* agg)
 {
   common_init(agg);
-  agg->ag_typ = AGG_TYP_VAR;
+  agg->ag_typ = AGG_FNC_VAR;
 }
 
 /// Start aggregating the standard deviation of values.
@@ -474,7 +474,7 @@ void
 agg_dev(struct agg* agg)
 {
   common_init(agg);
-  agg->ag_typ = AGG_TYP_DEV;
+  agg->ag_typ = AGG_FNC_DEV;
 }
 
 /// Start aggregating the skewness of values.
@@ -484,7 +484,7 @@ void
 agg_skw(struct agg* agg)
 {
   common_init(agg);
-  agg->ag_typ = AGG_TYP_SKW;
+  agg->ag_typ = AGG_FNC_SKW;
 }
 
 /// Start aggregating the kurtosis of values.
@@ -494,7 +494,7 @@ void
 agg_krt(struct agg* agg)
 {
   common_init(agg);
-  agg->ag_typ = AGG_TYP_KRT;
+  agg->ag_typ = AGG_FNC_KRT;
 }
 
 /// Reset the aggregate function.
