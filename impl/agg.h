@@ -14,7 +14,7 @@
 // Determine the appropriate type-related constants and functions.
 #ifdef AGG_FLT
   #define AGG_TYPE float 
-  #define AGG_FMT  "%f"
+  #define AGG_FMT  "%e"
   #define AGG_SQRT sqrtf
   #define AGG_POW  powf
   #define AGG_ABS  fabsf
@@ -26,7 +26,7 @@
   #define AGG_4_0  4.0f
 #else
   #define AGG_TYPE double
-  #define AGG_FMT  "%lf"
+  #define AGG_FMT  "%le"
   #define AGG_SQRT sqrt
   #define AGG_POW  pow
   #define AGG_ABS  fabs
