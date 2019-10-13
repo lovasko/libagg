@@ -18,7 +18,7 @@
 #define TEST_LEN 6
 
 /// Number of times each test case is re-tried.
-#define TEST_TRY 1000
+#define TEST_TRY 100
 
 /// Test case.
 struct test {
