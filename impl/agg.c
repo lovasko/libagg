@@ -281,6 +281,9 @@ get_avg(const struct agg* agg, AGG_TYPE* out)
 
 /// Obtain the variance of the values in the stream.
 /// @return success/failure indication
+///
+/// @param[in]  agg aggregate function
+/// @param[out] out variance
 static bool
 get_var(const struct agg* agg, AGG_TYPE* out)
 {
@@ -292,6 +295,11 @@ get_var(const struct agg* agg, AGG_TYPE* out)
   }
 }
 
+/// Obtain the standard deviation of the values in the stream.
+/// @return success/failure indication
+///
+/// @param[in]  agg aggregate function
+/// @param[out] out standard deviation
 static bool
 get_dev(const struct agg* agg, AGG_TYPE* out)
 {
@@ -306,6 +314,11 @@ get_dev(const struct agg* agg, AGG_TYPE* out)
   }
 }
 
+/// Obtain the skewness of the values in the stream.
+/// @return success/failure indication
+///
+/// @param[in]  agg aggregate function
+/// @param[out] out skewness
 static bool
 get_skw(const struct agg* agg, AGG_TYPE* out)
 {
@@ -321,6 +334,11 @@ get_skw(const struct agg* agg, AGG_TYPE* out)
   }
 }
 
+/// Obtain the kurtosis of the values in the stream.
+/// @return success/failure indication
+///
+/// @param[in]  agg aggregate function
+/// @param[out] out kurtosis
 static bool
 get_krt(const struct agg* agg, AGG_TYPE* out)
 {
