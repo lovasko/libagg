@@ -15,9 +15,15 @@ CC=c99
 # floating-point operations compliance. If any of the following steps were to
 # fail, we assume that the test suite has not passed.
 set -e
+echo "###############"
+echo "# DOUBLE      #"
+echo "###############"
 ${CC} -DAGG_DBL -o dbl_test -std=c99 test.c ../impl/agg.c -lm
 ./dbl_test
 
+echo "###############"
+echo "# FLOAT       #"
+echo "###############"
 ${CC} -DAGG_FLT -o flt_test -std=c99 test.c ../impl/agg.c -lm
 ./flt_test
 set +e
@@ -27,9 +33,15 @@ set +e
 # assumes all math is finite, still produces valid results within the expected
 # margin of error. To ensure that the test suite passes nonetheless, we exit
 # with successful execution.
+echo "###############"
+echo "# DOUBLE FAST #"
+echo "###############"
 ${CC} -DAGG_DBL -o dbl_test_fast -std=c99 -Ofast test.c ../impl/agg.c -lm
 ./dbl_test_fast
 
+echo "###############"
+echo "# FLOAT FAST  #"
+echo "###############"
 ${CC} -DAGG_FLT -o flt_test_fast -std=c99 -Ofast test.c ../impl/agg.c -lm 
 ./flt_test_fast
 true
