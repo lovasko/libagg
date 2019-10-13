@@ -1,0 +1,25 @@
+language: c
+compiler:
+ - clang
+ - gcc
+
+sudo: required
+script: make
+
+env:
+  global:
+   - secure: "PYP/bheROVfKbWL6hVBqXAx9DBTd8slFSZsCwyhSNBzKEwLsU6vGd4QE9JHhWCiYFvCGDD9sUYXOLBfdX+77VF3phbUaXy6AYNkH0FZebvQqO7lGXGt7CKCLVNAbHenCK1RdNjSWt59xJHzOeu1L9twtodWL+BmmGHndg9TE6wv8ciYdnySHUx/ooSst40HesNCgWKo2i7nqElx5s9GCzf8gMB6oX+H6UIdJNSU+nsiAFttiCE2GwzZNWOd4wl3XDKFqTLK7cDcobYP3RVGDJ/4fiIVuj43yxNwL3zwGuOm/UNoe94jAvuiQiTJvA7kUjzYkzh9i/GbKBeKEe1uOqjAsxnwNpObgcXA9SzGivNC4qmc18jH2Bx3/97zujwAjI9Hjotsbfd1bzdPoHw+h4FBKjX60UJAqYQ3I7q8Vox50eaXNGkQNXU8xBOKthIpfBk2bHYiWNZRzq6NYRBbvLRcsDes1IA+Y33azqAaR/HrLY/lEtUccjCo3owQ4Hq8YCDC/XDU6oNIxfyQS4DHAATOjpkSZxNSdfQuoifoecaiTFGZ/1ez/uQBF/DeJJUCtOzYFv+IokkMdLGgs5wXxp/F8JlxXQ8RjG6SbZLs3Otu04C1RPAwsFTdx/VZT0HBAkoSAS1JCuct8EqUXngcroCCTcG5G1NEeRvjrmfdoJcY="
+
+before_install:
+ - echo -n | openssl s_client -connect https://scan.coverity.com:443 | sed -ne '/-BEGIN
+  CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+
+addons:
+  coverity_scan:
+    project:
+      name: lovasko/libagg
+      description: Aggregate Functions
+    notification_email: daniel.lovasko@gmail.com
+    build_command_prepend: true
+    build_command: ./test/run.sh
+    branch_pattern: master
