@@ -23,7 +23,7 @@
 /// @param[in] agg aggregate function
 /// @param[in] inp input value
 static void
-put_fst(struct agg* agg, const float inp)
+put_fst(struct agg* agg, const AGG_TYPE inp)
 {
   if (agg->ag_cnt == 0) {
     agg->ag_val[0] = inp;
@@ -35,7 +35,7 @@ put_fst(struct agg* agg, const float inp)
 /// @param[in] agg aggregate function
 /// @param[in] inp input value
 static void 
-put_lst(struct agg* agg, const float inp)
+put_lst(struct agg* agg, const AGG_TYPE inp)
 {
   agg->ag_val[0] = inp;
 }
@@ -45,7 +45,7 @@ put_lst(struct agg* agg, const float inp)
 /// @param[in] agg aggregate function (unused)
 /// @param[in] inp input value (unused)
 static void
-put_cnt(struct agg* agg, const float inp)
+put_cnt(struct agg* agg, const AGG_TYPE inp)
 {
   (void)agg;
   (void)inp;
@@ -56,7 +56,7 @@ put_cnt(struct agg* agg, const float inp)
 /// @param[in] agg aggregate function
 /// @param[in] inp input value
 static void
-put_sum(struct agg* agg, const float inp)
+put_sum(struct agg* agg, const AGG_TYPE inp)
 {
   agg->ag_val[0] += inp;
 }
@@ -66,7 +66,7 @@ put_sum(struct agg* agg, const float inp)
 /// @param[in] agg aggregate function
 /// @param[in] inp input value
 static void
-put_min(struct agg* agg, const float inp)
+put_min(struct agg* agg, const AGG_TYPE inp)
 {
   if (agg->ag_cnt == 0 || agg->ag_val[0] > inp) {
     agg->ag_val[0] = inp;
@@ -78,7 +78,7 @@ put_min(struct agg* agg, const float inp)
 /// @param[in] agg aggregate function
 /// @param[in] inp input value
 static void
-put_max(struct agg* agg, const float inp)
+put_max(struct agg* agg, const AGG_TYPE inp)
 {
   if (agg->ag_cnt == 0 || agg->ag_val[0] < inp) {
     agg->ag_val[0] = inp;
@@ -90,9 +90,10 @@ put_max(struct agg* agg, const float inp)
 /// @param[in] agg aggregate function
 /// @param[in] inp input value
 static void
-put_avg(struct agg* agg, const float inp)
+put_avg(struct agg* agg, const AGG_TYPE inp)
 {
-  agg->ag_val[0] = (agg->ag_cnt * agg->ag_val[0] + inp) / (agg->ag_cnt + 1); 
+  agg->ag_val[0] = (agg->ag_cnt * agg->ag_val[0] + inp)
+                 / (AGG_TYPE)(agg->ag_cnt + 1); 
 }
 
 /// Update the variance of the stream.
@@ -100,13 +101,13 @@ put_avg(struct agg* agg, const float inp)
 /// @param[in] agg aggregate function
 /// @param[in] inp input value
 static void
-put_var(struct agg* agg, const float inp)
+put_var(struct agg* agg, const AGG_TYPE inp)
 {
-  float dlt;
+  AGG_TYPE dlt;
 
   // Update the second moment.
   dlt = agg->ag_val[0] - inp;
-  agg->ag_val[1] += powf(dlt, 2.0f);
+  agg->ag_val[1] += AGG_POW(dlt, AGG_2_0);
 
   // Update the average.
   put_avg(agg, inp);
@@ -121,7 +122,7 @@ put_var(struct agg* agg, const float inp)
 /// @param[in] agg aggregate function
 /// @param[in] inp input value
 static void
-put_dev(struct agg* agg, const float inp)
+put_dev(struct agg* agg, const AGG_TYPE inp)
 {
   put_var(agg, inp);
 }
@@ -135,13 +136,13 @@ put_dev(struct agg* agg, const float inp)
 /// @param[in] agg aggregate function
 /// @param[in] inp input value
 static void
-put_skw(struct agg* agg, const float inp)
+put_skw(struct agg* agg, const AGG_TYPE inp)
 {
-  float dlt;
+  AGG_TYPE dlt;
 
   // Update the third moment.
   dlt = agg->ag_val[0] - inp;
-  agg->ag_val[2] += powf(dlt, 3.0f);
+  agg->ag_val[2] += AGG_POW(dlt, AGG_3_0);
 
   // Update the variance.
   put_var(agg, inp);
@@ -156,13 +157,13 @@ put_skw(struct agg* agg, const float inp)
 /// @param[in] agg aggregate function
 /// @param[in] inp input value
 static void
-put_krt(struct agg* agg, const float inp)
+put_krt(struct agg* agg, const AGG_TYPE inp)
 {
-  float dlt;
+  AGG_TYPE dlt;
 
   // Update the fourth moment.
   dlt = agg->ag_val[0] - inp;
-  agg->ag_val[2] += powf(dlt, 4.0f);
+  agg->ag_val[2] += AGG_POW(dlt, AGG_4_0);
 
   // Update the variance.
   put_var(agg, inp);
@@ -174,7 +175,7 @@ put_krt(struct agg* agg, const float inp)
 /// @param[in]  agg aggregate function
 /// @param[out] out output value
 static bool
-get_fst(const struct agg* agg, float* out)
+get_fst(const struct agg* agg, AGG_TYPE* out)
 {
   if (agg->ag_cnt > 0) {
     *out = agg->ag_val[0];
@@ -190,7 +191,7 @@ get_fst(const struct agg* agg, float* out)
 /// @param[in]  agg aggregate function
 /// @param[out] out output value
 static bool
-get_lst(const struct agg* agg, float* out)
+get_lst(const struct agg* agg, AGG_TYPE* out)
 {
   if (agg->ag_cnt > 0) {
     *out = agg->ag_val[0];
@@ -206,9 +207,9 @@ get_lst(const struct agg* agg, float* out)
 /// @param[in]  agg aggregate function
 /// @param[out] out output value
 static bool
-get_cnt(const struct agg* agg, float* out)
+get_cnt(const struct agg* agg, AGG_TYPE* out)
 {
-  *out = (float)agg->ag_cnt;
+  *out = (AGG_TYPE)agg->ag_cnt;
   return true;
 }
 
@@ -218,7 +219,7 @@ get_cnt(const struct agg* agg, float* out)
 /// @param[in]  agg aggregate function
 /// @param[out] out output value
 static bool
-get_sum(const struct agg* agg, float* out)
+get_sum(const struct agg* agg, AGG_TYPE* out)
 {
   *out = agg->ag_val[0];
   return true;
@@ -230,7 +231,7 @@ get_sum(const struct agg* agg, float* out)
 /// @param[in]  agg aggregate function
 /// @param[out] out output value
 static bool
-get_min(const struct agg* agg, float* out)
+get_min(const struct agg* agg, AGG_TYPE* out)
 {
   if (agg->ag_cnt > 0) {
     *out = agg->ag_val[0];
@@ -246,7 +247,7 @@ get_min(const struct agg* agg, float* out)
 /// @param[in]  agg aggregate function
 /// @param[out] out output value
 static bool
-get_max(const struct agg* agg, float* out)
+get_max(const struct agg* agg, AGG_TYPE* out)
 {
   if (agg->ag_cnt > 0) {
     *out = agg->ag_val[0];
@@ -262,7 +263,7 @@ get_max(const struct agg* agg, float* out)
 /// @param[in]  agg aggregate function
 /// @param[out] out output value
 static bool
-get_avg(const struct agg* agg, float* out)
+get_avg(const struct agg* agg, AGG_TYPE* out)
 {
   if (agg->ag_cnt > 0) {
     *out = agg->ag_val[0];
@@ -275,10 +276,10 @@ get_avg(const struct agg* agg, float* out)
 /// Obtain the variance of the values in the stream.
 /// @return success/failure indication
 static bool
-get_var(const struct agg* agg, float* out)
+get_var(const struct agg* agg, AGG_TYPE* out)
 {
   if (agg->ag_cnt > 0) {
-    *out = agg->ag_val[1] / agg->ag_cnt;
+    *out = agg->ag_val[1] / (AGG_TYPE)agg->ag_cnt;
     return true;
   } else {
     return false;
@@ -286,13 +287,13 @@ get_var(const struct agg* agg, float* out)
 }
 
 static bool
-get_dev(const struct agg* agg, float* out)
+get_dev(const struct agg* agg, AGG_TYPE* out)
 {
   bool retb;
 
   retb = get_var(agg, out);
   if (retb == true) {
-    *out = sqrtf(*out);
+    *out = AGG_SQRT(*out);
     return true;
   } else {
     return false;
@@ -300,14 +301,14 @@ get_dev(const struct agg* agg, float* out)
 }
 
 static bool
-get_skw(const struct agg* agg, float* out)
+get_skw(const struct agg* agg, AGG_TYPE* out)
 {
-  float var;
+  AGG_TYPE var;
   bool retb;
 
   retb = get_var(agg, &var);
   if (retb == true && agg->ag_cnt > 1) {
-    *out = agg->ag_val[2] / ((float)agg->ag_cnt * powf(var, 1.5)); 
+    *out = agg->ag_val[2] / ((AGG_TYPE)agg->ag_cnt * AGG_POW(var, AGG_1_5));
     return true;
   } else {
     return false;
@@ -315,14 +316,16 @@ get_skw(const struct agg* agg, float* out)
 }
 
 static bool
-get_krt(const struct agg* agg, float* out)
+get_krt(const struct agg* agg, AGG_TYPE* out)
 {
-  float var;
+  AGG_TYPE var;
   bool retb;
 
   retb = get_var(agg, &var);
   if (retb == true && agg->ag_cnt > 1) {
-    *out = agg->ag_val[2] / ((float)agg->ag_cnt * powf(var, 2.0)) - 3.0f; 
+    *out = agg->ag_val[2]
+         / ((AGG_TYPE)agg->ag_cnt * AGG_POW(var, AGG_2_0))
+         - AGG_3_0;
     return true;
   } else {
     return false;
@@ -330,7 +333,7 @@ get_krt(const struct agg* agg, float* out)
 }
 
 /// Function table for put_* functions based on ag_typ.
-static void (*put_fns[])(struct agg*, const float) = {
+static void (*put_fns[])(struct agg*, const AGG_TYPE) = {
   put_fst, put_lst, put_cnt,
   put_sum, put_min, put_max,
   put_avg, put_var, put_dev,
@@ -338,7 +341,7 @@ static void (*put_fns[])(struct agg*, const float) = {
 };
 
 /// Function table for get_* functions based on ag_typ.
-static bool (*get_fns[])(const struct agg*, float*) = {
+static bool (*get_fns[])(const struct agg*, AGG_TYPE*) = {
   get_fst, get_lst, get_cnt,
   get_sum, get_min, get_max,
   get_avg, get_var, get_dev,
@@ -350,7 +353,7 @@ static bool (*get_fns[])(const struct agg*, float*) = {
 /// @param[in] agg aggregated value
 /// @param[in] inp input value
 void
-agg_put(struct agg* agg, const float inp)
+agg_put(struct agg* agg, const AGG_TYPE inp)
 {
   put_fns[agg->ag_typ](agg, inp);
   agg->ag_cnt++;
@@ -362,7 +365,7 @@ agg_put(struct agg* agg, const float inp)
 /// @param[in]  agg aggregate function
 /// @param[out] out output value
 bool
-agg_get(const struct agg* agg, float* out)
+agg_get(const struct agg* agg, AGG_TYPE* out)
 {
   return get_fns[agg->ag_typ](agg, out);
 }
@@ -374,9 +377,10 @@ static void
 common_init(struct agg* agg)
 {
   agg->ag_cnt    = 0;
-  agg->ag_val[0] = 0.0f;
-  agg->ag_val[1] = 0.0f;
-  agg->ag_val[2] = 0.0f;
+  agg->ag_val[0] = AGG_0_0;
+  agg->ag_val[1] = AGG_0_0;
+  agg->ag_val[2] = AGG_0_0;
+  agg->ag_val[3] = AGG_0_0;
 }
 
 /// Start aggregating the first value.

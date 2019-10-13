@@ -16,7 +16,7 @@
 
 /// Test case.
 struct test {
-  float    ts_err; ///< Acceptable magnitude of error.
+  AGG_TYPE ts_err; ///< Acceptable magnitude of error.
   uint64_t ts_cnt; ///< Number of samples.
 };
 
@@ -47,7 +47,7 @@ struct test test_lst[TEST_LEN] = {
 /// @param[in]  arr array representing the stream
 /// @param[in]  len length of the stream
 static bool
-impl_fst(float* out, const float* arr, const uint64_t len)
+impl_fst(AGG_TYPE* out, const AGG_TYPE* arr, const uint64_t len)
 {
   if (len == 0) {
     return false;
@@ -64,7 +64,7 @@ impl_fst(float* out, const float* arr, const uint64_t len)
 /// @param[in]  arr array representing the stream
 /// @param[in]  len length of the stream
 static bool
-impl_lst(float* out, const float* arr, const uint64_t len)
+impl_lst(AGG_TYPE* out, const AGG_TYPE* arr, const uint64_t len)
 {
   if (len == 0) {
     return false;
@@ -82,11 +82,11 @@ impl_lst(float* out, const float* arr, const uint64_t len)
 /// @param[in]  arr array representing the stream
 /// @param[in]  len length of the stream
 static bool
-impl_cnt(float* out, const float* arr, const uint64_t len)
+impl_cnt(AGG_TYPE* out, const AGG_TYPE* arr, const uint64_t len)
 {
   (void)arr;
 
-  *out = (float)len;
+  *out = (AGG_TYPE)len;
   return true;
 }
 
@@ -97,12 +97,12 @@ impl_cnt(float* out, const float* arr, const uint64_t len)
 /// @param[in]  arr array representing the stream
 /// @param[in]  len length of the stream
 static bool
-impl_sum(float* out, const float* arr, const uint64_t len)
+impl_sum(AGG_TYPE* out, const AGG_TYPE* arr, const uint64_t len)
 {
   uint64_t idx;
-  float sum;
+  AGG_TYPE sum;
 
-  sum = 0.0f;
+  sum = AGG_0_0;
   for (idx = 0; idx < len; idx++) {
     sum += arr[idx];
   }
@@ -118,10 +118,10 @@ impl_sum(float* out, const float* arr, const uint64_t len)
 /// @param[in]  arr array representing the stream
 /// @param[in]  len length of the stream
 static bool
-impl_min(float* out, const float* arr, const uint64_t len)
+impl_min(AGG_TYPE* out, const AGG_TYPE* arr, const uint64_t len)
 {
   uint64_t idx;
-  float min;
+  AGG_TYPE min;
 
   if (len == 0) {
     return false;
@@ -145,10 +145,10 @@ impl_min(float* out, const float* arr, const uint64_t len)
 /// @param[in]  arr array representing the stream
 /// @param[in]  len length of the stream
 static bool
-impl_max(float* out, const float* arr, const uint64_t len)
+impl_max(AGG_TYPE* out, const AGG_TYPE* arr, const uint64_t len)
 {
   uint64_t idx;
-  float max;
+  AGG_TYPE max;
 
   if (len == 0) {
     return false;
@@ -172,16 +172,16 @@ impl_max(float* out, const float* arr, const uint64_t len)
 /// @param[in]  arr array representing the stream
 /// @param[in]  len length of the stream
 static bool
-impl_avg(float* out, const float* arr, const uint64_t len)
+impl_avg(AGG_TYPE* out, const AGG_TYPE* arr, const uint64_t len)
 {
-  float sum;
+  AGG_TYPE sum;
 
   if (len == 0) {
     return false;
   }
 
   (void)impl_sum(&sum, arr, len);
-  *out = sum / (float)len;
+  *out = sum / (AGG_TYPE)len;
   return true;
 }
 
@@ -193,10 +193,10 @@ impl_avg(float* out, const float* arr, const uint64_t len)
 /// @param[in]  arr array representing the stream
 /// @param[in]  len length of the stream
 static bool
-impl_var(float* out, const float* arr, const uint64_t len)
+impl_var(AGG_TYPE* out, const AGG_TYPE* arr, const uint64_t len)
 {
-  float avg;
-  float var;
+  AGG_TYPE avg;
+  AGG_TYPE var;
   uint64_t idx;
 
   if (len == 0) {
@@ -204,16 +204,16 @@ impl_var(float* out, const float* arr, const uint64_t len)
   }
 
   if (len == 1) {
-    *out = 0.0f;
+    *out = AGG_0_0;
     return true;
   }
 
   (void)impl_avg(&avg, arr, len);
-  var = 0.0f;
+  var = AGG_0_0;
   for (idx = 0; idx < len; idx++) {
-    var += powf(arr[idx] - avg, 2.0f);
+    var += AGG_POW(arr[idx] - avg, AGG_2_0);
   }
-  var /= (float)len - 1.0f;
+  var /= (AGG_TYPE)len - AGG_1_0;
 
   *out = var;
   return true;
@@ -227,16 +227,16 @@ impl_var(float* out, const float* arr, const uint64_t len)
 /// @param[in]  arr array representing the stream
 /// @param[in]  len array length
 static bool
-impl_dev(float* out, const float* arr, const uint64_t len)
+impl_dev(AGG_TYPE* out, const AGG_TYPE* arr, const uint64_t len)
 {
-  float var;
+  AGG_TYPE var;
 
   if (len == 0) {
     return false;
   }
 
   (void)impl_var(&var, arr, len);
-  *out = sqrtf(var);
+  *out = AGG_SQRT(var);
   return true;
 }
 
@@ -248,12 +248,12 @@ impl_dev(float* out, const float* arr, const uint64_t len)
 /// @param[in]  arr array representing the stream
 /// @param[in]  len array length
 static bool
-impl_skw(float* out, const float* arr, const uint64_t len)
+impl_skw(AGG_TYPE* out, const AGG_TYPE* arr, const uint64_t len)
 {
   uint64_t idx;
-  float avg;
-  float dev;
-  float skw;
+  AGG_TYPE avg;
+  AGG_TYPE dev;
+  AGG_TYPE skw;
 
   if (len < 2) {
     return false;
@@ -262,11 +262,11 @@ impl_skw(float* out, const float* arr, const uint64_t len)
   (void)impl_avg(&avg, arr, len);
   (void)impl_dev(&dev, arr, len);
 
-  skw = 0.0;
+  skw = AGG_0_0;
   for (idx = 0; idx < len; idx++) {
-    skw += powf(arr[idx] - avg, 3.0f) / (float)len;
+    skw += AGG_POW(arr[idx] - avg, AGG_3_0) / (AGG_TYPE)len;
   }
-  skw /= powf(dev, 3.0f);
+  skw /= AGG_POW(dev, AGG_3_0);
 
   *out = skw;
   return true;
@@ -280,12 +280,12 @@ impl_skw(float* out, const float* arr, const uint64_t len)
 /// @param[in]  arr array representing the stream
 /// @param[in]  len array length
 static bool
-impl_krt(float* out, const float* arr, const uint64_t len)
+impl_krt(AGG_TYPE* out, const AGG_TYPE* arr, const uint64_t len)
 {
   uint64_t idx;
-  float avg;
-  float dev;
-  float krt;
+  AGG_TYPE avg;
+  AGG_TYPE dev;
+  AGG_TYPE krt;
 
   if (len < 2) {
     return false;
@@ -294,20 +294,20 @@ impl_krt(float* out, const float* arr, const uint64_t len)
   (void)impl_avg(&avg, arr, len);
   (void)impl_dev(&dev, arr, len);
 
-  krt = 0.0;
+  krt = AGG_0_0;
   for (idx = 0; idx < len; idx++) {
-    krt += powf(arr[idx] - avg, 4.0f) / (float)len;
+    krt += AGG_POW(arr[idx] - avg, AGG_4_0) / (AGG_TYPE)len;
   }
-  krt /= powf(dev, 4.0f);
+  krt /= AGG_POW(dev, AGG_4_0);
 
   *out = krt;
   return true;
 }
 
-/// Generate a next random float from the inclusive interval (0.0, 1.0).
-/// @return random float
-static float
-random_float(void)
+/// Generate a next random number from the inclusive interval (0.0, 1.0).
+/// @return random number
+static AGG_TYPE 
+random_number(void)
 {
   static uint32_t num = 55;
   uint32_t per; 
@@ -315,7 +315,7 @@ random_float(void)
   per = ((uint32_t)1 << 31) - 1;
   num = (num * 214013 + 2531011) & per;
 
-  return (float)num / (float)per;
+  return (AGG_TYPE)num / (AGG_TYPE)per;
 }
 
 /// Run the on-line and off-ine 
@@ -327,13 +327,13 @@ random_float(void)
 static bool
 verify(struct agg* agg,
        const struct test* ts,
-       bool (*impl)(float*, const float*, const uint64_t))
+       bool (*impl)(AGG_TYPE*, const AGG_TYPE*, const uint64_t))
 {
-  float*   arr;
-  uint64_t run;
-  float    val[2];
-  float    dif;
-  bool     ret[2];
+  AGG_TYPE* arr;
+  uint64_t  run;
+  AGG_TYPE  val[2];
+  AGG_TYPE  dif;
+  bool      ret[2];
 
 
   // Allocate the array.
@@ -345,7 +345,7 @@ verify(struct agg* agg,
 
   // Populate the array.
   for (run = 0; run < ts->ts_cnt; run++) {
-    arr[run] = random_float();
+    arr[run] = random_number();
   }
 
   // Run the on-line algorithm.
@@ -370,11 +370,11 @@ verify(struct agg* agg,
 
   // Certify that the functions produced an acceptable value within the error
   // margin.
-  dif = fabsf(val[0] - val[1]);
+  dif = AGG_ABS(val[0] - val[1]);
   if (dif > ts->ts_err) {
     (void)printf("result mismatch\n"
-                 "  value exp = %f, act = %f\n"
-                 "  error acc = %f, act = %f\n",
+                 "  value exp = " AGG_FMT ", act = " AGG_FMT "\n"
+                 "  error acc = " AGG_FMT ", act = " AGG_FMT "\n",
                  val[0], val[1], ts->ts_err, dif);
     return false;
   }
@@ -393,7 +393,7 @@ bool
 run_test(const char* name,
          struct agg* agg,
          const struct test ts[static TEST_LEN],
-         bool (*impl)(float*, const float*, const uint64_t))
+         bool (*impl)(AGG_TYPE*, const AGG_TYPE*, const uint64_t))
 {
   uint64_t ctr;
   uint64_t idx;
