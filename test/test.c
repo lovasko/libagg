@@ -460,7 +460,7 @@ verify(struct agg* agg,
 
   // Certify that the functions resulted in the same way.
   if (ret[0] != ret[1]) {
-    (void)printf("return mismatch\n  exp = %d, act = %d\n", ret[0], ret[1]);
+    (void)printf("\e[31mfail\e[0m\n  exp = %d, act = %d\n", ret[0], ret[1]);
     return false;
   }
 
@@ -468,7 +468,7 @@ verify(struct agg* agg,
   // margin.
   dif = AGG_ABS(val[0] - val[1]);
   if (dif > ts->ts_err) {
-    (void)printf("result mismatch\n"
+    (void)printf("\e[31mfail\e[0m\n"
                  "  value exp = " AGG_FMT ", act = " AGG_FMT "\n"
                  "  error acc = " AGG_FMT ", act = " AGG_FMT "\n",
                  val[0], val[1], ts->ts_err, dif);
@@ -511,7 +511,7 @@ run_test(const char* name,
       }
     }
     
-    (void)printf("OK\n");
+    (void)printf("\e[32mokay\e[0m\n");
   }
 
   (void)printf("\n");
