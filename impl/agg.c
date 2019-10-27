@@ -91,6 +91,67 @@ put_max(struct agg* agg, const AGG_TYPE inp)
   }
 }
 
+/// Pre-compute temporary variables.
+///
+/// @param[in] agg aggregate function
+/// @param[in] inp input value
+static void
+set_tmp(struct agg* agg, const AGG_TYPE inp)
+{
+  AGG_TYPE x;
+  AGG_TYPE y;
+
+  x = inp - agg->ag_val[0];
+  y = x / (AGG_TYPE)(agg->ag_cnt + 1);
+
+  agg->ag_tmp[0] = y;
+  agg->ag_tmp[1] = y * y;
+  agg->ag_tmp[2] = x * y * (AGG_TYPE)agg->ag_cnt;
+}
+
+/// Update the first moment.
+///
+/// @param[in] agg aggregate function
+static void
+fst_mnt(struct agg* agg)
+{
+  agg->ag_val[0] += agg->ag_tmp[0];
+}
+
+/// Update the second moment.
+///
+/// @param[in] agg aggregate function
+static void
+snd_mnt(struct agg* agg)
+{
+  agg->ag_val[1] += agg->ag_tmp[2];
+}
+
+/// Update the third moment.
+///
+/// @param[in] agg aggregate function
+static void
+trd_mnt(struct agg* agg)
+{
+  agg->ag_val[2] += agg->ag_tmp[2] * agg->ag_tmp[0] * (AGG_TYPE)(agg->ag_cnt - 1)
+                  - AGG_3_0        * agg->ag_tmp[0] * agg->ag_val[1];
+}
+
+/// Update the fourth moment.
+///
+/// @param[in] agg aggregate function
+static void
+fth_mnt(struct agg* agg)
+{
+  AGG_TYPE x;
+
+  x = (AGG_TYPE)(agg->ag_cnt + 1);
+  agg->ag_val[3] += agg->ag_tmp[2] * agg->ag_tmp[1]
+                  * (x * x - AGG_3_0 * x + AGG_3_0)
+                  + AGG_6_0 * agg->ag_tmp[1] * agg->ag_val[1]
+                  - AGG_4_0 * agg->ag_tmp[0] * agg->ag_val[2];
+}
+
 /// Update the average value in the stream.
 ///
 /// @param[in] agg aggregate function
@@ -98,8 +159,8 @@ put_max(struct agg* agg, const AGG_TYPE inp)
 static void
 put_avg(struct agg* agg, const AGG_TYPE inp)
 {
-  agg->ag_val[0] = (agg->ag_cnt * agg->ag_val[0] + inp)
-                 / (AGG_TYPE)(agg->ag_cnt + 1); 
+  set_tmp(agg, inp);
+  fst_mnt(agg);
 }
 
 /// Update the variance of the stream.
@@ -109,14 +170,9 @@ put_avg(struct agg* agg, const AGG_TYPE inp)
 static void
 put_var(struct agg* agg, const AGG_TYPE inp)
 {
-  AGG_TYPE dlt;
-
-  // Update the second moment.
-  dlt = agg->ag_val[0] - inp;
-  agg->ag_val[1] += AGG_POW(dlt, AGG_2_0);
-
-  // Update the average.
-  put_avg(agg, inp);
+  set_tmp(agg, inp);
+  fst_mnt(agg);
+  snd_mnt(agg);
 }
 
 /// Update the standard deviation of the stream.
@@ -135,44 +191,29 @@ put_dev(struct agg* agg, const AGG_TYPE inp)
 
 /// Update the skewness of the stream.
 ///
-/// val[0] = avg
-/// val[1] = var
-/// val[2] = 3th moment
-///
 /// @param[in] agg aggregate function
 /// @param[in] inp input value
 static void
 put_skw(struct agg* agg, const AGG_TYPE inp)
 {
-  AGG_TYPE dlt;
-
-  // Update the third moment.
-  dlt = agg->ag_val[0] - inp;
-  agg->ag_val[2] += AGG_POW(dlt, AGG_3_0);
-
-  // Update the variance.
-  put_var(agg, inp);
+  set_tmp(agg, inp);
+  fst_mnt(agg);
+  trd_mnt(agg);
+  snd_mnt(agg);
 }
 
 /// Update the kurtosis of the stream.
-///
-/// val[0] = avg
-/// val[1] = var
-/// val[2] = 4th moment
 ///
 /// @param[in] agg aggregate function
 /// @param[in] inp input value
 static void
 put_krt(struct agg* agg, const AGG_TYPE inp)
 {
-  AGG_TYPE dlt;
-
-  // Update the fourth moment.
-  dlt = agg->ag_val[0] - inp;
-  agg->ag_val[2] += AGG_POW(dlt, AGG_4_0);
-
-  // Update the variance.
-  put_var(agg, inp);
+  set_tmp(agg, inp);
+  fst_mnt(agg);
+  fth_mnt(agg);
+  trd_mnt(agg);
+  snd_mnt(agg);
 }
 
 /// Obtain the first value of the stream.
@@ -287,8 +328,8 @@ get_avg(const struct agg* agg, AGG_TYPE* out)
 static bool
 get_var(const struct agg* agg, AGG_TYPE* out)
 {
-  if (agg->ag_cnt > 0) {
-    *out = agg->ag_val[1] / (AGG_TYPE)agg->ag_cnt;
+  if (agg->ag_cnt > 1) {
+    *out = agg->ag_val[1] / (AGG_TYPE)(agg->ag_cnt - 1);
     return true;
   } else {
     return false;
@@ -322,16 +363,11 @@ get_dev(const struct agg* agg, AGG_TYPE* out)
 static bool
 get_skw(const struct agg* agg, AGG_TYPE* out)
 {
-  AGG_TYPE var;
-  bool retb;
+  *out = AGG_SQRT((AGG_TYPE)agg->ag_cnt)
+       * agg->ag_val[2]
+       / AGG_POW(agg->ag_val[1], AGG_1_5);
 
-  retb = get_var(agg, &var);
-  if (retb == true && agg->ag_cnt > 1) {
-    *out = agg->ag_val[2] / ((AGG_TYPE)agg->ag_cnt * AGG_POW(var, AGG_1_5));
-    return true;
-  } else {
-    return false;
-  }
+  return true;
 }
 
 /// Obtain the kurtosis of the values in the stream.
@@ -342,18 +378,11 @@ get_skw(const struct agg* agg, AGG_TYPE* out)
 static bool
 get_krt(const struct agg* agg, AGG_TYPE* out)
 {
-  AGG_TYPE var;
-  bool retb;
-
-  retb = get_var(agg, &var);
-  if (retb == true && agg->ag_cnt > 1) {
-    *out = agg->ag_val[2]
-         / ((AGG_TYPE)agg->ag_cnt * AGG_POW(var, AGG_2_0))
-         - AGG_3_0;
-    return true;
-  } else {
-    return false;
-  }
+  *out = (AGG_TYPE)(agg->ag_cnt)
+       * agg->ag_val[3] 
+       / (agg->ag_val[1] * agg->ag_val[1])
+       - 3.0;
+  return true;
 }
 
 /// Function table for put_* functions based on ag_typ.
@@ -401,10 +430,16 @@ static void
 common_init(struct agg* agg)
 {
   agg->ag_cnt    = 0;
+
   agg->ag_val[0] = AGG_0_0;
   agg->ag_val[1] = AGG_0_0;
   agg->ag_val[2] = AGG_0_0;
   agg->ag_val[3] = AGG_0_0;
+
+  agg->ag_tmp[0] = AGG_0_0;
+  agg->ag_tmp[1] = AGG_0_0;
+  agg->ag_tmp[2] = AGG_0_0;
+  agg->ag_tmp[3] = AGG_0_0;
 }
 
 /// Start aggregating the first value.

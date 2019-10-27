@@ -24,6 +24,7 @@
   #define AGG_2_0  2.0f
   #define AGG_3_0  3.0f
   #define AGG_4_0  4.0f
+  #define AGG_6_0  6.0f
 #else
   #define AGG_TYPE double
   #define AGG_FMT  "%le"
@@ -36,6 +37,7 @@
   #define AGG_2_0  2.0
   #define AGG_3_0  3.0
   #define AGG_4_0  4.0
+  #define AGG_6_0  6.0
 #endif
 
 
@@ -45,6 +47,7 @@ struct agg {
   uint8_t  ag_pad[7]; ///< Padding (unused).
   uint64_t ag_cnt;    ///< Number of observations.
   AGG_TYPE ag_val[4]; ///< State variables.
+  AGG_TYPE ag_tmp[4]; ///< Temporary variables.
 };
 
 /// Start the aggregate.
