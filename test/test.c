@@ -58,12 +58,12 @@ struct test test_cnt[TEST_LEN] = {
 
 /// Test cases for `agg_sum` function.
 struct test test_sum[TEST_LEN] = {
-  {0.0f, 10},
-  {0.0f, 100},
-  {0.0f, 1000},
-  {0.0f, 10000},
-  {0.0f, 100000},
-  {0.0f, 1000000},
+  {1.0e-6, 10},
+  {1.0e-6, 100},
+  {1.0e-6, 1000},
+  {1.0e-6, 10000},
+  {1.0e-6, 100000},
+  {1.0e-6, 1000000},
 };
 
 /// Test cases for `agg_min` function.
@@ -92,8 +92,8 @@ struct test test_avg[TEST_LEN] = {
   {1.0e-5, 100},
   {1.0e-5, 1000},
   {1.0e-5, 10000},
-  {1.0e-5, 100000},
-  {1.0e-5, 1000000},
+  {1.0e-4, 100000},
+  {1.0e-4, 1000000},
 };
 
 /// Test cases for `agg_var` function.
@@ -113,7 +113,7 @@ struct test test_dev[TEST_LEN] = {
   {1.0e-2, 1000},
   {1.0e-3, 10000},
   {1.0e-4, 100000},
-  {1.0e-5, 1000000},
+  {1.0e-4, 1000000},
 };
 
 /// Test cases for `agg_skw` function.
