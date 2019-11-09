@@ -1,4 +1,4 @@
-dbl_test
-flt_test
-dbl_test_fast
-flt_test_fast
+err_dbl
+err_flt
+err_dbl_fast
+err_flt_fast

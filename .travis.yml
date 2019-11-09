@@ -4,7 +4,7 @@ compiler:
  - gcc
 
 sudo: required
-script: sh ./test/run.sh
+script: sh ./test/err.sh
 
 env:
   global:
@@ -21,5 +21,5 @@ addons:
       description: Aggregate Functions
     notification_email: daniel.lovasko@gmail.com
     build_command_prepend: true
-    build_command: sh ./test/run.sh
+    build_command: sh ./test/err.sh
     branch_pattern: master

@@ -9,7 +9,7 @@
 cd $(dirname $0)
 
 # C compiler.
-CC=c99
+CC=cc
 
 # The first part of the testing is to execute the test assuming full IEEE
 # floating-point operations compliance. If any of the following steps were to
@@ -18,30 +18,31 @@ set -e
 echo "#################"
 echo "# DOUBLE        #"
 echo "#################"
-${CC} -DAGG_DBL -o dbl_test -std=c99 test.c ../impl/agg.c -lm
-./dbl_test
+${CC} -DAGG_DBL -o err_dbl -std=c99 err.c -Isrc/ ../impl/*.c -lm
+./err_dbl
 
 echo "#################"
 echo "# FLOAT         #"
 echo "#################"
-${CC} -DAGG_FLT -o flt_test -std=c99 test.c ../impl/agg.c -lm
-./flt_test
+${CC} -DAGG_FLT -o err_flt -std=c99 err.c -Isrc/ ../impl/*.c -lm
+./err_flt
 set +e
 
 # The second part is mostly informational as to whether increased optimizations
 # and the fast math mode that disables full IEEE compliance, errno-setting, and
 # assumes all math is finite, still produces valid results within the expected
-# margin of error. To ensure that the test suite passes nonetheless, we exit
-# with successful execution.
+# margin of error.
 echo "#################"
 echo "# DOUBLE FAST   #"
 echo "#################"
-${CC} -DAGG_DBL -o dbl_test_fast -std=c99 -Ofast test.c ../impl/agg.c -lm
-./dbl_test_fast
+${CC} -DAGG_DBL -o err_dbl_fast -std=c99 -Ofast err.c -Isrc/ ../impl/*.c -lm
+./err_dbl_fast
 
 echo "#################"
 echo "# FLOAT FAST    #"
 echo "#################"
-${CC} -DAGG_FLT -o flt_test_fast -std=c99 -Ofast test.c ../impl/agg.c -lm 
-./flt_test_fast
+${CC} -DAGG_FLT -o err_flt_fast -std=c99 -Ofast err.c -Isrc/ ../impl/*.c -lm
+./err_flt_fast
+
+# Ensure successful exit code of the testing, even if the fast tests fail.
 true
