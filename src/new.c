@@ -40,5 +40,15 @@ agg_new(struct agg* agg, const uint8_t fnc)
     agg->ag_fnc  = fnc;
   }
 
+  // Ensure the appropriate main value. This is done due to the use of
+  // fmin/fmax function in the respective functions.
+  if (fnc == AGG_FNC_MIN) {
+    agg->ag_val[0] = AGG_MAX;
+  }
+
+  if (fnc == AGG_FNC_MAX) {
+    agg->ag_val[0] = AGG_MIN;
+  }
+
   return true;
 }

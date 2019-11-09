@@ -5,6 +5,7 @@
 // license is in the file LICENSE, distributed as part of this software.
 
 #include <stddef.h>
+#include <math.h>
 
 #include "agg.h"
 
@@ -59,9 +60,7 @@ put_sum(struct agg* agg, const AGG_TYPE inp)
 static void
 put_min(struct agg* agg, const AGG_TYPE inp)
 {
-  if (agg->ag_cnt == 0 || agg->ag_val[0] > inp) {
-    agg->ag_val[0] = inp;
-  }
+  agg->ag_val[0] = AGG_FMIN(inp, agg->ag_val[0]);
 }
 
 /// Update the maximal value in the stream.
@@ -71,9 +70,7 @@ put_min(struct agg* agg, const AGG_TYPE inp)
 static void
 put_max(struct agg* agg, const AGG_TYPE inp)
 {
-  if (agg->ag_cnt == 0 || agg->ag_val[0] < inp) {
-    agg->ag_val[0] = inp;
-  }
+  agg->ag_val[0] = AGG_FMAX(inp, agg->ag_val[0]);
 }
 
 /// Pre-compute temporary variables.

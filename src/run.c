@@ -99,9 +99,7 @@ run_min(AGG_TYPE* out, const AGG_TYPE* arr, const uint64_t len)
 
   min = arr[0];
   for (idx = 1; idx < len; idx++) {
-    if (arr[idx] < min) {
-      min = arr[idx];
-    }
+    min = AGG_FMIN(min, arr[idx]);
   }
 
   *out = min;
@@ -126,9 +124,7 @@ run_max(AGG_TYPE* out, const AGG_TYPE* arr, const uint64_t len)
 
   max = arr[0];
   for (idx = 1; idx < len; idx++) {
-    if (arr[idx] > max) {
-      max = arr[idx];
-    }
+    max = AGG_FMAX(max, arr[idx]);
   }
 
   *out = max;

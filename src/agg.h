@@ -9,6 +9,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include <float.h>
 
 
 // Determine the appropriate type-related constants and functions.
@@ -18,6 +19,8 @@
   #define AGG_SQRT sqrtf
   #define AGG_POW  powf
   #define AGG_ABS  fabsf
+  #define AGG_FMIN fminf
+  #define AGG_FMAX fmaxf
   #define AGG_0_0  0.0f
   #define AGG_1_0  1.0f
   #define AGG_1_5  1.5f
@@ -25,12 +28,16 @@
   #define AGG_3_0  3.0f
   #define AGG_4_0  4.0f
   #define AGG_6_0  6.0f
+  #define AGG_MIN  -FLT_MAX
+  #define AGG_MAX  FLT_MAX
 #else
   #define AGG_TYPE double
   #define AGG_FMT  "%le"
   #define AGG_SQRT sqrt
   #define AGG_POW  pow
   #define AGG_ABS  fabs
+  #define AGG_FMIN fmin
+  #define AGG_FMAX fmax
   #define AGG_0_0  0.0
   #define AGG_1_0  1.0
   #define AGG_1_5  1.5
@@ -38,6 +45,8 @@
   #define AGG_3_0  3.0
   #define AGG_4_0  4.0
   #define AGG_6_0  6.0
+  #define AGG_MIN  -DBL_MAX
+  #define AGG_MAX  DBL_MAX
 #endif
 
 /// Aggregate function types.
