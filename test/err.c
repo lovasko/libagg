@@ -145,8 +145,8 @@ main(void)
   (void)printf("fst\n");
   test(&res, AGG_FNC_FST);
 
-  (void)printf("fst\n");
-  test(&res, AGG_FNC_FST);
+  (void)printf("lst\n");
+  test(&res, AGG_FNC_LST);
 
   (void)printf("cnt\n");
   test(&res, AGG_FNC_CNT);
