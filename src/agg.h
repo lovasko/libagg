@@ -14,13 +14,18 @@
 
 // Determine the appropriate type-related constants and functions.
 #ifdef AGG_FLT
+  // Types.
   #define AGG_TYPE float 
-  #define AGG_FMT  "%e"
+
+  // Functions.
   #define AGG_SQRT sqrtf
   #define AGG_POW  powf
   #define AGG_ABS  fabsf
   #define AGG_FMIN fminf
   #define AGG_FMAX fmaxf
+
+  // Constants.
+  #define AGG_FMT  "%e"
   #define AGG_0_0  0.0f
   #define AGG_1_0  1.0f
   #define AGG_1_5  1.5f
@@ -31,13 +36,18 @@
   #define AGG_MIN  -FLT_MAX
   #define AGG_MAX  FLT_MAX
 #else
+  // Types.
   #define AGG_TYPE double
-  #define AGG_FMT  "%le"
+  
+  // Functions.
   #define AGG_SQRT sqrt
   #define AGG_POW  pow
   #define AGG_ABS  fabs
   #define AGG_FMIN fmin
   #define AGG_FMAX fmax
+
+  // Constants.
+  #define AGG_FMT  "%le"
   #define AGG_0_0  0.0
   #define AGG_1_0  1.0
   #define AGG_1_5  1.5
