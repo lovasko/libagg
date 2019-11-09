@@ -18,13 +18,13 @@ set -e
 echo "#################"
 echo "# DOUBLE        #"
 echo "#################"
-${CC} -DAGG_DBL -o err_dbl -std=c99 err.c -Isrc/ ../src/*.c -lm
+${CC} -DAGG_DBL -o err_dbl -std=c99 err.c ../src/*.c -lm
 ./err_dbl
 
 echo "#################"
 echo "# FLOAT         #"
 echo "#################"
-${CC} -DAGG_FLT -o err_flt -std=c99 err.c -Isrc/ ../src/*.c -lm
+${CC} -DAGG_FLT -o err_flt -std=c99 err.c ../src/*.c -lm
 ./err_flt
 set +e
 
@@ -35,13 +35,13 @@ set +e
 echo "#################"
 echo "# DOUBLE FAST   #"
 echo "#################"
-${CC} -DAGG_DBL -o err_dbl_fast -std=c99 -Ofast err.c -Isrc/ ../src/*.c -lm
+${CC} -DAGG_DBL -o err_dbl_fast -std=c99 -Ofast err.c ../src/*.c -lm
 ./err_dbl_fast
 
 echo "#################"
 echo "# FLOAT FAST    #"
 echo "#################"
-${CC} -DAGG_FLT -o err_flt_fast -std=c99 -Ofast err.c -Isrc/ ../src/*.c -lm
+${CC} -DAGG_FLT -o err_flt_fast -std=c99 -Ofast err.c ../src/*.c -lm
 ./err_flt_fast
 
 # Ensure successful exit code of the testing, even if the fast tests fail.

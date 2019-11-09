@@ -11,7 +11,7 @@
 #include <stdint.h>
 #include <math.h>
 
-#include "../../src/agg.h"
+#include "../src/agg.h"
 #include "err.h"
 
 
