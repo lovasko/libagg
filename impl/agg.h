@@ -40,36 +40,34 @@
   #define AGG_6_0  6.0
 #endif
 
+/// Aggregate function types.
+#define AGG_FNC_FST 0x1 // First.
+#define AGG_FNC_LST 0x2 // Last.
+#define AGG_FNC_CNT 0x3 // Count.
+#define AGG_FNC_SUM 0x4 // Sum.
+#define AGG_FNC_MIN 0x5 // Minimum.
+#define AGG_FNC_MAX 0x6 // Maximum.
+#define AGG_FNC_AVG 0x7 // Average.
+#define AGG_FNC_VAR 0x8 // Variance.
+#define AGG_FNC_DEV 0x9 // Standard deviation.
+#define AGG_FNC_SKW 0xa // Skewness.
+#define AGG_FNC_KRT 0xb // Kurtosis.
 
 /// Aggregate function. 
 struct agg {
-  uint8_t  ag_typ;    ///< Type.
+  uint8_t  ag_fnc;    ///< Type.
   uint8_t  ag_pad[7]; ///< Padding (unused).
   uint64_t ag_cnt;    ///< Number of observations.
   AGG_TYPE ag_val[4]; ///< State variables.
   AGG_TYPE ag_tmp[4]; ///< Temporary variables.
 };
 
-/// Start the aggregate.
-void agg_fst(struct agg* agg);
-void agg_lst(struct agg* agg);
-void agg_cnt(struct agg* agg);
-void agg_sum(struct agg* agg);
-void agg_min(struct agg* agg);
-void agg_max(struct agg* agg);
-void agg_avg(struct agg* agg);
-void agg_var(struct agg* agg);
-void agg_dev(struct agg* agg);
-void agg_skw(struct agg* agg);
-void agg_krt(struct agg* agg);
+/// On-line algorithms.
+bool agg_new(struct agg* agg, const uint8_t fnc);
+void agg_put(struct agg* agg, const AGG_TYPE val);
+bool agg_get(const struct agg* agg, AGG_TYPE* val);
 
-/// Reset the aggregate.
-void agg_rst(struct agg* agg);
-
-/// Update the aggregate.
-void agg_put(struct agg* agg, const AGG_TYPE inp);
-
-/// Obtain the aggregate.
-bool agg_get(const struct agg* agg, AGG_TYPE* out);
+/// Off-line algorithms.
+bool agg_run(AGG_TYPE* val, const AGG_TYPE* arr, const uint64_t len, const uint8_t fnc);
 
 #endif
