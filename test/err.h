@@ -1,6 +1,11 @@
+// Copyright (c) 2019 Daniel Lovasko
+// All Rights Reserved
+//
+// Distributed under the terms of the 2-clause BSD License. The full
+// license is in the file LICENSE, distributed as part of this software.
+
 #ifndef AGGREGATE_TEST_ERR_H
 #define AGGREGATE_TEST_ERR_H
-
 
 // The tables below denote the acceptable magnitudes of error for each
 // aggregate function. The corresponding length of the input list is
