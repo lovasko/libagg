@@ -138,10 +138,10 @@ get_var(const struct agg* agg, AGG_TYPE* out)
 static bool
 get_dev(const struct agg* agg, AGG_TYPE* out)
 {
-  bool retb;
+  bool ret;
 
-  retb = get_var(agg, out);
-  if (retb == true) {
+  ret = get_var(agg, out);
+  if (ret == true) {
     *out = AGG_SQRT(*out);
     return true;
   } else {
