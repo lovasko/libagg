@@ -14,7 +14,7 @@
 /// @return success/failure indication
 ///
 /// @param[in]  agg aggregate function
-/// @param[out] out output value
+/// @param[out] out first value
 static bool
 get_fst(const struct agg *restrict agg, AGG_TYPE *restrict out)
 {
@@ -30,7 +30,7 @@ get_fst(const struct agg *restrict agg, AGG_TYPE *restrict out)
 /// @return success/failure indication
 ///
 /// @param[in]  agg aggregate function
-/// @param[out] out output value
+/// @param[out] out last value
 static bool
 get_lst(const struct agg *restrict agg, AGG_TYPE *restrict out)
 {
@@ -46,7 +46,7 @@ get_lst(const struct agg *restrict agg, AGG_TYPE *restrict out)
 /// @return always true
 ///
 /// @param[in]  agg aggregate function
-/// @param[out] out output value
+/// @param[out] out number of values
 static bool
 get_cnt(const struct agg *restrict agg, AGG_TYPE *restrict out)
 {
@@ -58,7 +58,7 @@ get_cnt(const struct agg *restrict agg, AGG_TYPE *restrict out)
 /// @return always true
 ///
 /// @param[in]  agg aggregate function
-/// @param[out] out output value
+/// @param[out] out sum of values
 static bool
 get_sum(const struct agg *restrict agg, AGG_TYPE *restrict out)
 {
@@ -70,7 +70,7 @@ get_sum(const struct agg *restrict agg, AGG_TYPE *restrict out)
 /// @return success/failure indication
 ///
 /// @param[in]  agg aggregate function
-/// @param[out] out output value
+/// @param[out] out minimal value
 static bool
 get_min(const struct agg *restrict agg, AGG_TYPE *restrict out)
 {
@@ -86,7 +86,7 @@ get_min(const struct agg *restrict agg, AGG_TYPE *restrict out)
 /// @return success/failure indication
 ///
 /// @param[in]  agg aggregate function
-/// @param[out] out output value
+/// @param[out] out maximal value
 static bool
 get_max(const struct agg *restrict agg, AGG_TYPE *restrict out)
 {
@@ -102,7 +102,7 @@ get_max(const struct agg *restrict agg, AGG_TYPE *restrict out)
 /// @return success/failure indication
 ///
 /// @param[in]  agg aggregate function
-/// @param[out] out output value
+/// @param[out] out average value
 static bool
 get_avg(const struct agg *restrict agg, AGG_TYPE *restrict out)
 {
@@ -118,7 +118,7 @@ get_avg(const struct agg *restrict agg, AGG_TYPE *restrict out)
 /// @return success/failure indication
 ///
 /// @param[in]  agg aggregate function
-/// @param[out] out variance
+/// @param[out] out variance of values
 static bool
 get_var(const struct agg *restrict agg, AGG_TYPE *restrict out)
 {
@@ -134,7 +134,7 @@ get_var(const struct agg *restrict agg, AGG_TYPE *restrict out)
 /// @return success/failure indication
 ///
 /// @param[in]  agg aggregate function
-/// @param[out] out standard deviation
+/// @param[out] out standard deviation of values
 static bool
 get_dev(const struct agg *restrict agg, AGG_TYPE *restrict out)
 {
@@ -153,7 +153,7 @@ get_dev(const struct agg *restrict agg, AGG_TYPE *restrict out)
 /// @return success/failure indication
 ///
 /// @param[in]  agg aggregate function
-/// @param[out] out skewness
+/// @param[out] out skewness of values
 static bool
 get_skw(const struct agg *restrict agg, AGG_TYPE *restrict out)
 {
@@ -168,7 +168,7 @@ get_skw(const struct agg *restrict agg, AGG_TYPE *restrict out)
 /// @return success/failure indication
 ///
 /// @param[in]  agg aggregate function
-/// @param[out] out kurtosis
+/// @param[out] out kurtosis of values
 static bool
 get_krt(const struct agg *restrict agg, AGG_TYPE *restrict out)
 {
@@ -199,7 +199,7 @@ static bool (*get_fnc[])(const struct agg*, AGG_TYPE*) = {
 /// @return success/failure indication
 /// 
 /// @param[in]  agg aggregate function
-/// @param[out] out output value
+/// @param[out] out aggregate value
 bool
 agg_get(const struct agg *restrict agg, AGG_TYPE *restrict out)
 {
