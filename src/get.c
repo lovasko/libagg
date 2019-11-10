@@ -175,7 +175,7 @@ get_krt(const struct agg *restrict agg, AGG_TYPE *restrict out)
   *out = (AGG_TYPE)(agg->ag_cnt)
        * agg->ag_val[3] 
        / (agg->ag_val[1] * agg->ag_val[1])
-       - 3.0;
+       - AGG_3_0;
   return true;
 }
 
