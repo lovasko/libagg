@@ -17,7 +17,7 @@
 /// @param[in]  arr array representing the stream
 /// @param[in]  len length of the stream
 static bool
-run_fst(AGG_TYPE* out, const AGG_TYPE* arr, const uint64_t len)
+run_fst(AGG_TYPE *restrict out, const AGG_TYPE *restrict arr, const uint64_t len)
 {
   if (len == 0) {
     return false;
@@ -34,7 +34,7 @@ run_fst(AGG_TYPE* out, const AGG_TYPE* arr, const uint64_t len)
 /// @param[in]  arr array representing the stream
 /// @param[in]  len length of the stream
 static bool
-run_lst(AGG_TYPE* out, const AGG_TYPE* arr, const uint64_t len)
+run_lst(AGG_TYPE *restrict out, const AGG_TYPE *restrict arr, const uint64_t len)
 {
   if (len == 0) {
     return false;
@@ -52,7 +52,7 @@ run_lst(AGG_TYPE* out, const AGG_TYPE* arr, const uint64_t len)
 /// @param[in]  arr array representing the stream
 /// @param[in]  len length of the stream
 static bool
-run_cnt(AGG_TYPE* out, const AGG_TYPE* arr, const uint64_t len)
+run_cnt(AGG_TYPE *restrict out, const AGG_TYPE *restrict arr, const uint64_t len)
 {
   (void)arr;
 
@@ -67,7 +67,7 @@ run_cnt(AGG_TYPE* out, const AGG_TYPE* arr, const uint64_t len)
 /// @param[in]  arr array representing the stream
 /// @param[in]  len length of the stream
 static bool
-run_sum(AGG_TYPE* out, const AGG_TYPE* arr, const uint64_t len)
+run_sum(AGG_TYPE *restrict out, const AGG_TYPE *restrict arr, const uint64_t len)
 {
   uint64_t idx;
   AGG_TYPE sum;
@@ -88,7 +88,7 @@ run_sum(AGG_TYPE* out, const AGG_TYPE* arr, const uint64_t len)
 /// @param[in]  arr array representing the stream
 /// @param[in]  len length of the stream
 static bool
-run_min(AGG_TYPE* out, const AGG_TYPE* arr, const uint64_t len)
+run_min(AGG_TYPE *restrict out, const AGG_TYPE *restrict arr, const uint64_t len)
 {
   uint64_t idx;
   AGG_TYPE min;
@@ -113,7 +113,7 @@ run_min(AGG_TYPE* out, const AGG_TYPE* arr, const uint64_t len)
 /// @param[in]  arr array representing the stream
 /// @param[in]  len length of the stream
 static bool
-run_max(AGG_TYPE* out, const AGG_TYPE* arr, const uint64_t len)
+run_max(AGG_TYPE *restrict out, const AGG_TYPE *restrict arr, const uint64_t len)
 {
   uint64_t idx;
   AGG_TYPE max;
@@ -138,7 +138,7 @@ run_max(AGG_TYPE* out, const AGG_TYPE* arr, const uint64_t len)
 /// @param[in]  arr array representing the stream
 /// @param[in]  len length of the stream
 static bool
-run_avg(AGG_TYPE* out, const AGG_TYPE* arr, const uint64_t len)
+run_avg(AGG_TYPE *restrict out, const AGG_TYPE *restrict arr, const uint64_t len)
 {
   AGG_TYPE sum;
 
@@ -159,7 +159,7 @@ run_avg(AGG_TYPE* out, const AGG_TYPE* arr, const uint64_t len)
 /// @param[in]  arr array representing the stream
 /// @param[in]  len length of the stream
 static bool
-run_var(AGG_TYPE* out, const AGG_TYPE* arr, const uint64_t len)
+run_var(AGG_TYPE *restrict out, const AGG_TYPE *restrict arr, const uint64_t len)
 {
   AGG_TYPE avg;
   AGG_TYPE var;
@@ -193,7 +193,7 @@ run_var(AGG_TYPE* out, const AGG_TYPE* arr, const uint64_t len)
 /// @param[in]  arr array representing the stream
 /// @param[in]  len array length
 static bool
-run_dev(AGG_TYPE* out, const AGG_TYPE* arr, const uint64_t len)
+run_dev(AGG_TYPE *restrict out, const AGG_TYPE *restrict arr, const uint64_t len)
 {
   AGG_TYPE var;
 
@@ -214,7 +214,7 @@ run_dev(AGG_TYPE* out, const AGG_TYPE* arr, const uint64_t len)
 /// @param[in]  arr array representing the stream
 /// @param[in]  len array length
 static bool
-run_skw(AGG_TYPE* out, const AGG_TYPE* arr, const uint64_t len)
+run_skw(AGG_TYPE *restrict out, const AGG_TYPE *restrict arr, const uint64_t len)
 {
   uint64_t idx;
   AGG_TYPE avg;
@@ -246,7 +246,7 @@ run_skw(AGG_TYPE* out, const AGG_TYPE* arr, const uint64_t len)
 /// @param[in]  arr array representing the stream
 /// @param[in]  len array length
 static bool
-run_krt(AGG_TYPE* out, const AGG_TYPE* arr, const uint64_t len)
+run_krt(AGG_TYPE *restrict out, const AGG_TYPE *restrict arr, const uint64_t len)
 {
   uint64_t idx;
   AGG_TYPE avg;
@@ -294,7 +294,7 @@ static bool (*run_fnc[])(AGG_TYPE*, const AGG_TYPE*, const uint64_t) = {
 /// @param[in]  len length of the stream
 /// @param[in]  fnc aggregate function ID
 bool
-agg_run(AGG_TYPE* val, const AGG_TYPE* arr, const uint64_t len, const uint8_t fnc)
+agg_run(AGG_TYPE *restrict val, const AGG_TYPE *restrict arr, const uint64_t len, const uint8_t fnc)
 {
   return run_fnc[fnc](val, arr, len);
 }

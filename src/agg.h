@@ -84,9 +84,12 @@ struct agg {
 /// On-line algorithms.
 bool agg_new(struct agg* agg, const uint8_t fnc);
 void agg_put(struct agg* agg, const AGG_TYPE val);
-bool agg_get(const struct agg* agg, AGG_TYPE* val);
+bool agg_get(const struct agg *restrict agg, AGG_TYPE *restrict val);
 
 /// Off-line algorithms.
-bool agg_run(AGG_TYPE* val, const AGG_TYPE* arr, const uint64_t len, const uint8_t fnc);
+bool agg_run(AGG_TYPE *restrict val,
+             const AGG_TYPE *restrict arr,
+             const uint64_t len,
+             const uint8_t fnc);
 
 #endif
