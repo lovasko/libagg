@@ -82,7 +82,7 @@ struct agg {
 };
 
 /// On-line algorithms.
-bool agg_new(struct agg* agg, const uint8_t fnc);
+void agg_new(struct agg* agg, const uint8_t fnc);
 void agg_put(struct agg* agg, const AGG_TYPE val);
 bool agg_get(const struct agg *restrict agg, AGG_TYPE *restrict val);
 

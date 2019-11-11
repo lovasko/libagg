@@ -18,12 +18,8 @@
 static bool
 get_fst(const struct agg *restrict agg, AGG_TYPE *restrict out)
 {
-  if (agg->ag_cnt > 0) {
-    *out = agg->ag_val[0];
-    return true;
-  } else {
-    return false;
-  }
+  *out = agg->ag_val[0];
+  return agg->ag_cnt > 0;
 }
 
 /// Obtain the last value of the stream.
@@ -34,12 +30,8 @@ get_fst(const struct agg *restrict agg, AGG_TYPE *restrict out)
 static bool
 get_lst(const struct agg *restrict agg, AGG_TYPE *restrict out)
 {
-  if (agg->ag_cnt > 0) {
-    *out = agg->ag_val[0];
-    return true;
-  } else {
-    return false;
-  }
+  *out = agg->ag_val[0];
+  return agg->ag_cnt > 0;
 }
 
 /// Obtain the number of values in the stream.
@@ -74,12 +66,8 @@ get_sum(const struct agg *restrict agg, AGG_TYPE *restrict out)
 static bool
 get_min(const struct agg *restrict agg, AGG_TYPE *restrict out)
 {
-  if (agg->ag_cnt > 0) {
-    *out = agg->ag_val[0];
-    return true;
-  } else {
-    return false;
-  }
+  *out = agg->ag_val[2];
+  return agg->ag_cnt > 0;
 }
 
 /// Obtain the maximal value in the stream.
@@ -90,12 +78,8 @@ get_min(const struct agg *restrict agg, AGG_TYPE *restrict out)
 static bool
 get_max(const struct agg *restrict agg, AGG_TYPE *restrict out)
 {
-  if (agg->ag_cnt > 0) {
-    *out = agg->ag_val[0];
-    return true;
-  } else {
-    return false;
-  }
+  *out = agg->ag_val[3];
+  return agg->ag_cnt > 0;
 }
 
 /// Obtain the average value in the stream.
@@ -106,12 +90,8 @@ get_max(const struct agg *restrict agg, AGG_TYPE *restrict out)
 static bool
 get_avg(const struct agg *restrict agg, AGG_TYPE *restrict out)
 {
-  if (agg->ag_cnt > 0) {
-    *out = agg->ag_val[0];
-    return true;
-  } else {
-    return false;
-  }
+  *out = agg->ag_val[0];
+  return agg->ag_cnt > 0;
 }
 
 /// Obtain the variance of the values in the stream.
@@ -122,12 +102,13 @@ get_avg(const struct agg *restrict agg, AGG_TYPE *restrict out)
 static bool
 get_var(const struct agg *restrict agg, AGG_TYPE *restrict out)
 {
-  if (agg->ag_cnt > 1) {
-    *out = agg->ag_val[1] / (AGG_TYPE)(agg->ag_cnt - 1);
-    return true;
-  } else {
-    return false;
-  }
+  // The following potential division by zero might appear as a mistake; it is
+  // not. The division by zero is a well-defined IEEE-745 operation yielding a
+  // positive/negative infinity. The value itself in this case is wrong, but
+  // that does not matter, as the function returns `false` in this case,
+  // meaning that the resulting value shall not be consulted.
+  *out = agg->ag_val[1] / (AGG_TYPE)(agg->ag_cnt - 1);
+  return agg->ag_cnt > 1;
 }
 
 /// Obtain the standard deviation of the values in the stream.
@@ -141,12 +122,8 @@ get_dev(const struct agg *restrict agg, AGG_TYPE *restrict out)
   bool ret;
 
   ret = get_var(agg, out);
-  if (ret == true) {
-    *out = AGG_SQRT(*out);
-    return true;
-  } else {
-    return false;
-  }
+  *out = AGG_SQRT(*out);
+  return ret;
 }
 
 /// Obtain the skewness of the values in the stream.
