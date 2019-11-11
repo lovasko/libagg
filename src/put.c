@@ -157,9 +157,8 @@ put_var(struct agg* agg, const AGG_TYPE inp)
 
 /// Update the standard deviation of the stream.
 ///
-/// Note: As the standard deviation is computed as the square root of variance,
-/// we choose to maintain the variance computation throughout the update
-/// process.
+/// Note: As the standard deviation is computed as the square root of variance, we choose to 
+/// maintain the variance computation throughout the update process.
 ///
 /// @param[in] agg aggregate function
 /// @param[in] inp input value

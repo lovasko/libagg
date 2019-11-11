@@ -44,8 +44,7 @@ run_lst(AGG_TYPE *restrict out, const AGG_TYPE *restrict arr, const uint64_t len
   return true;
 }
 
-/// Compute the number of values in the stream given the full stream
-/// information.
+/// Compute the number of values in the stream given the full stream information.
 /// @return always true
 ///
 /// @param[out] out number of values
@@ -151,8 +150,7 @@ run_avg(AGG_TYPE *restrict out, const AGG_TYPE *restrict arr, const uint64_t len
   return true;
 }
 
-/// Compute the variance of values in the stream given the full stream
-/// information.
+/// Compute the variance of values in the stream given the full stream information.
 /// @return success/failure indication
 ///
 /// @param[out] out variance of values
@@ -185,8 +183,7 @@ run_var(AGG_TYPE *restrict out, const AGG_TYPE *restrict arr, const uint64_t len
   return true;
 }
 
-/// Compute the standard deviation of values in the stream given the full
-/// stream information.
+/// Compute the standard deviation of values in the stream given the full stream information.
 /// @return success/failure indication
 ///
 /// @param[out] out standard deviation of values
@@ -206,8 +203,7 @@ run_dev(AGG_TYPE *restrict out, const AGG_TYPE *restrict arr, const uint64_t len
   return true;
 }
 
-/// Compute the skewness of values in the stream given the full stream
-/// information.
+/// Compute the skewness of values in the stream given the full stream information.
 /// @return success/failure indication
 ///
 /// @param[out] out skewness of values
@@ -238,8 +234,7 @@ run_skw(AGG_TYPE *restrict out, const AGG_TYPE *restrict arr, const uint64_t len
   return true;
 }
 
-/// Compute the kurtosis of values in the stream given the full stream
-/// information.
+/// Compute the kurtosis of values in the stream given the full stream information.
 /// @return success/failure indication
 ///
 /// @param[out] out kurtosis of values

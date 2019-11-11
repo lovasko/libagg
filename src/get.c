@@ -102,11 +102,10 @@ get_avg(const struct agg *restrict agg, AGG_TYPE *restrict out)
 static bool
 get_var(const struct agg *restrict agg, AGG_TYPE *restrict out)
 {
-  // The following potential division by zero might appear as a mistake; it is
-  // not. The division by zero is a well-defined IEEE-745 operation yielding a
-  // positive/negative infinity. The value itself in this case is wrong, but
-  // that does not matter, as the function returns `false` in this case,
-  // meaning that the resulting value shall not be consulted.
+  // The following potential division by zero might appear as a mistake; it is not. The division by
+  // zero is a well-defined IEEE-745 operation yielding a positive/negative infinity. The value
+  // itself in this case is wrong, but that does not matter, as the function returns `false` in
+  // this case, meaning that the resulting value shall not be consulted.
   *out = agg->ag_val[1] / (AGG_TYPE)(agg->ag_cnt - 1);
   return agg->ag_cnt > 1;
 }
