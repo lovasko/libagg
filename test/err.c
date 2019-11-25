@@ -41,8 +41,9 @@ random_number(void)
 /// @param[in] len length of the array
 /// @param[in] fnc aggregate function
 /// @param[in] idx test case index
+/// @param[in] par function parameter
 static bool
-exec(AGG_TYPE* arr, const uint64_t len, const uint8_t fnc, const uint64_t idx)
+exec(AGG_TYPE* arr, const uint64_t len, const uint8_t fnc, const uint64_t idx, const AGG_TYPE par)
 {
   struct agg agg;
   uint64_t   run;
@@ -56,14 +57,14 @@ exec(AGG_TYPE* arr, const uint64_t len, const uint8_t fnc, const uint64_t idx)
   }
 
   // Run the on-line algorithm.
-  agg_new(&agg, fnc);
+  agg_new(&agg, fnc, par);
   for (run = 0; run < len; run++) {
     agg_put(&agg, arr[run]);
   }
   ret[0] = agg_get(&agg, &val[0]);
 
   // Run the off-line algorithm.
-  ret[1] = agg_run(&val[1], arr, len, fnc);
+  ret[1] = agg_run(&val[1], arr, len, fnc, par);
 
   // Certify that the functions resulted in the same way.
   if (ret[0] != ret[1]) {
@@ -89,8 +90,9 @@ exec(AGG_TYPE* arr, const uint64_t len, const uint8_t fnc, const uint64_t idx)
 ///
 /// @param[out] res  result
 /// @param[in]  fnc  aggregate function
+/// @param[in]  par  parameter
 static void
-test(bool* res, const uint8_t fnc)
+test(bool* res, const uint8_t fnc, const AGG_TYPE par)
 {
   AGG_TYPE* arr;
   uint64_t  ctr;
@@ -113,7 +115,7 @@ test(bool* res, const uint8_t fnc)
     // Run each test multiple times to ensure that it satisfies the margin of
     // error under various inputs.
     for (ctr = 0; ctr < TEST_TRY; ctr++) {
-      ret = exec(arr, len, fnc, idx);
+      ret = exec(arr, len, fnc, idx, par);
       if (ret == false) {
         printf("\n");
         *res = *res && ret;
@@ -143,37 +145,49 @@ main(void)
   res = true;
 
   (void)printf("fst\n");
-  test(&res, AGG_FNC_FST);
+  test(&res, AGG_FNC_FST, AGG_0_0);
 
   (void)printf("lst\n");
-  test(&res, AGG_FNC_LST);
+  test(&res, AGG_FNC_LST, AGG_0_0);
 
   (void)printf("cnt\n");
-  test(&res, AGG_FNC_CNT);
+  test(&res, AGG_FNC_CNT, AGG_0_0);
 
   (void)printf("sum\n");
-  test(&res, AGG_FNC_SUM);
+  test(&res, AGG_FNC_SUM, AGG_0_0);
 
   (void)printf("min\n");
-  test(&res, AGG_FNC_MIN);
+  test(&res, AGG_FNC_MIN, AGG_0_0);
 
   (void)printf("max\n");
-  test(&res, AGG_FNC_MAX);
+  test(&res, AGG_FNC_MAX, AGG_0_0);
 
   (void)printf("avg\n");
-  test(&res, AGG_FNC_AVG);
+  test(&res, AGG_FNC_AVG, AGG_0_0);
 
   (void)printf("var\n");
-  test(&res, AGG_FNC_VAR);
+  test(&res, AGG_FNC_VAR, AGG_0_0);
 
   (void)printf("dev\n");
-  test(&res, AGG_FNC_DEV);
+  test(&res, AGG_FNC_DEV, AGG_0_0);
 
   (void)printf("skw\n");
-  test(&res, AGG_FNC_SKW);
+  test(&res, AGG_FNC_SKW, AGG_0_0);
 
   (void)printf("krt\n");
-  test(&res, AGG_FNC_KRT);
+  test(&res, AGG_FNC_KRT, AGG_0_0);
+
+  (void)printf("qnt(0.1)\n");
+  test(&res, AGG_FNC_QNT, AGG_0_1);
+
+  (void)printf("qnt(0.75)\n");
+  test(&res, AGG_FNC_QNT, AGG_0_75);
+
+  (void)printf("qnt(0.9)\n");
+  test(&res, AGG_FNC_QNT, AGG_0_9);
+
+  (void)printf("qnt(0.99)\n");
+  test(&res, AGG_FNC_QNT, AGG_0_99);
 
   // Ensure that the process succeeds only and only if all tests passed.
   if (res == true) {
