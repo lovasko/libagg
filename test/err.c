@@ -67,7 +67,7 @@ exec(AGG_TYPE* arr, const uint64_t len, const uint8_t fnc, const uint64_t idx)
 
   // Certify that the functions resulted in the same way.
   if (ret[0] != ret[1]) {
-    (void)printf("\e[31mfail\e[0m\n  exp = %d, act = %d\n", ret[0], ret[1]);
+    (void)printf("\e[31mfail\e[0m\n  exp = %d, act = %d\n", ret[1], ret[0]);
     return false;
   }
 
@@ -78,7 +78,7 @@ exec(AGG_TYPE* arr, const uint64_t len, const uint8_t fnc, const uint64_t idx)
     (void)printf("\e[31mfail\e[0m\n"
                  "  value exp = " AGG_FMT ", act = " AGG_FMT "\n"
                  "  error acc = " AGG_FMT ", act = " AGG_FMT "\n",
-                 val[0], val[1], err[fnc - 1][idx], dif);
+                 val[1], val[0], err[fnc - 1][idx], dif);
     return false;
   }
 
