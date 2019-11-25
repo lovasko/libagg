@@ -16,6 +16,7 @@
 #ifdef AGG_FLT
   // Types.
   #define AGG_TYPE float 
+  #define AGG_SIZE sizeof(float)
 
   // Functions.
   #define AGG_SQRT sqrtf
@@ -23,21 +24,30 @@
   #define AGG_ABS  fabsf
   #define AGG_FMIN fminf
   #define AGG_FMAX fmaxf
+  #define AGG_SIGN copysignf
+  #define AGG_MODF modff
 
   // Constants.
   #define AGG_FMT  "%e"
   #define AGG_0_0  0.0f
+  #define AGG_0_1  0.1f
+  #define AGG_0_5  0.5f
+  #define AGG_0_75 0.75f
+  #define AGG_0_9  0.9f
+  #define AGG_0_99 0.99f
   #define AGG_1_0  1.0f
   #define AGG_1_5  1.5f
   #define AGG_2_0  2.0f
   #define AGG_3_0  3.0f
   #define AGG_4_0  4.0f
+  #define AGG_5_0  5.0f
   #define AGG_6_0  6.0f
   #define AGG_MIN  -FLT_MAX
   #define AGG_MAX  FLT_MAX
 #else
   // Types.
   #define AGG_TYPE double
+  #define AGG_SIZE sizeof(double)
   
   // Functions.
   #define AGG_SQRT sqrt
@@ -45,15 +55,23 @@
   #define AGG_ABS  fabs
   #define AGG_FMIN fmin
   #define AGG_FMAX fmax
+  #define AGG_SIGN copysign
+  #define AGG_MODF modf
 
   // Constants.
   #define AGG_FMT  "%le"
   #define AGG_0_0  0.0
+  #define AGG_0_1  0.1
+  #define AGG_0_5  0.5
+  #define AGG_0_75 0.75
+  #define AGG_0_9  0.9
+  #define AGG_0_99 0.99
   #define AGG_1_0  1.0
   #define AGG_1_5  1.5
   #define AGG_2_0  2.0
   #define AGG_3_0  3.0
   #define AGG_4_0  4.0
+  #define AGG_5_0  5.0
   #define AGG_6_0  6.0
   #define AGG_MIN  -DBL_MAX
   #define AGG_MAX  DBL_MAX
@@ -71,25 +89,29 @@
 #define AGG_FNC_DEV 0x9 // Standard deviation.
 #define AGG_FNC_SKW 0xa // Skewness.
 #define AGG_FNC_KRT 0xb // Kurtosis.
+#define AGG_FNC_QNT 0xc // Quantile.
+
 
 /// Aggregate function. 
 struct agg {
-  uint8_t  ag_fnc;    ///< Type.
-  uint8_t  ag_pad[7]; ///< Padding (unused).
-  uint64_t ag_cnt;    ///< Number of observations.
-  AGG_TYPE ag_val[4]; ///< State variables.
-  AGG_TYPE ag_tmp[4]; ///< Temporary variables.
+  uint8_t  ag_fnc;     ///< Type.
+  uint8_t  ag_pad[7];  ///< Padding (unused).
+  uint64_t ag_cnt[5];  ///< Number of observations.
+  AGG_TYPE ag_par;     ///< Function argument.
+  AGG_TYPE ag_val[10]; ///< State variables.
+  AGG_TYPE ag_tmp[5];  ///< Temporary variables.
 };
 
 /// On-line algorithms.
-void agg_new(struct agg* agg, const uint8_t fnc);
+void agg_new(struct agg* agg, const uint8_t fnc, const AGG_TYPE par);
 void agg_put(struct agg* agg, const AGG_TYPE val);
 bool agg_get(const struct agg *restrict agg, AGG_TYPE *restrict val);
 
 /// Off-line algorithms.
-bool agg_run(AGG_TYPE *restrict val,
+bool agg_run(      AGG_TYPE *restrict val,
              const AGG_TYPE *restrict arr,
-             const uint64_t len,
-             const uint8_t fnc);
+             const uint64_t           len,
+             const uint8_t            fnc,
+             const AGG_TYPE           par);
 
 #endif
