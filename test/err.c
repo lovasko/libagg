@@ -10,6 +10,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <math.h>
+#include <time.h>
 
 #include "../src/agg.h"
 #include "err.h"
@@ -37,19 +38,28 @@ random_number(void)
 /// the acceptable margin of error.
 /// @return success/failure indication
 ///
-/// @param[in] arr array of values
-/// @param[in] len length of the array
-/// @param[in] fnc aggregate function
-/// @param[in] idx test case index
-/// @param[in] par function parameter
+/// @param[out] onc on-line method clock
+/// @param[out] ofc off-line method clock
+/// @param[in]  arr array of values
+/// @param[in]  len length of the array
+/// @param[in]  fnc aggregate function
+/// @param[in]  idx test case index
+/// @param[in]  par function parameter
 static bool
-exec(AGG_TYPE* arr, const uint64_t len, const uint8_t fnc, const uint64_t idx, const AGG_TYPE par)
+exec(uint64_t* onc,
+     uint64_t* ofc,
+     AGG_TYPE* arr,
+     const uint64_t len,
+     const uint8_t fnc,
+     const uint64_t idx,
+     const AGG_TYPE par)
 {
   struct agg agg;
   uint64_t   run;
   AGG_TYPE   val[2];
   AGG_TYPE   dif;
   bool       ret[2];
+  clock_t    clk[3];
 
   // Populate the array.
   for (run = 0; run < len; run++) {
@@ -57,14 +67,19 @@ exec(AGG_TYPE* arr, const uint64_t len, const uint8_t fnc, const uint64_t idx, c
   }
 
   // Run the on-line algorithm.
+  clk[0] = clock();
   agg_new(&agg, fnc, par);
   for (run = 0; run < len; run++) {
     agg_put(&agg, arr[run]);
   }
   ret[0] = agg_get(&agg, &val[0]);
 
+  clk[1] = clock();
+
   // Run the off-line algorithm.
   ret[1] = agg_run(&val[1], arr, len, fnc, par);
+
+  clk[2] = clock();
 
   // Certify that the functions resulted in the same way.
   if (ret[0] != ret[1]) {
@@ -83,6 +98,9 @@ exec(AGG_TYPE* arr, const uint64_t len, const uint8_t fnc, const uint64_t idx, c
     return false;
   }
 
+  *onc += (uint64_t)(clk[1] - clk[0]);
+  *ofc += (uint64_t)(clk[2] - clk[1]);
+
   return true;
 }
 
@@ -99,6 +117,12 @@ test(bool* res, const uint8_t fnc, const AGG_TYPE par)
   uint64_t  len;
   uint64_t  idx;
   bool      ret;
+  uint64_t  onc;
+  uint64_t  ofc;
+
+  // Reset the clocks.
+  onc = 0;
+  ofc = 0;
 
   // Run the test with various input sizes.
   len = 10;
@@ -115,16 +139,20 @@ test(bool* res, const uint8_t fnc, const AGG_TYPE par)
     // Run each test multiple times to ensure that it satisfies the margin of
     // error under various inputs.
     for (ctr = 0; ctr < TEST_TRY; ctr++) {
-      ret = exec(arr, len, fnc, idx, par);
+      ret = exec(&onc, &ofc, arr, len, fnc, idx, par);
       if (ret == false) {
         printf("\n");
         *res = *res && ret;
         return;
       }
     }
-    
-    (void)printf("\e[32mokay\e[0m\n");
+
     free(arr);
+    
+    // Report success and elapsed times.
+    (void)printf("\e[32mokay\e[0m");
+    (void)printf(" (on = %8" PRIu64 "us total, %2" PRIu64 "us avg ",   onc, onc / len);
+    (void)printf("| of = %8" PRIu64 "us total, %2" PRIu64 "us avg)\n", ofc, ofc / len);
 
     // Increase the array length.
     len = len * 10;
