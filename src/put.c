@@ -277,6 +277,14 @@ qnt_adj(struct agg* agg, const uint64_t idx)
   }
 }
 
+/// Compare two elements of the stream.
+/// @return comparison
+/// @retval 0 elements are equal
+/// @retval 1 first element is greater
+/// @retval -1 second element is greater
+///
+/// @param[in] a first element
+/// @param[in] b second element
 static int
 qnt_cmp(const void* a, const void* b)
 {
