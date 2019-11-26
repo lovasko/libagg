@@ -357,8 +357,8 @@ run_qnt(      AGG_TYPE *restrict out,
         const AGG_TYPE           par)
 {
   uint64_t idx;
-  AGG_TYPE x;
-  AGG_TYPE y;
+  AGG_TYPE inp;
+  AGG_TYPE frp;
 
   // Validate the stream length.
   if (len == 0) {
@@ -375,8 +375,8 @@ run_qnt(      AGG_TYPE *restrict out,
 
   // Select the appropriate field. This is achieved by finding the precise decimal index, followed
   // by decomposition of the number into the integral and fractional parts.
-  x = AGG_MODF((len - 1) * par, &y);
-  idx = (AGG_TYPE)x;
+  frp = AGG_MODF((len - 1) * par, &inp);
+  idx = (uint64_t)inp;
 
   // Perform linear interpolation between the two candidate values. The first of the values
   // corresponds to the integral part, whereas the parameter for the linear interpolation is the
@@ -384,7 +384,7 @@ run_qnt(      AGG_TYPE *restrict out,
   if (idx == (len - 1)) {
     *out = arr[idx];
   } else {
-    *out = arr[idx] + y * (arr[idx + 1] - arr[idx]);
+    *out = arr[idx] + frp * (arr[idx + 1] - arr[idx]);
   }
 
   return true;
