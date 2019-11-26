@@ -258,22 +258,23 @@ qnt_adj(struct agg* agg, const uint64_t idx)
   ord[1] = agg->ag_cnt[idx - 1] < (agg->ag_cnt[idx] - 1); 
 
   // Only continue with the readjustment if the values are out of order.
-  if (!(dlt >= 1 && ord[0]) && !(dlt < -1 && ord[1])) {
-    return;
-  }
-  
-  // Decide the movement direction.
-  dir = (int64_t)AGG_SIGN(AGG_1_0, dlt);
+  if ((dlt >= AGG_1_0 && ord[0]) || (dlt <= -AGG_1_0 && ord[1])) {
+    // Decide the movement direction.
+    dir = (int64_t)AGG_SIGN(AGG_1_0, dlt);
 
-  par = qnt_prb(agg, idx, dir);
-  // Determine which estimation to use.
-  if (agg->ag_val[idx] < par && par < agg->ag_val[idx + 1]) {
-    agg->ag_val[idx] = par;
-  } else {
-    agg->ag_val[idx] = qnt_lin(agg, idx, dir);
-  }
+    // Determine which estimation to use.
+    par = qnt_prb(agg, idx, dir);
 
-  agg->ag_cnt[idx] += dir;
+    // In case the piecewise parabolic estimation would result in out of order values, revert to
+    // the linear estimation.
+    if (agg->ag_val[idx - 1] < par && par < agg->ag_val[idx + 1]) {
+      agg->ag_val[idx] = par;
+    } else {
+      agg->ag_val[idx] = qnt_lin(agg, idx, dir);
+    }
+
+    agg->ag_cnt[idx] += dir;
+  }
 }
 
 static int
