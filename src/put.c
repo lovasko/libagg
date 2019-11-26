@@ -24,7 +24,7 @@ put_fst(struct agg* agg, const AGG_TYPE inp)
 ///
 /// @param[in] agg aggregate function
 /// @param[in] inp input value
-static void 
+static void
 put_lst(struct agg* agg, const AGG_TYPE inp)
 {
   agg->ag_val[0] = inp;
@@ -157,7 +157,7 @@ put_var(struct agg* agg, const AGG_TYPE inp)
 
 /// Update the standard deviation of the stream.
 ///
-/// Note: As the standard deviation is computed as the square root of variance, we choose to 
+/// Note: As the standard deviation is computed as the square root of variance, we choose to
 /// maintain the variance computation throughout the update process.
 ///
 /// @param[in] agg aggregate function
@@ -196,7 +196,7 @@ put_krt(struct agg* agg, const AGG_TYPE inp)
 }
 
 /// Linear extrapolation between two heights.
-/// @return 
+/// @return
 ///
 /// This function works with the assumption that the `idx` argument
 /// is never the first (0) or the last (4) element of the array.
@@ -204,7 +204,7 @@ put_krt(struct agg* agg, const AGG_TYPE inp)
 /// @param[in] agg aggregate
 /// @param[in] idx index of the value to adjust
 /// @param[in] dir direction of the change
-static AGG_TYPE 
+static AGG_TYPE
 qnt_lin(struct agg* agg, const uint64_t idx, const int64_t dir)
 {
   return agg->ag_val[idx]       + (AGG_TYPE)dir
@@ -213,13 +213,13 @@ qnt_lin(struct agg* agg, const uint64_t idx, const int64_t dir)
 }
 
 /// Parabolic extrapolation between two heights.
-/// @return 
+/// @return
 ///
 /// This function works with the assumption that the `idx` argument
 /// is never the first (0) or the last (4) element of the array.
 ///
 /// @param[in] agg aggregate
-/// @param[in] idx index of 
+/// @param[in] idx index of
 /// @param[in] dir direction of the extrapolation
 static AGG_TYPE
 qnt_prb(struct agg* agg, const uint64_t idx, const int64_t dir)
@@ -255,7 +255,7 @@ qnt_adj(struct agg* agg, const uint64_t idx)
   // Compute the current differences.
   dlt    = agg->ag_val[idx + 5] - (AGG_TYPE)agg->ag_cnt[idx];
   ord[0] = agg->ag_cnt[idx + 1] > (agg->ag_cnt[idx] + 1);
-  ord[1] = agg->ag_cnt[idx - 1] < (agg->ag_cnt[idx] - 1); 
+  ord[1] = agg->ag_cnt[idx - 1] < (agg->ag_cnt[idx] - 1);
 
   // Only continue with the readjustment if the values are out of order.
   if ((dlt >= AGG_1_0 && ord[0]) || (dlt <= -AGG_1_0 && ord[1])) {

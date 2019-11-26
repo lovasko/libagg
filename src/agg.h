@@ -15,7 +15,7 @@
 // Determine the appropriate type-related constants and functions.
 #ifdef AGG_FLT
   // Types.
-  #define AGG_TYPE float 
+  #define AGG_TYPE float
   #define AGG_SIZE sizeof(float)
 
   // Functions.
@@ -48,7 +48,7 @@
   // Types.
   #define AGG_TYPE double
   #define AGG_SIZE sizeof(double)
-  
+
   // Functions.
   #define AGG_SQRT sqrt
   #define AGG_POW  pow
@@ -92,7 +92,7 @@
 #define AGG_FNC_QNT 0xc // Quantile.
 
 
-/// Aggregate function. 
+/// Aggregate function.
 struct agg {
   uint8_t  ag_fnc;     ///< Type.
   uint8_t  ag_pad[7];  ///< Padding (unused).

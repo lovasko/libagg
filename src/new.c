@@ -12,7 +12,7 @@
 ///
 /// @param[in] agg aggregate function
 /// @param[in] fnc function type
-/// @param[in] par function parameter 
+/// @param[in] par function parameter
 void
 agg_new(struct agg* agg, const uint8_t fnc, const AGG_TYPE par)
 {

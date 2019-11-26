@@ -149,7 +149,7 @@ static bool
 get_krt(const struct agg *restrict agg, AGG_TYPE *restrict out)
 {
   *out = (AGG_TYPE)(agg->ag_cnt[0])
-       * agg->ag_val[3] 
+       * agg->ag_val[3]
        / (agg->ag_val[1] * agg->ag_val[1])
        - AGG_3_0;
   return true;
@@ -186,7 +186,7 @@ static bool (*get_fnc[])(const struct agg*, AGG_TYPE*) = {
 
 /// Obtain the aggregated value.
 /// @return success/failure indication
-/// 
+///
 /// @param[in]  agg aggregate function
 /// @param[out] out aggregate value
 bool
