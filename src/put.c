@@ -336,8 +336,8 @@ put_qnt(struct agg* agg, const AGG_TYPE inp)
 
   // Increment the counts.
   agg->ag_cnt[1] += inc[0];
-  agg->ag_cnt[2] += inc[0] + inc[1];
-  agg->ag_cnt[3] += inc[0] + inc[1] + inc[2];
+  agg->ag_cnt[2] += inc[0] || inc[1];
+  agg->ag_cnt[3] += inc[0] || inc[1] || inc[2];
   agg->ag_cnt[4]++;
 
   // Adjust minimum and maximum.
