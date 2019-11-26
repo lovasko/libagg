@@ -295,7 +295,7 @@ qnt_cmp(const void* a, const void* b)
 static void
 put_qnt(struct agg* agg, const AGG_TYPE inp)
 {
-  uint64_t inc[4];
+  uint64_t inc[3];
 
   // Perform a sorted insert of the first 5 elements.
   if (agg->ag_cnt[4] < 4) {
@@ -329,22 +329,20 @@ put_qnt(struct agg* agg, const AGG_TYPE inp)
     return;
   }
 
+  // Determine which counts need to be incremented.
+  inc[0] = !!(inp < agg->ag_val[1]);
+  inc[1] = !!(inp < agg->ag_val[2]);
+  inc[2] = !!(inp < agg->ag_val[3]);
+
+  // Increment the counts.
+  agg->ag_cnt[1] += inc[0];
+  agg->ag_cnt[2] += inc[0] + inc[1];
+  agg->ag_cnt[3] += inc[0] + inc[1] + inc[2];
+  agg->ag_cnt[4]++;
+
   // Adjust minimum and maximum.
   agg->ag_val[0] = AGG_FMIN(agg->ag_val[0], inp);
   agg->ag_val[4] = AGG_FMAX(agg->ag_val[4], inp);
-
-  // Determine which counts need to be incremented.
-  inc[0] = !!(inp < agg->ag_val[0]);
-  inc[1] = !!(inp < agg->ag_val[1]);
-  inc[2] = !!(inp < agg->ag_val[2]);
-  inc[3] = !!(inp < agg->ag_val[3]);
-
-  // Increment the counts.
-  agg->ag_cnt[0] += inc[0];
-  agg->ag_cnt[1] += inc[0] + inc[1];
-  agg->ag_cnt[2] += inc[0] + inc[1] + inc[2];
-  agg->ag_cnt[3] += inc[0] + inc[1] + inc[2] + inc[3];
-  agg->ag_cnt[4]++;
 
   // Increment the desired counts.
   agg->ag_val[6] += agg->ag_par / AGG_2_0;
