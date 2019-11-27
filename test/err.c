@@ -224,6 +224,9 @@ main(void)
   (void)printf("qnt(0.99)\n");
   test(&res, AGG_FNC_QNT, AGG_0_99);
 
+  (void)printf("med\n");
+  test(&res, AGG_FNC_MED, AGG_0_0);
+
   // Ensure that the process succeeds only and only if all tests passed.
   if (res == true) {
     return EXIT_SUCCESS;
