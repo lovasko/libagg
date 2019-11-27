@@ -10,7 +10,7 @@ cd $(dirname $0)
 
 # C compilation settings.
 CC="cc"
-CFLAGS="-std=c99 -Wall -Wextra -Werror -flto"
+CFLAGS="-D_POSIX_C_SOURCE=201912 -std=c99 -Wall -Wextra -Werror -flto"
 LDFLAGS="-lm"
 SRC="err.c ../src/get.c ../src/put.c ../src/new.c ../src/run.c"
 

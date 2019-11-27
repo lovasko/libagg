@@ -41,6 +41,17 @@ random_number(void)
   return (AGG_TYPE)num / (AGG_TYPE)per * AGG_10_0;
 }
 
+/// Obtain the current time with minimal external effects.
+/// @return nanoseconds
+static uint64_t
+time_now(void)
+{
+  struct timespec ts;
+
+  (void)clock_gettime(CLOCK_MONOTONIC, &ts);
+  return ts.tv_sec * 1000000000ULL + ts.tv_nsec;
+}
+
 /// Run the on-line and off-line algorithms and verify whether they differ
 /// the acceptable margin of error.
 /// @return success/failure indication
@@ -66,27 +77,26 @@ exec(uint64_t* onc,
   AGG_TYPE   val[2];
   AGG_TYPE   dif;
   bool       ret[2];
-  clock_t    clk[3];
+  uint64_t   now[3];
 
   // Populate the array.
   for (run = 0; run < len; run++) {
     arr[run] = random_number();
   }
 
+
   // Run the on-line algorithm.
-  clk[0] = clock();
+  now[0] = time_now();
   agg_new(&agg, fnc, par);
   for (run = 0; run < len; run++) {
     agg_put(&agg, arr[run]);
   }
   ret[0] = agg_get(&agg, &val[0]);
-
-  clk[1] = clock();
+  now[1] = time_now();
 
   // Run the off-line algorithm.
   ret[1] = agg_run(&val[1], arr, len, fnc, par);
-
-  clk[2] = clock();
+  now[2] = time_now();
 
   // Certify that the functions resulted in the same way.
   if (ret[0] != ret[1]) {
@@ -105,8 +115,8 @@ exec(uint64_t* onc,
     return false;
   }
 
-  *onc += (uint64_t)(clk[1] - clk[0]);
-  *ofc += (uint64_t)(clk[2] - clk[1]);
+  *onc += (uint64_t)(now[1] - now[0]);
+  *ofc += (uint64_t)(now[2] - now[1]);
 
   return true;
 }
@@ -158,8 +168,8 @@ test(bool* res, const uint8_t fnc, const AGG_TYPE par)
 
     // Report success and elapsed times.
     (void)printf("\e[32mokay\e[0m");
-    (void)printf(" (on = %8" PRIu64 "us total, %2" PRIu64 "us avg ",   onc, onc / len);
-    (void)printf("| of = %8" PRIu64 "us total, %2" PRIu64 "us avg)\n", ofc, ofc / len);
+    (void)printf(" (on = %12" PRIu64 "ns total, %4" PRIu64 "ns avg ",   onc, onc / len / TEST_TRY);
+    (void)printf("| of = %12" PRIu64 "ns total, %4" PRIu64 "ns avg)\n", ofc, ofc / len / TEST_TRY);
 
     // Increase the array length.
     len = len * 10;
