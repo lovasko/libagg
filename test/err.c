@@ -19,6 +19,13 @@
 #define TEST_LEN 6
 #define TEST_TRY 100
 
+// Define a type-correct constant for one hundred.
+#ifdef AGG_FLT
+  #define AGG_10_0 10.0f
+#else
+  #define AGG_10_0 10.0
+#endif
+
 
 /// Generate a next random number from the inclusive interval (0.0, 1.0).
 /// @return random number
@@ -31,7 +38,7 @@ random_number(void)
   per = ((uint32_t)1 << 31) - 1;
   num = (num * 214013 + 2531011) & per;
 
-  return (AGG_TYPE)num / (AGG_TYPE)per;
+  return (AGG_TYPE)num / (AGG_TYPE)per * AGG_10_0;
 }
 
 /// Run the on-line and off-line algorithms and verify whether they differ
