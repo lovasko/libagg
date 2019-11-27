@@ -66,7 +66,7 @@ get_sum(const struct agg *restrict agg, AGG_TYPE *restrict out)
 static bool
 get_min(const struct agg *restrict agg, AGG_TYPE *restrict out)
 {
-  *out = agg->ag_val[4];
+  *out = agg->ag_val[0];
   return agg->ag_cnt[0] > 0;
 }
 
@@ -78,7 +78,7 @@ get_min(const struct agg *restrict agg, AGG_TYPE *restrict out)
 static bool
 get_max(const struct agg *restrict agg, AGG_TYPE *restrict out)
 {
-  *out = agg->ag_val[5];
+  *out = agg->ag_val[0];
   return agg->ag_cnt[0] > 0;
 }
 

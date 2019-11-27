@@ -58,7 +58,7 @@ put_sum(struct agg* agg, const AGG_TYPE inp)
 static void
 put_min(struct agg* agg, const AGG_TYPE inp)
 {
-  agg->ag_val[4] = AGG_FMIN(inp, agg->ag_val[4]);
+  agg->ag_val[0] = AGG_FMIN(inp, agg->ag_val[0]);
 }
 
 /// Update the maximal value in the stream.
@@ -68,7 +68,7 @@ put_min(struct agg* agg, const AGG_TYPE inp)
 static void
 put_max(struct agg* agg, const AGG_TYPE inp)
 {
-  agg->ag_val[5] = AGG_FMAX(inp, agg->ag_val[5]);
+  agg->ag_val[0] = AGG_FMAX(inp, agg->ag_val[0]);
 }
 
 /// Pre-compute temporary variables.

@@ -32,12 +32,22 @@ agg_new(struct agg* agg, const uint8_t fnc, const AGG_TYPE par)
   agg->ag_val[1] = AGG_0_0;
   agg->ag_val[2] = AGG_0_0;
   agg->ag_val[3] = AGG_0_0;
-  agg->ag_val[4] = AGG_MAX; // For use in `put_min`.
-  agg->ag_val[5] = AGG_MIN; // For use in `put_max`.
+  agg->ag_val[4] = AGG_0_0;
+  agg->ag_val[5] = AGG_0_0;
   agg->ag_val[6] = AGG_0_0;
   agg->ag_val[7] = AGG_0_0;
   agg->ag_val[8] = AGG_0_0;
   agg->ag_val[9] = AGG_0_0;
+
+  // Override the default value for minimum computation.
+  if (fnc == AGG_FNC_MIN) {
+    agg->ag_val[0] = AGG_MAX;
+  }
+
+  // Override the default value for maximum computation.
+  if (fnc == AGG_FNC_MAX) {
+    agg->ag_val[0] = AGG_MIN;
+  }
 
   // Override the parameter for median computation.
   if (fnc == AGG_FNC_MED) {
