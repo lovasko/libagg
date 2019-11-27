@@ -369,6 +369,16 @@ put_qnt(struct agg* agg, const AGG_TYPE inp)
   agg->ag_cnt[0]--;
 }
 
+/// Update the median of the stream.
+///
+/// @param[in] agg aggregate function
+/// @param[in] inp input value
+static void
+put_med(struct agg* agg, const AGG_TYPE inp)
+{
+  put_qnt(agg, inp);
+}
+
 /// Function table for put_* functions based on ag_fnc.
 static void (*put_fnc[])(struct agg*, const AGG_TYPE) = {
   NULL,
@@ -383,7 +393,8 @@ static void (*put_fnc[])(struct agg*, const AGG_TYPE) = {
   put_dev,
   put_skw,
   put_krt,
-  put_qnt
+  put_qnt,
+  put_med
 };
 
 /// Update the aggregated value.

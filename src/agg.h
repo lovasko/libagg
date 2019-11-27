@@ -90,6 +90,7 @@
 #define AGG_FNC_SKW 0xa // Skewness.
 #define AGG_FNC_KRT 0xb // Kurtosis.
 #define AGG_FNC_QNT 0xc // Quantile.
+#define AGG_FNC_MED 0xd // Median.
 
 
 /// Aggregate function.

@@ -45,4 +45,9 @@ agg_new(struct agg* agg, const uint8_t fnc, const AGG_TYPE par)
   agg->ag_tmp[2] = AGG_0_0;
   agg->ag_tmp[3] = AGG_0_0;
   agg->ag_tmp[4] = AGG_0_0;
+
+  // Override the parameter for median computation.
+  if (fnc == AGG_FNC_MED) {
+    agg->ag_par = AGG_0_5;
+  }
 }

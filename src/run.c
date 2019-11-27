@@ -390,6 +390,23 @@ run_qnt(      AGG_TYPE *restrict out,
   return true;
 }
 
+/// Compute the median of the values in the stream given full stream information.
+/// @return success/failure indication
+///
+/// @param[out] out median of values
+/// @param[in]  arr array representing the stream
+/// @param[in]  len array length
+/// @param[in]  par parameter (unused)
+static bool
+run_med(      AGG_TYPE *restrict out,
+        const AGG_TYPE *restrict arr,
+        const uint64_t           len,
+        const AGG_TYPE           par)
+{
+  (void)par;
+  return run_qnt(out, arr, len, AGG_0_5);
+}
+
 /// Function table for push_* functions based on ag_typ.
 static bool (*run_fnc[])(AGG_TYPE*, const AGG_TYPE*, const uint64_t, const AGG_TYPE) = {
   NULL,
@@ -404,7 +421,8 @@ static bool (*run_fnc[])(AGG_TYPE*, const AGG_TYPE*, const uint64_t, const AGG_T
   run_dev,
   run_skw,
   run_krt,
-  run_qnt
+  run_qnt,
+  run_med
 };
 
 /// Compute an aggregate of a stream with full information.

@@ -167,6 +167,17 @@ get_qtl(const struct agg* restrict agg, AGG_TYPE *restrict out)
   return agg->ag_cnt[4] > 0;
 }
 
+/// Obtain the median of the values in the stream.
+/// @return success/failure indication
+///
+/// @param[in]  agg aggregate function
+/// @param[out] out median of values
+static bool
+get_med(const struct agg* restrict agg, AGG_TYPE *restrict out)
+{
+  return get_qtl(agg, out);
+}
+
 /// Function table for get_* functions based on ag_fnc.
 static bool (*get_fnc[])(const struct agg*, AGG_TYPE*) = {
   NULL,
@@ -181,7 +192,8 @@ static bool (*get_fnc[])(const struct agg*, AGG_TYPE*) = {
   get_dev,
   get_skw,
   get_krt,
-  get_qtl
+  get_qtl,
+  get_med
 };
 
 /// Obtain the aggregated value.
