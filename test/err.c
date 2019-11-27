@@ -29,12 +29,12 @@
 
 /// Generate a next random number from the inclusive interval (0.0, 1.0).
 /// @return random number
-static AGG_TYPE 
+static AGG_TYPE
 random_number(void)
 {
   static uint32_t num = 77;
-  uint32_t per; 
-  
+  uint32_t per;
+
   per = ((uint32_t)1 << 31) - 1;
   num = (num * 214013 + 2531011) & per;
 
@@ -137,7 +137,7 @@ test(bool* res, const uint8_t fnc, const AGG_TYPE par)
     (void)printf("%*" PRIu64 " -> ", 9, len);
 
     // Allocate the array.
-    arr = malloc(sizeof(*arr) * len); 
+    arr = malloc(sizeof(*arr) * len);
     if (arr == NULL) {
       perror("allocation error\n");
       return;
@@ -155,7 +155,7 @@ test(bool* res, const uint8_t fnc, const AGG_TYPE par)
     }
 
     free(arr);
-    
+
     // Report success and elapsed times.
     (void)printf("\e[32mokay\e[0m");
     (void)printf(" (on = %8" PRIu64 "us total, %2" PRIu64 "us avg ",   onc, onc / len);
