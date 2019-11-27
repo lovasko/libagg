@@ -84,9 +84,9 @@ set_tmp(struct agg* agg, const AGG_TYPE inp)
   x = inp - agg->ag_val[0];
   y = x / (AGG_TYPE)(agg->ag_cnt[0] + 1);
 
-  agg->ag_tmp[0] = y;
-  agg->ag_tmp[1] = y * y;
-  agg->ag_tmp[2] = x * y * (AGG_TYPE)agg->ag_cnt[0];
+  agg->ag_val[4] = y;
+  agg->ag_val[5] = y * y;
+  agg->ag_val[6] = x * y * (AGG_TYPE)agg->ag_cnt[0];
 }
 
 /// Update the first moment.
@@ -95,7 +95,7 @@ set_tmp(struct agg* agg, const AGG_TYPE inp)
 static void
 fst_mnt(struct agg* agg)
 {
-  agg->ag_val[0] += agg->ag_tmp[0];
+  agg->ag_val[0] += agg->ag_val[4];
 }
 
 /// Update the second moment.
@@ -104,7 +104,7 @@ fst_mnt(struct agg* agg)
 static void
 snd_mnt(struct agg* agg)
 {
-  agg->ag_val[1] += agg->ag_tmp[2];
+  agg->ag_val[1] += agg->ag_val[6];
 }
 
 /// Update the third moment.
@@ -113,8 +113,8 @@ snd_mnt(struct agg* agg)
 static void
 trd_mnt(struct agg* agg)
 {
-  agg->ag_val[2] += agg->ag_tmp[2] * agg->ag_tmp[0] * (AGG_TYPE)(agg->ag_cnt[0] - 1)
-                  - AGG_3_0        * agg->ag_tmp[0] * agg->ag_val[1];
+  agg->ag_val[2] += agg->ag_val[6] * agg->ag_val[4] * (AGG_TYPE)(agg->ag_cnt[0] - 1)
+                  - AGG_3_0        * agg->ag_val[4] * agg->ag_val[1];
 }
 
 /// Update the fourth moment.
@@ -126,10 +126,10 @@ fth_mnt(struct agg* agg)
   AGG_TYPE x;
 
   x = (AGG_TYPE)(agg->ag_cnt[0] + 1);
-  agg->ag_val[3] += agg->ag_tmp[2] * agg->ag_tmp[1]
+  agg->ag_val[3] += agg->ag_val[6] * agg->ag_val[5]
                   * (x * x - AGG_3_0 * x + AGG_3_0)
-                  + AGG_6_0 * agg->ag_tmp[1] * agg->ag_val[1]
-                  - AGG_4_0 * agg->ag_tmp[0] * agg->ag_val[2];
+                  + AGG_6_0 * agg->ag_val[5] * agg->ag_val[1]
+                  - AGG_4_0 * agg->ag_val[4] * agg->ag_val[2];
 }
 
 /// Update the average value in the stream.

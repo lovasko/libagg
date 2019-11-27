@@ -100,7 +100,6 @@ struct agg {
   uint64_t ag_cnt[5];  ///< Number of observations.
   AGG_TYPE ag_par;     ///< Function argument.
   AGG_TYPE ag_val[10]; ///< State variables.
-  AGG_TYPE ag_tmp[5];  ///< Temporary variables.
 };
 
 /// On-line algorithms.
