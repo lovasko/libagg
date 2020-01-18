@@ -11,17 +11,16 @@
 #include <stdint.h>
 #include <float.h>
 
-// This constant ensures that all code that is made available by this library is
-// stricly compliant with the C99 language standard.
+// This constant ensures that all code that is made available by this library is strictly compliant
+// with the C99 language standard.
 #ifndef AGG_STD
   #define AGG_STD 1
 #endif
 
-// This constant selects the width of the floating point type used by the library
-// in all computations. The default value is 64, which denotes the `double` type.
-// Other permissible values include 32 for `float` and 128 for `__float128`. The
-// latter type is a non-standard extension and will result in compile-time error
-// unless the `AGG_STD` macro evaluates to `0`.
+// This constant selects the width of the floating point type used by the library in all
+// computations. The default value is 64, which denotes the `double` type.  Other permissible values
+// include 32 for `float` and 128 for `__float128`. The latter type is a non-standard extension and
+// will result in compile-time error unless the `AGG_STD` macro evaluates to `0`.
 #ifndef AGG_BIT
   #define AGG_BIT 64
 #endif
