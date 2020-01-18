@@ -21,13 +21,13 @@ set -e
 echo "#################"
 echo "# DOUBLE        #"
 echo "#################"
-${CC} -DAGG_DBL -o "err_dbl" ${CFLAGS} ${SRC} ${LDFLAGS}
+${CC} -DAGG_BIT=32 -o "err_dbl" ${CFLAGS} ${SRC} ${LDFLAGS}
 ./err_dbl
 
 echo "#################"
 echo "# FLOAT         #"
 echo "#################"
-${CC} -DAGG_FLT -o "err_flt" ${CFLAGS} ${SRC} ${LDFLAGS}
+${CC} -DAGG_BIT=64 -o "err_flt" ${CFLAGS} ${SRC} ${LDFLAGS}
 ./err_flt
 set +e
 
@@ -38,13 +38,13 @@ set +e
 echo "#################"
 echo "# DOUBLE FAST   #"
 echo "#################"
-${CC} -DAGG_DBL -o "err_dbl_fast" -Ofast ${CFLAGS} ${SRC} ${LDFLAGS}
+${CC} -DAGG_BIT=32 -o "err_dbl_fast" -Ofast ${CFLAGS} ${SRC} ${LDFLAGS}
 ./err_dbl_fast
 
 echo "#################"
 echo "# FLOAT FAST    #"
 echo "#################"
-${CC} -DAGG_FLT -o "err_flt_fast" -Ofast ${CFLAGS} ${SRC} ${LDFLAGS}
+${CC} -DAGG_BIT=64 -o "err_flt_fast" -Ofast ${CFLAGS} ${SRC} ${LDFLAGS}
 ./err_flt_fast
 
 # Ensure successful exit code of the testing, even if the fast tests fail.

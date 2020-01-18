@@ -11,7 +11,7 @@
 // aggregate function. The corresponding length of the input list is
 // implied, starting with 10 elements and increasing tenfold in each
 // iteration.
-#ifdef AGG_FLT
+#if AGG_BIT == 32
   #ifdef __FAST_MATH__
     static const float err[13][6] = {
       {0.0e0f,  0.0e0f,  0.0e0f,  0.0e0f,  0.0e0f,  0.0e0f},  // fst
@@ -45,7 +45,7 @@
       {1.0e1f,  1.0e0f,  1.0e0f,  1.0e-1f, 1.0e-1f, 1.0e-1f}, // med
     };
   #endif
-#else
+#elif AGG_BIT == 64
   #ifdef __FAST_MATH__
     static const double err[13][6] = {
       {0.0e0,   0.0e0,   0.0e0,   0.0e0,   0.0e0,   0.0e0},   // fst
@@ -79,6 +79,8 @@
       {1.0e1,   1.0e0,   1.0e0,   1.0e-1,  1.0e-2,  1.0e-3},  // med
     };
   #endif
+#else
+  #error "AGG_BIT is not supported" AGG_BIT
 #endif
 
 #endif

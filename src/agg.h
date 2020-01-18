@@ -11,9 +11,23 @@
 #include <stdint.h>
 #include <float.h>
 
+// This constant ensures that all code that is made available by this library is
+// stricly compliant with the C99 language standard.
+#ifndef AGG_STD
+  #define AGG_STD 1
+#endif
+
+// This constant selects the width of the floating point type used by the library
+// in all computations. The default value is 64, which denotes the `double` type.
+// Other permissible values include 32 for `float` and 128 for `__float128`. The
+// latter type is a non-standard extension and will result in compile-time error
+// unless the `AGG_STD` macro evaluates to `0`.
+#ifndef AGG_BIT
+  #define AGG_BIT 64
+#endif
 
 // Determine the appropriate type-related constants and functions.
-#ifdef AGG_FLT
+#if AGG_BIT == 32
   // Types.
   #define AGG_TYPE float
   #define AGG_SIZE sizeof(float)
@@ -44,7 +58,7 @@
   #define AGG_6_0  6.0f
   #define AGG_MIN  -FLT_MAX
   #define AGG_MAX  FLT_MAX
-#else
+#elif AGG_BIT == 64
   // Types.
   #define AGG_TYPE double
   #define AGG_SIZE sizeof(double)
@@ -75,6 +89,44 @@
   #define AGG_6_0  6.0
   #define AGG_MIN  -DBL_MAX
   #define AGG_MAX  DBL_MAX
+#elif AGG_BIT == 128
+  // Ensure that the type cannot be seleted when a strict standard-compliance is requested.
+  #if AGG_STD == 1
+    #error "AGG_BIT == 128 is a non-standard extension"
+  #endif
+
+  // Types.
+  #define AGG_TYPE __float128
+  #define AGG_SIZE sizeof(__float128)
+
+  // Functions.
+  #define AGG_SQRT sqrtq
+  #define AGG_POW  powq
+  #define AGG_ABS  fabsq
+  #define AGG_FMIN fminq
+  #define AGG_FMAX fmaxq
+  #define AGG_SIGN copysignq
+  #define AGG_MODF modfq
+
+  // Constants.
+  #define AGG_FMT  "%Qe"
+  #define AGG_0_0  0.0Q
+  #define AGG_0_1  0.1Q
+  #define AGG_0_5  0.5Q
+  #define AGG_0_75 0.75Q
+  #define AGG_0_9  0.9Q
+  #define AGG_0_99 0.99Q
+  #define AGG_1_0  1.0Q
+  #define AGG_1_5  1.5Q
+  #define AGG_2_0  2.0Q
+  #define AGG_3_0  3.0Q
+  #define AGG_4_0  4.0Q
+  #define AGG_5_0  5.0Q
+  #define AGG_6_0  6.0Q
+  #define AGG_MIN  -FLT128_MAX
+  #define AGG_MAX  FLT128_MAX
+#else
+  #error "invalid value of AGG_BIT: " AGG_BIT
 #endif
 
 /// Aggregate function types.

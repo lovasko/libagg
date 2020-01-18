@@ -20,10 +20,12 @@
 #define TEST_TRY 100
 
 // Define a type-correct constant for one hundred.
-#ifdef AGG_FLT
+#if AGG_BIT == 32
   #define AGG_10_0 10.0f
-#else
+#elif AGG_BIT == 64
   #define AGG_10_0 10.0
+#else
+  #error "AGG_BIT not supported"
 #endif
 
 

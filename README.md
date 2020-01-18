@@ -102,10 +102,17 @@ in the C99 language. This is evidenced by the fact that all mathematical functio
 `long double` are differentiated by a suffix, e.g. `sin`, `sinf`, and `sinl`. Moreover, the
 numerical literals in the language are `double` by default too.
 
-In order to use `float` instead, the `AGG_FLT` macro has to be defined before the `agg.h` header
-file is included (and thus attended to by the pre-processor). This creates a trade-off, where the
-precision of all functions The switch is not dynamic and has to be done in during the
-compilation of the source code.
+In order to use other floating point types instead, the `AGG_BIT` macro with the appropriate bit width
+has to be defined before the `agg.h` header file is included (and thus attended to by the pre-processor).
+This creates a trade-off, where the precision of all functions The switch is not dynamic and has to
+be done in during the compilation of the source code. The following table lists currently supported
+floating point types and their respective values recognised by `AGG_BIT`:
+
+| Type         | `AGG_BIT` |
+|--------------|-----------|
+| `float`      | 32        |
+| `double`     | 64        |
+| `__float128` | 128       |
 
 ## Testing
 The library has a particular trade-off at its heart: it sacrifices the precision of the
