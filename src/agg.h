@@ -30,7 +30,7 @@
 #if AGG_BIT == 32
   // Types.
   #define AGG_TYPE float
-  #define AGG_SIZE sizeof(float)
+  #define AGG_SIZE sizeof(AGG_TYPE)
 
   // Functions.
   #define AGG_SQRT sqrtf
@@ -61,7 +61,7 @@
 #elif AGG_BIT == 64
   // Types.
   #define AGG_TYPE double
-  #define AGG_SIZE sizeof(double)
+  #define AGG_SIZE sizeof(AGG_TYPE)
 
   // Functions.
   #define AGG_SQRT sqrt
@@ -97,7 +97,7 @@
 
   // Types.
   #define AGG_TYPE __float128
-  #define AGG_SIZE sizeof(__float128)
+  #define AGG_SIZE sizeof(AGG_TYPE)
 
   // Functions.
   #define AGG_SQRT sqrtq
