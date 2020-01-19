@@ -3,7 +3,7 @@ The `libagg` is a C99 library that implements a set of algorithms that provide s
 aggregation of a stream of floating-point numerical values. All aggregate functions are provided in
 two separate implementations: _static_ and _streaming_.
 
-The two key properties achieved by the streaming implementations relate to the fact that 
+The two key properties achieved by the streaming implementations relate to the fact that
 the full set of values does not need to be known ahead, enabling:
  * large data sets to be processed in constant amount of memory
  * analysis of data sets of unknown length (e.g. user input, non-deterministic behaviour of a
@@ -32,8 +32,8 @@ The module provides the following aggregate functions:
 ## API
 ### Functions
 The streaming part of the library consists of the following three functions:
- * `agg_new` to initialize or reset the state 
- * `agg_put` to update the statistical aggregate estimate 
+ * `agg_new` to initialize or reset the state
+ * `agg_put` to update the statistical aggregate estimate
  * `agg_get` to obtain the statistical aggregate estimate
 
 The static part of the library consists only of one function:
@@ -42,7 +42,7 @@ The static part of the library consists only of one function:
 ### Types
 The streaming part of the library consists only of one type:
   * `struct agg` which keeps track of state and should be treated as an opaque structure
- 
+
 The static part of the library does not use any custom types.
 
 ### Constants

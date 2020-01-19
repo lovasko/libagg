@@ -61,7 +61,7 @@
 
   // Constants.
   #define AGG_FMT  "%le"
-  #define AGG_NUM(I, F, S, E) I ## . ## F ## e ## S ## E 
+  #define AGG_NUM(I, F, S, E) I ## . ## F ## e ## S ## E
   #define AGG_MIN  -DBL_MAX
   #define AGG_MAX  DBL_MAX
 #elif AGG_BIT == 128
