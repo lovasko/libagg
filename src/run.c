@@ -371,7 +371,7 @@ run_qnt(      AGG_TYPE *restrict out,
   }
 
   // Sort the stream.
-  (void)qsort((void*)arr, len, AGG_SIZE, qnt_cmp);
+  (void)qsort((void*)arr, len, sizeof(AGG_TYPE), qnt_cmp);
 
   // Select the appropriate field. This is achieved by finding the precise decimal index, followed
   // by decomposition of the number into the integral and fractional parts.

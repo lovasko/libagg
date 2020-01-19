@@ -319,7 +319,7 @@ put_qnt(struct agg* agg, const AGG_TYPE inp)
     agg->ag_val[4] = inp;
 
     // Sort the values.
-    (void)qsort(agg->ag_val, 5, AGG_SIZE, qnt_cmp);
+    (void)qsort(agg->ag_val, 5, sizeof(AGG_TYPE), qnt_cmp);
 
     // Initialise the counts.
     agg->ag_cnt[0] = 0; // Will get incremented by `agg_put`.
