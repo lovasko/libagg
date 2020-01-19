@@ -7,6 +7,28 @@
 #ifndef AGGREGATE_TEST_ERR_H
 #define AGGREGATE_TEST_ERR_H
 
+// Define error threshold constants.
+#define P_03 AGG_NUM(1, 0, +,  3)
+#define P_02 AGG_NUM(1, 0, +,  2)
+#define P_01 AGG_NUM(1, 0, +,  1)
+#define Z_01 AGG_NUM(1, 0, +,  0)
+#define Z_00 AGG_NUM(0, 0, +,  0)
+#define M_01 AGG_NUM(1, 0, -,  1)
+#define M_02 AGG_NUM(1, 0, -,  2)
+#define M_03 AGG_NUM(1, 0, -,  3)
+#define M_04 AGG_NUM(1, 0, -,  4)
+#define M_05 AGG_NUM(1, 0, -,  5)
+#define M_06 AGG_NUM(1, 0, -,  6)
+#define M_07 AGG_NUM(1, 0, -,  7)
+#define M_08 AGG_NUM(1, 0, -,  8)
+#define M_09 AGG_NUM(1, 0, -,  9)
+#define M_10 AGG_NUM(1, 0, -, 10)
+#define M_12 AGG_NUM(1, 0, -, 11)
+#define M_13 AGG_NUM(1, 0, -, 12)
+#define M_14 AGG_NUM(1, 0, -, 13)
+#define M_15 AGG_NUM(1, 0, -, 14)
+#define M_16 AGG_NUM(1, 0, -, 15)
+
 // The tables below denote the acceptable magnitudes of error for each
 // aggregate function. The corresponding length of the input list is
 // implied, starting with 10 elements and increasing tenfold in each
@@ -14,69 +36,69 @@
 #if AGG_BIT == 32
   #ifdef __FAST_MATH__
     static const AGG_TYPE err[13][6] = {
-      {0.0e0f,  0.0e0f,  0.0e0f,  0.0e0f,  0.0e0f,  0.0e0f},  // fst
-      {0.0e0f,  0.0e0f,  0.0e0f,  0.0e0f,  0.0e0f,  0.0e0f},  // lst
-      {0.0e0f,  0.0e0f,  0.0e0f,  0.0e0f,  0.0e0f,  0.0e0f},  // cnt
-      {1.0e-5f, 1.0e-3f, 1.0e-2f, 1.0e0f,  1.0e1f,  1.0e3f},  // sum
-      {0.0e0f,  0.0e0f,  0.0e0f,  0.0e0f,  0.0e0f,  0.0e0f},  // min
-      {0.0e0f,  0.0e0f,  0.0e0f,  0.0e0f,  0.0e0f,  0.0e0f},  // max
-      {1.0e-6f, 1.0e-5f, 1.0e-4f, 1.0e-4f, 1.0e-4f, 1.0e-3f}, // avg
-      {1.0e-5f, 1.0e-5f, 1.0e-4f, 1.0e-4f, 1.0e-3f, 1.0e-2f}, // var
-      {1.0e-6f, 1.0e-5f, 1.0e-4f, 1.0e-4f, 1.0e-4f, 1.0e-3f}, // dev
-      {1.0e0f,  1.0e-2f, 1.0e-3f, 1.0e-4f, 1.0e-4f, 1.0e-3f}, // skw
-      {1.0e0f,  1.0e-1f, 1.0e-2f, 1.0e-3f, 1.0e-3f, 1.0e-2f}, // krt
-      {1.0e1f,  1.0e0f,  1.0e0f,  1.0e-1f, 1.0e-1f, 1.0e-1f}, // qnt
-      {1.0e1f,  1.0e0f,  1.0e0f,  1.0e-1f, 1.0e-1f, 1.0e-1f}, // med
+      {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // fst
+      {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // snd
+      {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // cnt 
+      {M_05, M_03, M_02, Z_01, P_01, P_03}, // sum
+      {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // min
+      {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // max
+      {M_06, M_05, M_04, M_04, M_04, M_03}, // avg
+      {M_05, M_05, M_04, M_04, M_03, M_02}, // var
+      {M_06, M_05, E_04, M_04, M_04, M_03}, // dev
+      {Z_01, M_02, M_03, M_04, M_04, M_03}, // skw
+      {Z_01, M_01, M_02, M_03, M_03, M_02}, // krt
+      {P_01, Z_01, Z_01, M_01, M_01, M_01}, // qnt
+      {P_01, Z_01, Z_01, M_01, M_01, M_01}, // med
     };
   #else
     static const AGG_TYPE err[13][6] = {
-      {0.0e0f,  0.0e0f,  0.0e0f,  0.0e0f,  0.0e0f,  0.0e0f},  // fst
-      {0.0e0f,  0.0e0f,  0.0e0f,  0.0e0f,  0.0e0f,  0.0e0f},  // lst
-      {0.0e0f,  0.0e0f,  0.0e0f,  0.0e0f,  0.0e0f,  0.0e0f},  // cnt
-      {0.0e0f,  0.0e0f,  0.0e0f,  0.0e0f,  0.0e0f,  0.0e0f},  // sum
-      {0.0e0f,  0.0e0f,  0.0e0f,  0.0e0f,  0.0e0f,  0.0e0f},  // min
-      {0.0e0f,  0.0e0f,  0.0e0f,  0.0e0f,  0.0e0f,  0.0e0f},  // max
-      {1.0e-6f, 1.0e-5f, 1.0e-4f, 1.0e-4f, 1.0e-4f, 1.0e-3f}, // avg
-      {1.0e-5f, 1.0e-5f, 1.0e-4f, 1.0e-4f, 1.0e-3f, 1.0e-3f}, // var
-      {1.0e-6f, 1.0e-5f, 1.0e-4f, 1.0e-4f, 1.0e-4f, 1.0e-4f}, // dev
-      {1.0e0f,  1.0e-2f, 1.0e-3f, 1.0e-4f, 1.0e-4f, 1.0e-3f}, // skw
-      {1.0e0f,  1.0e-1f, 1.0e-2f, 1.0e-3f, 1.0e-3f, 1.0e-3f}, // krt
-      {1.0e1f,  1.0e0f,  1.0e0f,  1.0e-1f, 1.0e-1f, 1.0e-1f}, // qnt
-      {1.0e1f,  1.0e0f,  1.0e0f,  1.0e-1f, 1.0e-1f, 1.0e-1f}, // med
+      {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // fst
+      {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // lst
+      {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // cnt
+      {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // sum
+      {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // min
+      {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // max
+      {M_06, M_05, M_04, M_04, M_04, M_03}, // avg
+      {M_05, M_05, M_04, M_04, M_03, M_03}, // var
+      {M_06, M_05, M_04, M_04, M_04, M_04}, // dev
+      {Z_01, M_02, M_03, M_04, M_04, M_03}, // skw
+      {Z_01, M_01, M_02, M_03, M_03, M_03}, // krt
+      {P_01, Z_01, Z_01, M_01, M_01, M_01}, // qnt
+      {P_01, Z_01, Z_01, M_01, M_01, M_01}, // med
     };
   #endif
 #elif AGG_BIT == 64
   #ifdef __FAST_MATH__
     static const AGG_TYPE err[13][6] = {
-      {0.0e0,   0.0e0,   0.0e0,   0.0e0,   0.0e0,   0.0e0},   // fst
-      {0.0e0,   0.0e0,   0.0e0,   0.0e0,   0.0e0,   0.0e0},   // lst
-      {0.0e0,   0.0e0,   0.0e0,   0.0e0,   0.0e0,   0.0e0},   // cnt
-      {1.0e-13, 1.0e-12, 1.0e-10, 1.0e-9,  1.0e-7,  1.0e-6},  // sum
-      {0.0e0,   0.0e0,   0.0e0,   0.0e0,   0.0e0,   0.0e0},   // min
-      {0.0e0,   0.0e0,   0.0e0,   0.0e0,   0.0e0,   0.0e0},   // max
-      {1.0e-14, 1.0e-14, 1.0e-13, 1.0e-13, 1.0e-12, 1.0e-12}, // avg
-      {1.0e-14, 1.0e-14, 1.0e-13, 1.0e-13, 1.0e-12, 1.0e-12}, // var
-      {1.0e-14, 1.0e-14, 1.0e-13, 1.0e-13, 1.0e-12, 1.0e-12}, // dev
-      {1.0e0,   1.0e-2,  1.0e-3,  1.0e-5,  1.0e-6,  1.0e-8},  // skw
-      {1.0e0,   1.0e-1,  1.0e-2,  1.0e-3,  1.0e-4,  1.0e-5},  // krt
-      {1.0e1,   1.0e0,   1.0e0,   1.0e-1,  1.0e-2,  1.0e-3},  // qnt
-      {1.0e1,   1.0e0,   1.0e0,   1.0e-1,  1.0e-2,  1.0e-3},  // med
+      {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // fst
+      {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // lst
+      {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // cnt
+      {M_13, M_12, M_10, M_09, M_07, M_06}, // sum
+      {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // min 
+      {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // max 
+      {M_14, M_14, M_13, M_13, M_12, M_12}, // avg
+      {M_14, M_14, M_13, M_13, M_12, M_12}, // var
+      {M_14, M_14, M_13, M_13, M_12, M_12}, // dev
+      {Z_01, M_02, M_03, M_05, M_06, M_08}, // skw
+      {Z_01, M_01, M_02, M_03, M_04, M_05}, // krt
+      {P_01, Z_01, Z_01, M_01, M_02, M_03}, // qnt
+      {P_01, Z_01, Z_01, M_01, M_02, M_03}, // med
     };
   #else
     static const AGG_TYPE err[13][6] = {
-      {0.0e0,   0.0e0,   0.0e0,   0.0e0,   0.0e0,   0.0e0},   // fst
-      {0.0e0,   0.0e0,   0.0e0,   0.0e0,   0.0e0,   0.0e0},   // lst
-      {0.0e0,   0.0e0,   0.0e0,   0.0e0,   0.0e0,   0.0e0},   // cnt
-      {0.0e0,   0.0e0,   0.0e0,   0.0e0,   0.0e0,   0.0e0},   // sum
-      {0.0e0,   0.0e0,   0.0e0,   0.0e0,   0.0e0,   0.0e0},   // min
-      {0.0e0,   0.0e0,   0.0e0,   0.0e0,   0.0e0,   0.0e0},   // max
-      {1.0e-14, 1.0e-14, 1.0e-13, 1.0e-13, 1.0e-12, 1.0e-12}, // avg
-      {1.0e-14, 1.0e-14, 1.0e-13, 1.0e-13, 1.0e-12, 1.0e-12}, // var
-      {1.0e-14, 1.0e-14, 1.0e-13, 1.0e-13, 1.0e-12, 1.0e-12}, // dev
-      {1.0e0,   1.0e-2,  1.0e-3,  1.0e-5,  1.0e-6,  1.0e-8},  // skw
-      {1.0e1,   1.0e-1,  1.0e-2,  1.0e-3,  1.0e-4,  1.0e-5},  // krt
-      {1.0e1,   1.0e0,   1.0e0,   1.0e-1,  1.0e-2,  1.0e-3},  // qnt
-      {1.0e1,   1.0e0,   1.0e0,   1.0e-1,  1.0e-2,  1.0e-3},  // med
+      {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // fst
+      {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // lst
+      {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // cnt
+      {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // sum
+      {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // min
+      {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // max
+      {M_14, M_14, M_13, M_13, M_12, M_12}, // avg
+      {M_14, M_14, M_13, M_13, M_12, M_12}, // var 
+      {M_14, M_14, M_13, M_13, M_12, M_12}, // dev
+      {Z_01, M_02, M_03, M_05, M_06, M_08}, // skw
+      {P_01, M_01, M_02, M_03, M_04, M_05}, // krt
+      {P_01, Z_01, Z_01, M_01, M_02, M_03}, // qnt
+      {P_01, Z_01, Z_01, M_01, M_02, M_03}, // med
     };
   #endif
 #else

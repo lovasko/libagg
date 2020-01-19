@@ -19,15 +19,8 @@
 #define TEST_LEN 6
 #define TEST_TRY 100
 
-// Define a type-correct constant for one hundred.
-#if AGG_BIT == 32
-  #define AGG_10_0 10.0f
-#elif AGG_BIT == 64
-  #define AGG_10_0 10.0
-#else
-  #error "AGG_BIT not supported"
-#endif
-
+// Define a type-correct constant for ten.
+#define AGG_10_0 AGG_NUM(10, 0, +, 0)
 
 /// Generate a next random number from the inclusive interval (0.0, 1.0).
 /// @return random number

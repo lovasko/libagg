@@ -42,19 +42,7 @@
 
   // Constants.
   #define AGG_FMT  "%e"
-  #define AGG_0_0  0.0f
-  #define AGG_0_1  0.1f
-  #define AGG_0_5  0.5f
-  #define AGG_0_75 0.75f
-  #define AGG_0_9  0.9f
-  #define AGG_0_99 0.99f
-  #define AGG_1_0  1.0f
-  #define AGG_1_5  1.5f
-  #define AGG_2_0  2.0f
-  #define AGG_3_0  3.0f
-  #define AGG_4_0  4.0f
-  #define AGG_5_0  5.0f
-  #define AGG_6_0  6.0f
+  #define AGG_NUM(I, F, S, E) I ## . ## F ## e ## S ## E ## f
   #define AGG_MIN  -FLT_MAX
   #define AGG_MAX  FLT_MAX
 #elif AGG_BIT == 64
@@ -73,19 +61,7 @@
 
   // Constants.
   #define AGG_FMT  "%le"
-  #define AGG_0_0  0.0
-  #define AGG_0_1  0.1
-  #define AGG_0_5  0.5
-  #define AGG_0_75 0.75
-  #define AGG_0_9  0.9
-  #define AGG_0_99 0.99
-  #define AGG_1_0  1.0
-  #define AGG_1_5  1.5
-  #define AGG_2_0  2.0
-  #define AGG_3_0  3.0
-  #define AGG_4_0  4.0
-  #define AGG_5_0  5.0
-  #define AGG_6_0  6.0
+  #define AGG_NUM(I, F, S, E) I ## . ## F ## e ## S ## E 
   #define AGG_MIN  -DBL_MAX
   #define AGG_MAX  DBL_MAX
 #elif AGG_BIT == 128
@@ -109,24 +85,27 @@
 
   // Constants.
   #define AGG_FMT  "%Qe"
-  #define AGG_0_0  0.0Q
-  #define AGG_0_1  0.1Q
-  #define AGG_0_5  0.5Q
-  #define AGG_0_75 0.75Q
-  #define AGG_0_9  0.9Q
-  #define AGG_0_99 0.99Q
-  #define AGG_1_0  1.0Q
-  #define AGG_1_5  1.5Q
-  #define AGG_2_0  2.0Q
-  #define AGG_3_0  3.0Q
-  #define AGG_4_0  4.0Q
-  #define AGG_5_0  5.0Q
-  #define AGG_6_0  6.0Q
+  #define AGG_NUM(I, F, S, E) I ## . ## F ## e ## S ## E ## Q
   #define AGG_MIN  -FLT128_MAX
   #define AGG_MAX  FLT128_MAX
 #else
   #error "invalid value of AGG_BIT: " AGG_BIT
 #endif
+
+// Numerical constants.
+#define AGG_0_0  AGG_NUM(0,  0, +, 0)
+#define AGG_0_1  AGG_NUM(0,  1, +, 0)
+#define AGG_0_5  AGG_NUM(0,  5, +, 0)
+#define AGG_0_75 AGG_NUM(0, 75, +, 0)
+#define AGG_0_9  AGG_NUM(0,  9, +, 0)
+#define AGG_0_99 AGG_NUM(0, 99, +, 0)
+#define AGG_1_0  AGG_NUM(1,  0, +, 0)
+#define AGG_1_5  AGG_NUM(1,  5, +, 0)
+#define AGG_2_0  AGG_NUM(2,  0, +, 0)
+#define AGG_3_0  AGG_NUM(3,  0, +, 0)
+#define AGG_4_0  AGG_NUM(4,  0, +, 0)
+#define AGG_5_0  AGG_NUM(5,  0, +, 0)
+#define AGG_6_0  AGG_NUM(6,  0, +, 0)
 
 /// Aggregate function types.
 #define AGG_FNC_FST 0x1 // First.
