@@ -62,6 +62,24 @@
   #define AGG_NUM(I, F, S, E) I ## . ## F ## e ## S ## E
   #define AGG_MIN  -DBL_MAX
   #define AGG_MAX  DBL_MAX
+#elif AGG_BIT == 80
+  // Types.
+  #define AGG_TYPE long double
+
+  // Functions.
+  #define AGG_SQRT sqrtl
+  #define AGG_POW  powl
+  #define AGG_ABS  fabsl
+  #define AGG_FMIN fminl
+  #define AGG_FMAX fmaxl
+  #define AGG_SIGN copysignl
+  #define AGG_MODF modfl
+
+  // Constants.
+  #define AGG_FMT  "%Le"
+  #define AGG_NUM(I, F, S, E) I ## . ## F ## e ## S ## E ## L
+  #define AGG_MIN  -LDBL_MAX
+  #define AGG_MAX  LDBL_MAX
 #elif AGG_BIT == 128
   // Ensure that the type cannot be seleted when a strict standard-compliance is requested.
   #if AGG_STD == 1
