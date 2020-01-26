@@ -21,14 +21,14 @@ set -e
 echo "#################"
 echo "# DOUBLE        #"
 echo "#################"
-${CC} -DAGG_BIT=64 -o "err_dbl" ${CFLAGS} ${SRC} ${LDFLAGS}
-./err_dbl
+${CC} -DAGG_BIT=64 -o err_64 ${CFLAGS} ${SRC} ${LDFLAGS}
+./err_64
 
 echo "#################"
 echo "# FLOAT         #"
 echo "#################"
-${CC} -DAGG_BIT=32 -o "err_flt" ${CFLAGS} ${SRC} ${LDFLAGS}
-./err_flt
+${CC} -DAGG_BIT=32 -o err_32 ${CFLAGS} ${SRC} ${LDFLAGS}
+./err_32
 
 echo "#################"
 echo "# LONG DOUBLE   #"
@@ -44,14 +44,14 @@ set +e
 echo "#################"
 echo "# DOUBLE FAST   #"
 echo "#################"
-${CC} -DAGG_BIT=64 -o "err_dbl_fast" -Ofast ${CFLAGS} ${SRC} ${LDFLAGS}
-./err_dbl_fast
+${CC} -DAGG_BIT=64 -o err_64_fast -Ofast ${CFLAGS} ${SRC} ${LDFLAGS}
+./err_64_fast
 
 echo "#################"
 echo "# FLOAT FAST    #"
 echo "#################"
-${CC} -DAGG_BIT=32 -o "err_flt_fast" -Ofast ${CFLAGS} ${SRC} ${LDFLAGS}
-./err_flt_fast
+${CC} -DAGG_BIT=32 -o err_32_fast -Ofast ${CFLAGS} ${SRC} ${LDFLAGS}
+./err_32_fast
 
 echo "######################"
 echo "# LONG DOUBLE (FAST) #"
