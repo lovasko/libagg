@@ -18,44 +18,46 @@ SRC="err.c ../src/get.c ../src/put.c ../src/new.c ../src/run.c"
 # floating-point operations compliance. If any of the following steps were to
 # fail, we assume that the test suite has not passed.
 set -e
-echo "#################"
-echo "# FLOAT         #"
-echo "#################"
+
+echo "##############"
+echo "# AGG_BIT 32 #"
+echo "##############"
 ${CC} -DAGG_BIT=32 -o err_32 ${CFLAGS} ${SRC} ${LDFLAGS}
 ./err_32
 
-echo "#################"
-echo "# DOUBLE        #"
-echo "#################"
+echo "##############"
+echo "# AGG_BIT 64 #"
+echo "##############"
 ${CC} -DAGG_BIT=64 -o err_64 ${CFLAGS} ${SRC} ${LDFLAGS}
 ./err_64
 
-echo "#################"
-echo "# LONG DOUBLE   #"
-echo "#################"
+echo "##############"
+echo "# AGG_BIT 80 #"
+echo "##############"
 ${CC} -DAGG_BIT=80 -o err_80 ${CFLAGS} ${SRC} ${LDFLAGS}
 ./err_80
-set +e
 
 # The second part is mostly informational as to whether increased optimizations
 # and the fast math mode that disables full IEEE compliance, errno-setting, and
 # assumes all math is finite, still produces valid results within the expected
 # margin of error.
-echo "#################"
-echo "# FLOAT FAST    #"
-echo "#################"
+set +e
+
+echo "#####################"
+echo "# AGG_BIT 32 (FAST) #"
+echo "#####################"
 ${CC} -DAGG_BIT=32 -o err_32_fast -Ofast ${CFLAGS} ${SRC} ${LDFLAGS}
 ./err_32_fast
 
-echo "#################"
-echo "# DOUBLE FAST   #"
-echo "#################"
+echo "#####################"
+echo "# AGG_BIT 64 (FAST) #"
+echo "#####################"
 ${CC} -DAGG_BIT=64 -o err_64_fast -Ofast ${CFLAGS} ${SRC} ${LDFLAGS}
 ./err_64_fast
 
-echo "######################"
-echo "# LONG DOUBLE (FAST) #"
-echo "######################"
+echo "#####################"
+echo "# AGG_BIT 80 (FAST) #"
+echo "#####################"
 ${CC} -DAGG_BIT=80 -o err_80_fast -Ofast ${CFLAGS} ${SRC} ${LDFLAGS}
 ./err_80_fast
 
