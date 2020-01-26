@@ -19,16 +19,16 @@ SRC="err.c ../src/get.c ../src/put.c ../src/new.c ../src/run.c"
 # fail, we assume that the test suite has not passed.
 set -e
 echo "#################"
-echo "# DOUBLE        #"
-echo "#################"
-${CC} -DAGG_BIT=64 -o err_64 ${CFLAGS} ${SRC} ${LDFLAGS}
-./err_64
-
-echo "#################"
 echo "# FLOAT         #"
 echo "#################"
 ${CC} -DAGG_BIT=32 -o err_32 ${CFLAGS} ${SRC} ${LDFLAGS}
 ./err_32
+
+echo "#################"
+echo "# DOUBLE        #"
+echo "#################"
+${CC} -DAGG_BIT=64 -o err_64 ${CFLAGS} ${SRC} ${LDFLAGS}
+./err_64
 
 echo "#################"
 echo "# LONG DOUBLE   #"
@@ -42,16 +42,16 @@ set +e
 # assumes all math is finite, still produces valid results within the expected
 # margin of error.
 echo "#################"
-echo "# DOUBLE FAST   #"
-echo "#################"
-${CC} -DAGG_BIT=64 -o err_64_fast -Ofast ${CFLAGS} ${SRC} ${LDFLAGS}
-./err_64_fast
-
-echo "#################"
 echo "# FLOAT FAST    #"
 echo "#################"
 ${CC} -DAGG_BIT=32 -o err_32_fast -Ofast ${CFLAGS} ${SRC} ${LDFLAGS}
 ./err_32_fast
+
+echo "#################"
+echo "# DOUBLE FAST   #"
+echo "#################"
+${CC} -DAGG_BIT=64 -o err_64_fast -Ofast ${CFLAGS} ${SRC} ${LDFLAGS}
+./err_64_fast
 
 echo "######################"
 echo "# LONG DOUBLE (FAST) #"
