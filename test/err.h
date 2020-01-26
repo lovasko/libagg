@@ -28,6 +28,8 @@
 #define M_14 AGG_NUM(1, 0, -, 13)
 #define M_15 AGG_NUM(1, 0, -, 14)
 #define M_16 AGG_NUM(1, 0, -, 15)
+#define M_17 AGG_NUM(1, 0, -, 17)
+#define M_18 AGG_NUM(1, 0, -, 18)
 
 // The tables below denote the acceptable magnitudes of error for each
 // aggregate function. The corresponding length of the input list is
@@ -96,6 +98,40 @@
       {M_14, M_14, M_13, M_13, M_12, M_12}, // var
       {M_14, M_14, M_13, M_13, M_12, M_12}, // dev
       {Z_01, M_02, M_03, M_05, M_06, M_08}, // skw
+      {P_01, M_01, M_02, M_03, M_04, M_05}, // krt
+      {P_01, Z_01, Z_01, M_01, M_02, M_03}, // qnt
+      {P_01, Z_01, Z_01, M_01, M_02, M_03}, // med
+    };
+  #endif
+#elif AGG_BIT == 80
+  #ifdef __FAST_MATH__
+    static const AGG_TYPE err[13][6] = {
+      {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // fst
+      {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // lst
+      {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // cnt
+      {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // sum
+      {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // min
+      {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // max
+      {M_18, M_17, M_16, M_15, M_15, M_15}, // avg
+      {M_17, M_17, M_16, M_15, M_15, M_15}, // var
+      {M_18, M_17, M_16, M_15, M_15, M_15}, // dev
+      {Z_01, M_02, M_03, M_05, M_06, M_07}, // skw
+      {P_01, M_01, M_02, M_03, M_04, M_05}, // krt
+      {P_01, Z_01, Z_01, M_01, M_02, M_03}, // qnt
+      {P_01, Z_01, Z_01, M_01, M_02, M_03}, // med
+    };
+  #else
+    static const AGG_TYPE err[13][6] = {
+      {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // fst
+      {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // lst
+      {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // cnt
+      {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // sum
+      {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // min
+      {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // max
+      {M_18, M_17, M_16, M_15, M_15, M_15}, // avg
+      {M_17, M_17, M_16, M_15, M_15, M_15}, // var
+      {M_18, M_17, M_16, M_15, M_15, M_15}, // dev
+      {Z_01, M_02, M_03, M_05, M_06, M_07}, // skw
       {P_01, M_01, M_02, M_03, M_04, M_05}, // krt
       {P_01, Z_01, Z_01, M_01, M_02, M_03}, // qnt
       {P_01, Z_01, Z_01, M_01, M_02, M_03}, // med

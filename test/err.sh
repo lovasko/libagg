@@ -29,6 +29,12 @@ echo "# FLOAT         #"
 echo "#################"
 ${CC} -DAGG_BIT=32 -o "err_flt" ${CFLAGS} ${SRC} ${LDFLAGS}
 ./err_flt
+
+echo "#################"
+echo "# LONG DOUBLE   #"
+echo "#################"
+${CC} -DAGG_BIT=80 -o err_80 ${CFLAGS} ${SRC} ${LDFLAGS}
+./err_80
 set +e
 
 # The second part is mostly informational as to whether increased optimizations
@@ -46,6 +52,12 @@ echo "# FLOAT FAST    #"
 echo "#################"
 ${CC} -DAGG_BIT=32 -o "err_flt_fast" -Ofast ${CFLAGS} ${SRC} ${LDFLAGS}
 ./err_flt_fast
+
+echo "######################"
+echo "# LONG DOUBLE (FAST) #"
+echo "######################"
+${CC} -DAGG_BIT=80 -o err_80_fast -Ofast ${CFLAGS} ${SRC} ${LDFLAGS}
+./err_80_fast
 
 # Ensure successful exit code of the testing, even if the fast tests fail.
 true
