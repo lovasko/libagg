@@ -37,20 +37,35 @@ run_for_func() {
 run_for_bits() {
   run_for_func $1 fst 0.0  > "$1_fst" &
   run_for_func $1 lst 0.0  > "$1_lst" &
+  wait
+
   run_for_func $1 cnt 0.0  > "$1_cnt" &
   run_for_func $1 sum 0.0  > "$1_sum" &
+  wait
+
   run_for_func $1 min 0.0  > "$1_min" &
   run_for_func $1 max 0.0  > "$1_max" &
+  wait
+
   run_for_func $1 avg 0.0  > "$1_avg" &
   run_for_func $1 var 0.0  > "$1_var" &
-  run_for_func $1 dev 0.0  > "$1_dev" &
+  wait
+
   run_for_func $1 skw 0.0  > "$1_skw" &
   run_for_func $1 krt 0.0  > "$1_krt" &
+  wait
+
   run_for_func $1 qnt 0.1  > "$1_qnt_01" &
   run_for_func $1 qnt 0.75 > "$1_qnt_075" &
+  wait
+
   run_for_func $1 qnt 0.9  > "$1_qnt_09" &
   run_for_func $1 qnt 0.99 > "$1_qnt_099" &
+  wait
+
   run_for_func $1 med 0.0  > "$1_med" &
+  run_for_func $1 dev 0.0  > "$1_dev" &
+  wait
 }
 
 ${CC} -DAGG_BIT=32 -o "cap_32" ${CFLAGS} ${SRC} ${LDFLAGS}
