@@ -6,6 +6,7 @@
 #include <math.h>
 #include <unistd.h>
 #include <errno.h>
+#include <fenv.h>
 
 #include "agg.h"
 
@@ -186,36 +187,76 @@ parse_settings(struct settings* stg, int argc, char* argv[])
   return true;
 }
 
+/// Check the state of the floating-point environment for exceptions.
+///
+/// @param[out] ovr overflow exception
+/// @param[out] udr underflow exception
+/// @param[out] ine inexact computation exception
+static void
+read_exceptions(bool* ovr, bool* udr, bool* ine)
+{
+  int test;
+  int flag;
+
+  flag = FE_UNDERFLOW | FE_OVERFLOW | FE_INEXACT;
+
+  test = fetestexcept(flag);
+  *udr = *udr || (test & FE_OVERFLOW);
+  *ovr = *ovr || (test & FE_UNDERFLOW);
+  *ine = *ine || (test & FE_INEXACT);
+
+  feclearexcept(flag);
+}
+
 /// Perform repeated comparisons of streaming and standard algorithms and find
 /// their largest difference.
-/// @return maximum of differences
 ///
 /// @param[in] arr memory for stream emulation
 /// @param[in] stg settings
-static AGG_TYPE
+static void
 run_comparisons(AGG_TYPE* arr, struct settings* stg)
 {
   uintmax_t idx;
   AGG_TYPE max;
   AGG_TYPE dif;
-  AGG_TYPE onl;
-  AGG_TYPE ofl;
+  AGG_TYPE val[2];
+  bool ovr[2];
+  bool udr[2];
+  bool ine[2];
+
+  // Assume no exceptions.
+  ovr[0] = false;
+  ovr[1] = false;
+  udr[0] = false;
+  udr[1] = false;
+  ine[0] = false;
+  ine[1] = false;
   
   // Repeatedly generate a new array and compute both values.
   max = AGG_NUM(0, 0, +, 0);
   for (idx = 0; idx < stg->s_rep; idx++) {
+    // Prepare the array.
     fill_array(arr, stg->s_len, stg->s_scl, stg->s_off);
-    onl = compute_online(arr, stg->s_len, stg->s_fnc, stg->s_par);
-    ofl = compute_offline(arr, stg->s_len, stg->s_fnc, stg->s_par);
+
+    // Execute the streaming computation.
+    val[0] = compute_online(arr, stg->s_len, stg->s_fnc, stg->s_par);
+    read_exceptions(&ovr[0], &udr[0], &ine[0]);
+    
+    // Execute the standard computation.
+    val[1] = compute_offline(arr, stg->s_len, stg->s_fnc, stg->s_par);
+    read_exceptions(&ovr[1], &udr[1], &ine[1]);
 
     // Potentially set the new maximum.
-    dif = AGG_ABS(onl - ofl);
+    dif = AGG_ABS(val[0] - val[1]);
     if (dif > max) {
       max = dif;
     }
   }
 
-  return max;
+  (void)printf(AGG_FMT "(%s%s%s)(%s%s%s) ",
+    max,
+    ovr[0] ? "o" : "", udr[0] ? "u" : "", ine[0] ? "i" : "",
+    ovr[1] ? "o" : "", udr[1] ? "u" : "", ine[1] ? "i" : "");
 }
 
 int
@@ -223,7 +264,6 @@ main(int argc, char* argv[])
 {
   struct settings stg;
   AGG_TYPE* arr;
-  AGG_TYPE max;
   bool ret;
 
   // Parse input from command-line.
@@ -242,8 +282,7 @@ main(int argc, char* argv[])
   }
 
   // Find the cap of the error value.
-  max = run_comparisons(arr, &stg);
-  (void)printf(AGG_FMT " ", max);
+  run_comparisons(arr, &stg);
 
   return EXIT_SUCCESS;
 }
