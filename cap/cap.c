@@ -278,6 +278,7 @@ main(int argc, char* argv[])
   // Allocate the array of numbers.
   arr = calloc(sizeof(AGG_TYPE), stg.s_len);
   if (arr == NULL) {
+    perror("calloc");
     return EXIT_FAILURE;
   }
 
