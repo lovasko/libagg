@@ -223,6 +223,7 @@ run_comparisons(AGG_TYPE* arr, struct settings* stg)
   bool ovr[2];
   bool udr[2];
   bool ine[2];
+  bool dum;
 
   // Assume no exceptions.
   ovr[0] = false;
@@ -235,8 +236,10 @@ run_comparisons(AGG_TYPE* arr, struct settings* stg)
   // Repeatedly generate a new array and compute both values.
   max = AGG_NUM(0, 0, +, 0);
   for (idx = 0; idx < stg->s_rep; idx++) {
-    // Prepare the array.
+    // Prepare the array and clear any exceptions that might have been caused
+    // by the random number generation.
     fill_array(arr, stg->s_len, stg->s_scl, stg->s_off);
+    read_exceptions(&dum, &dum, &dum);
 
     // Execute the streaming computation.
     val[0] = compute_online(arr, stg->s_len, stg->s_fnc, stg->s_par);
