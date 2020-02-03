@@ -12,7 +12,8 @@ cd $(dirname $0)
 
 # C compilation settings.
 CC="cc"
-CFLAGS="-I../src -D_POSIX_C_SOURCE=201912 -std=c99 -Wall -Wextra -Werror -flto"
+OPT="-flto -march=native -mtune=native"
+CFLAGS="-I../src -D_POSIX_C_SOURCE=201912 -std=c99 -Wall -Wextra -Werror $OPT"
 LDFLAGS="-lm"
 SRC="cap.c ../src/get.c ../src/put.c ../src/new.c ../src/run.c"
 
