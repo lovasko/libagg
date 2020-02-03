@@ -22,15 +22,15 @@ OFFSET=0.0
 
 run_for_func() {
   echo -n "$2 "
-  ./cap_$1 -f$2 -p$3 -s${SCALE} -o${OFFSET} -r1000 -l10
-  ./cap_$1 -f$2 -p$3 -s${SCALE} -o${OFFSET} -r1000 -l100
-  ./cap_$1 -f$2 -p$3 -s${SCALE} -o${OFFSET} -r1000 -l1000
-  ./cap_$1 -f$2 -p$3 -s${SCALE} -o${OFFSET} -r1000 -l10000
-  ./cap_$1 -f$2 -p$3 -s${SCALE} -o${OFFSET} -r1000 -l100000
-  ./cap_$1 -f$2 -p$3 -s${SCALE} -o${OFFSET} -r1000 -l1000000
-  ./cap_$1 -f$2 -p$3 -s${SCALE} -o${OFFSET} -r1000 -l10000000
-  ./cap_$1 -f$2 -p$3 -s${SCALE} -o${OFFSET} -r1000 -l100000000
-  ./cap_$1 -f$2 -p$3 -s${SCALE} -o${OFFSET} -r1000 -l1000000000
+  ./cap_$1 -f$2 -p$3 -s${SCALE} -o${OFFSET} -r${REPEAT} -l10
+  ./cap_$1 -f$2 -p$3 -s${SCALE} -o${OFFSET} -r${REPEAT} -l100
+  ./cap_$1 -f$2 -p$3 -s${SCALE} -o${OFFSET} -r${REPEAT} -l1000
+  ./cap_$1 -f$2 -p$3 -s${SCALE} -o${OFFSET} -r${REPEAT} -l10000
+  ./cap_$1 -f$2 -p$3 -s${SCALE} -o${OFFSET} -r${REPEAT} -l100000
+  ./cap_$1 -f$2 -p$3 -s${SCALE} -o${OFFSET} -r${REPEAT} -l1000000
+  ./cap_$1 -f$2 -p$3 -s${SCALE} -o${OFFSET} -r${REPEAT} -l10000000
+  ./cap_$1 -f$2 -p$3 -s${SCALE} -o${OFFSET} -r${REPEAT} -l100000000
+  ./cap_$1 -f$2 -p$3 -s${SCALE} -o${OFFSET} -r${REPEAT} -l1000000000
   echo
 }
 
