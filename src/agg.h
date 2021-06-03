@@ -22,12 +22,12 @@
 // computations. The default value is 64, which denotes the `double` type.  Other permissible values
 // include 32 for `float` and 128 for `__float128`. The latter type is a non-standard extension and
 // will result in compile-time error unless the `AGGSTAT_STD` macro evaluates to `0`.
-#ifndef AGGSTAT_BIT
-  #define AGGSTAT_BIT 64
+#ifndef AGGSTAT_FLT_BIT
+  #define AGGSTAT_FLT_BIT 64
 #endif
 
 // Determine the appropriate type-related constants and functions.
-#if AGGSTAT_BIT == 32
+#if AGGSTAT_FLT_BIT == 32
   // Types.
   #define AGGSTAT_FLT float
 
@@ -45,7 +45,7 @@
   #define AGGSTAT_NUM(I, F, S, E) I ## . ## F ## e ## S ## E ## f
   #define AGGSTAT_MIN  -FLT_MAX
   #define AGGSTAT_MAX  FLT_MAX
-#elif AGGSTAT_BIT == 64
+#elif AGGSTAT_FLT_BIT == 64
   // Types.
   #define AGGSTAT_FLT double
 
@@ -63,7 +63,7 @@
   #define AGGSTAT_NUM(I, F, S, E) I ## . ## F ## e ## S ## E
   #define AGGSTAT_MIN  -DBL_MAX
   #define AGGSTAT_MAX  DBL_MAX
-#elif AGGSTAT_BIT == 80
+#elif AGGSTAT_FLT_BIT == 80
   // Types.
   #define AGGSTAT_FLT long double
 
@@ -81,10 +81,10 @@
   #define AGGSTAT_NUM(I, F, S, E) I ## . ## F ## e ## S ## E ## L
   #define AGGSTAT_MIN  -LDBL_MAX
   #define AGGSTAT_MAX  LDBL_MAX
-#elif AGGSTAT_BIT == 128
+#elif AGGSTAT_FLT_BIT == 128
   // Ensure that the type cannot be seleted when a strict standard-compliance is requested.
   #if AGGSTAT_STD == 1
-    #error "AGGSTAT_BIT == 128 is a non-standard extension"
+    #error "AGGSTAT_FLT_BIT == 128 is a non-standard extension"
   #endif
 
   // Types.
@@ -105,7 +105,7 @@
   #define AGGSTAT_MIN  -FLT128_MAX
   #define AGGSTAT_MAX  FLT128_MAX
 #else
-  #error "invalid value of AGGSTAT_BIT: " AGGSTAT_BIT
+  #error "invalid value of AGGSTAT_FLT_BIT: " AGGSTAT_FLT_BIT
 #endif
 
 // Numerical constants.

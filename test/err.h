@@ -35,7 +35,7 @@
 // aggregate function. The corresponding length of the input list is
 // implied, starting with 10 elements and increasing tenfold in each
 // iteration.
-#if AGGSTAT_BIT == 32
+#if AGGSTAT_FLT_BIT == 32
   #ifdef __FAST_MATH__
     static const AGGSTAT_FLT err[13][6] = {
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // fst
@@ -69,7 +69,7 @@
       {P_01, Z_01, Z_01, M_01, M_01, M_01}, // med
     };
   #endif
-#elif AGGSTAT_BIT == 64
+#elif AGGSTAT_FLT_BIT == 64
   #ifdef __FAST_MATH__
     static const AGGSTAT_FLT err[13][6] = {
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // fst
@@ -103,7 +103,7 @@
       {P_01, Z_01, Z_01, M_01, M_02, M_03}, // med
     };
   #endif
-#elif AGGSTAT_BIT == 80
+#elif AGGSTAT_FLT_BIT == 80
   #ifdef __FAST_MATH__
     static const AGGSTAT_FLT err[13][6] = {
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // fst
@@ -138,7 +138,7 @@
     };
   #endif
 #else
-  #error "AGGSTAT_BIT is not supported" AGGSTAT_BIT
+  #error "AGGSTAT_FLT_BIT is not supported" AGGSTAT_FLT_BIT
 #endif
 
 #endif
