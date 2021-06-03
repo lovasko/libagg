@@ -11,6 +11,7 @@
 #include <stdint.h>
 #include <float.h>
 
+
 // This constant ensures that all code that is made available by this library is strictly compliant
 // with the C99 language standard.
 #ifndef AGGSTAT_STD
