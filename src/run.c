@@ -18,10 +18,10 @@
 /// @param[in]  len length of the stream
 /// @param[in]  par parameter (unused)
 static bool
-run_fst(      AGGSTAT_TYPE *restrict out,
-        const AGGSTAT_TYPE *restrict arr,
-        const uint64_t               len,
-        const AGGSTAT_TYPE           par)
+run_fst(      AGGSTAT_FLT *restrict out,
+        const AGGSTAT_FLT *restrict arr,
+        const uint64_t              len,
+        const AGGSTAT_FLT           par)
 {
   (void)par;
 
@@ -41,10 +41,10 @@ run_fst(      AGGSTAT_TYPE *restrict out,
 /// @param[in]  len length of the stream
 /// @param[in]  par parameter (unused)
 static bool
-run_lst(      AGGSTAT_TYPE *restrict out,
-        const AGGSTAT_TYPE *restrict arr,
-        const uint64_t               len,
-        const AGGSTAT_TYPE           par)
+run_lst(      AGGSTAT_FLT *restrict out,
+        const AGGSTAT_FLT *restrict arr,
+        const uint64_t              len,
+        const AGGSTAT_FLT           par)
 {
   (void)par;
 
@@ -64,15 +64,15 @@ run_lst(      AGGSTAT_TYPE *restrict out,
 /// @param[in]  len length of the stream
 /// @param[in]  par parameter (unused)
 static bool
-run_cnt(      AGGSTAT_TYPE *restrict out,
-        const AGGSTAT_TYPE *restrict arr,
-        const uint64_t               len,
-        const AGGSTAT_TYPE           par)
+run_cnt(      AGGSTAT_FLT *restrict out,
+        const AGGSTAT_FLT *restrict arr,
+        const uint64_t              len,
+        const AGGSTAT_FLT           par)
 {
   (void)arr;
   (void)par;
 
-  *out = (AGGSTAT_TYPE)len;
+  *out = (AGGSTAT_FLT)len;
   return true;
 }
 
@@ -84,13 +84,13 @@ run_cnt(      AGGSTAT_TYPE *restrict out,
 /// @param[in]  len length of the stream
 /// @param[in]  par parameter (unused)
 static bool
-run_sum(      AGGSTAT_TYPE *restrict out,
-        const AGGSTAT_TYPE *restrict arr,
-        const uint64_t               len,
-        const AGGSTAT_TYPE           par)
+run_sum(      AGGSTAT_FLT *restrict out,
+        const AGGSTAT_FLT *restrict arr,
+        const uint64_t              len,
+        const AGGSTAT_FLT           par)
 {
-  uint64_t     idx;
-  AGGSTAT_TYPE sum;
+  uint64_t    idx;
+  AGGSTAT_FLT sum;
 
   (void)par;
 
@@ -111,13 +111,13 @@ run_sum(      AGGSTAT_TYPE *restrict out,
 /// @param[in]  len length of the stream
 /// @param[in]  par parameter (unused)
 static bool
-run_min(      AGGSTAT_TYPE *restrict out,
-        const AGGSTAT_TYPE *restrict arr,
-        const uint64_t               len,
-        const AGGSTAT_TYPE           par)
+run_min(      AGGSTAT_FLT *restrict out,
+        const AGGSTAT_FLT *restrict arr,
+        const uint64_t              len,
+        const AGGSTAT_FLT           par)
 {
-  uint64_t     idx;
-  AGGSTAT_TYPE min;
+  uint64_t    idx;
+  AGGSTAT_FLT min;
 
   (void)par;
 
@@ -142,13 +142,13 @@ run_min(      AGGSTAT_TYPE *restrict out,
 /// @param[in]  len length of the stream
 /// @param[in]  par parameter (unused)
 static bool
-run_max(      AGGSTAT_TYPE *restrict out,
-        const AGGSTAT_TYPE *restrict arr,
-        const uint64_t               len,
-        const AGGSTAT_TYPE           par)
+run_max(      AGGSTAT_FLT *restrict out,
+        const AGGSTAT_FLT *restrict arr,
+        const uint64_t              len,
+        const AGGSTAT_FLT           par)
 {
-  uint64_t     idx;
-  AGGSTAT_TYPE max;
+  uint64_t    idx;
+  AGGSTAT_FLT max;
 
   // Ignore the parameter.
   (void)par;
@@ -174,12 +174,12 @@ run_max(      AGGSTAT_TYPE *restrict out,
 /// @param[in]  len length of the stream
 /// @param[in]  par parameter (unused)
 static bool
-run_avg(      AGGSTAT_TYPE *restrict out,
-        const AGGSTAT_TYPE *restrict arr,
-        const uint64_t               len,
-        const AGGSTAT_TYPE           par)
+run_avg(      AGGSTAT_FLT *restrict out,
+        const AGGSTAT_FLT *restrict arr,
+        const uint64_t              len,
+        const AGGSTAT_FLT           par)
 {
-  AGGSTAT_TYPE sum;
+  AGGSTAT_FLT sum;
 
   (void)par;
 
@@ -188,7 +188,7 @@ run_avg(      AGGSTAT_TYPE *restrict out,
   }
 
   (void)run_sum(&sum, arr, len, par);
-  *out = sum / (AGGSTAT_TYPE)len;
+  *out = sum / (AGGSTAT_FLT)len;
   return true;
 }
 
@@ -200,14 +200,14 @@ run_avg(      AGGSTAT_TYPE *restrict out,
 /// @param[in]  len length of the stream
 /// @param[in]  par parameter (unused)
 static bool
-run_var(      AGGSTAT_TYPE *restrict out,
-        const AGGSTAT_TYPE *restrict arr,
-        const uint64_t               len,
-        const AGGSTAT_TYPE           par)
+run_var(      AGGSTAT_FLT *restrict out,
+        const AGGSTAT_FLT *restrict arr,
+        const uint64_t              len,
+        const AGGSTAT_FLT           par)
 {
-  AGGSTAT_TYPE avg;
-  AGGSTAT_TYPE var;
-  uint64_t     idx;
+  AGGSTAT_FLT avg;
+  AGGSTAT_FLT var;
+  uint64_t    idx;
 
   if (len == 0) {
     return false;
@@ -223,7 +223,7 @@ run_var(      AGGSTAT_TYPE *restrict out,
   for (idx = 0; idx < len; idx++) {
     var += AGGSTAT_POW(arr[idx] - avg, AGGSTAT_2_0);
   }
-  var /= (AGGSTAT_TYPE)len - AGGSTAT_1_0;
+  var /= (AGGSTAT_FLT)len - AGGSTAT_1_0;
 
   *out = var;
   return true;
@@ -237,12 +237,12 @@ run_var(      AGGSTAT_TYPE *restrict out,
 /// @param[in]  len array length
 /// @param[in]  par parameter (unused)
 static bool
-run_dev(      AGGSTAT_TYPE *restrict out,
-        const AGGSTAT_TYPE *restrict arr,
-        const uint64_t               len,
-        const AGGSTAT_TYPE           par)
+run_dev(      AGGSTAT_FLT *restrict out,
+        const AGGSTAT_FLT *restrict arr,
+        const uint64_t              len,
+        const AGGSTAT_FLT           par)
 {
-  AGGSTAT_TYPE var;
+  AGGSTAT_FLT var;
 
   if (len == 0) {
     return false;
@@ -261,15 +261,15 @@ run_dev(      AGGSTAT_TYPE *restrict out,
 /// @param[in]  len array length
 /// @param[in]  par parameter (unused)
 static bool
-run_skw(      AGGSTAT_TYPE *restrict out,
-        const AGGSTAT_TYPE *restrict arr,
-        const uint64_t               len,
-        const AGGSTAT_TYPE           par)
+run_skw(      AGGSTAT_FLT *restrict out,
+        const AGGSTAT_FLT *restrict arr,
+        const uint64_t              len,
+        const AGGSTAT_FLT           par)
 {
-  uint64_t     idx;
-  AGGSTAT_TYPE avg;
-  AGGSTAT_TYPE dev;
-  AGGSTAT_TYPE skw;
+  uint64_t    idx;
+  AGGSTAT_FLT avg;
+  AGGSTAT_FLT dev;
+  AGGSTAT_FLT skw;
 
   if (len < 2) {
     return false;
@@ -280,7 +280,7 @@ run_skw(      AGGSTAT_TYPE *restrict out,
 
   skw = AGGSTAT_0_0;
   for (idx = 0; idx < len; idx++) {
-    skw += AGGSTAT_POW(arr[idx] - avg, AGGSTAT_3_0) / (AGGSTAT_TYPE)len;
+    skw += AGGSTAT_POW(arr[idx] - avg, AGGSTAT_3_0) / (AGGSTAT_FLT)len;
   }
   skw /= AGGSTAT_POW(dev, AGGSTAT_3_0);
 
@@ -296,15 +296,15 @@ run_skw(      AGGSTAT_TYPE *restrict out,
 /// @param[in]  len array length
 /// @param[in]  par parameter (unused)
 static bool
-run_krt(      AGGSTAT_TYPE *restrict out,
-        const AGGSTAT_TYPE *restrict arr,
-        const uint64_t               len,
-        const AGGSTAT_TYPE           par)
+run_krt(      AGGSTAT_FLT *restrict out,
+        const AGGSTAT_FLT *restrict arr,
+        const uint64_t              len,
+        const AGGSTAT_FLT           par)
 {
-  uint64_t     idx;
-  AGGSTAT_TYPE avg;
-  AGGSTAT_TYPE dev;
-  AGGSTAT_TYPE krt;
+  uint64_t    idx;
+  AGGSTAT_FLT avg;
+  AGGSTAT_FLT dev;
+  AGGSTAT_FLT krt;
 
   if (len < 2) {
     return false;
@@ -315,7 +315,7 @@ run_krt(      AGGSTAT_TYPE *restrict out,
 
   krt = AGGSTAT_0_0;
   for (idx = 0; idx < len; idx++) {
-    krt += AGGSTAT_POW(arr[idx] - avg, AGGSTAT_4_0) / (AGGSTAT_TYPE)len;
+    krt += AGGSTAT_POW(arr[idx] - avg, AGGSTAT_4_0) / (AGGSTAT_FLT)len;
   }
   krt /= AGGSTAT_POW(dev, AGGSTAT_4_0);
 
@@ -334,11 +334,11 @@ run_krt(      AGGSTAT_TYPE *restrict out,
 static int
 qnt_cmp(const void* a, const void* b)
 {
-  AGGSTAT_TYPE x;
-  AGGSTAT_TYPE y;
+  AGGSTAT_FLT x;
+  AGGSTAT_FLT y;
 
-  x = *(AGGSTAT_TYPE*)a;
-  y = *(AGGSTAT_TYPE*)b;
+  x = *(AGGSTAT_FLT*)a;
+  y = *(AGGSTAT_FLT*)b;
 
   return (x > y) - (x < y);
 }
@@ -351,14 +351,14 @@ qnt_cmp(const void* a, const void* b)
 /// @param[in]  len array length
 /// @param[in]  par parameter
 static bool
-run_qnt(      AGGSTAT_TYPE *restrict out,
-        const AGGSTAT_TYPE *restrict arr,
-        const uint64_t               len,
-        const AGGSTAT_TYPE           par)
+run_qnt(      AGGSTAT_FLT *restrict out,
+        const AGGSTAT_FLT *restrict arr,
+        const uint64_t              len,
+        const AGGSTAT_FLT           par)
 {
-  uint64_t     idx;
-  AGGSTAT_TYPE inp;
-  AGGSTAT_TYPE frp;
+  uint64_t    idx;
+  AGGSTAT_FLT inp;
+  AGGSTAT_FLT frp;
 
   // Validate the stream length.
   if (len == 0) {
@@ -371,7 +371,7 @@ run_qnt(      AGGSTAT_TYPE *restrict out,
   }
 
   // Sort the stream.
-  (void)qsort((void*)arr, len, sizeof(AGGSTAT_TYPE), qnt_cmp);
+  (void)qsort((void*)arr, len, sizeof(AGGSTAT_FLT), qnt_cmp);
 
   // Select the appropriate field. This is achieved by finding the precise decimal index, followed
   // by decomposition of the number into the integral and fractional parts.
@@ -398,17 +398,17 @@ run_qnt(      AGGSTAT_TYPE *restrict out,
 /// @param[in]  len array length
 /// @param[in]  par parameter (unused)
 static bool
-run_med(      AGGSTAT_TYPE *restrict out,
-        const AGGSTAT_TYPE *restrict arr,
-        const uint64_t           len,
-        const AGGSTAT_TYPE           par)
+run_med(      AGGSTAT_FLT *restrict out,
+        const AGGSTAT_FLT *restrict arr,
+        const uint64_t              len,
+        const AGGSTAT_FLT           par)
 {
   (void)par;
   return run_qnt(out, arr, len, AGGSTAT_0_5);
 }
 
 /// Function table for push_* functions based on ag_typ.
-static bool (*run_fnc[])(AGGSTAT_TYPE*, const AGGSTAT_TYPE*, const uint64_t, const AGGSTAT_TYPE) = {
+static bool (*run_fnc[])(AGGSTAT_FLT*, const AGGSTAT_FLT*, const uint64_t, const AGGSTAT_FLT) = {
   NULL,
   run_fst,
   run_lst,
@@ -434,11 +434,11 @@ static bool (*run_fnc[])(AGGSTAT_TYPE*, const AGGSTAT_TYPE*, const uint64_t, con
 /// @param[in]  fnc aggregate function
 /// @param[in]  par parameter
 bool
-aggstat_run(      AGGSTAT_TYPE *restrict val,
-            const AGGSTAT_TYPE *restrict arr,
-            const uint64_t           len,
-            const uint8_t            fnc,
-            const AGGSTAT_TYPE           par)
+aggstat_run(      AGGSTAT_FLT *restrict val,
+            const AGGSTAT_FLT *restrict arr,
+            const uint64_t              len,
+            const uint8_t               fnc,
+            const AGGSTAT_FLT           par)
 {
   return run_fnc[fnc](val, arr, len, par);
 }

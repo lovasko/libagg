@@ -14,7 +14,7 @@
 /// @param[in] fnc function type
 /// @param[in] par function parameter
 void
-aggstat_new(struct aggstat* agg, const uint8_t fnc, const AGGSTAT_TYPE par)
+aggstat_new(struct aggstat* agg, const uint8_t fnc, const AGGSTAT_FLT par)
 {
   // Select aggregate function.
   agg->ag_fnc    = fnc;

@@ -15,7 +15,7 @@
 /// @param[in] agg aggregate function
 /// @param[in] inp input value
 static void
-put_fst(struct aggstat* agg, const AGGSTAT_TYPE inp)
+put_fst(struct aggstat* agg, const AGGSTAT_FLT inp)
 {
   agg->ag_val[!!agg->ag_cnt[0]] = inp;
 }
@@ -25,7 +25,7 @@ put_fst(struct aggstat* agg, const AGGSTAT_TYPE inp)
 /// @param[in] agg aggregate function
 /// @param[in] inp input value
 static void
-put_lst(struct aggstat* agg, const AGGSTAT_TYPE inp)
+put_lst(struct aggstat* agg, const AGGSTAT_FLT inp)
 {
   agg->ag_val[0] = inp;
 }
@@ -35,7 +35,7 @@ put_lst(struct aggstat* agg, const AGGSTAT_TYPE inp)
 /// @param[in] agg aggregate function (unused)
 /// @param[in] inp input value (unused)
 static void
-put_cnt(struct aggstat* agg, const AGGSTAT_TYPE inp)
+put_cnt(struct aggstat* agg, const AGGSTAT_FLT inp)
 {
   (void)agg;
   (void)inp;
@@ -46,7 +46,7 @@ put_cnt(struct aggstat* agg, const AGGSTAT_TYPE inp)
 /// @param[in] agg aggregate function
 /// @param[in] inp input value
 static void
-put_sum(struct aggstat* agg, const AGGSTAT_TYPE inp)
+put_sum(struct aggstat* agg, const AGGSTAT_FLT inp)
 {
   agg->ag_val[0] += inp;
 }
@@ -56,7 +56,7 @@ put_sum(struct aggstat* agg, const AGGSTAT_TYPE inp)
 /// @param[in] agg aggregate function
 /// @param[in] inp input value
 static void
-put_min(struct aggstat* agg, const AGGSTAT_TYPE inp)
+put_min(struct aggstat* agg, const AGGSTAT_FLT inp)
 {
   agg->ag_val[0] = AGGSTAT_FMIN(inp, agg->ag_val[0]);
 }
@@ -66,7 +66,7 @@ put_min(struct aggstat* agg, const AGGSTAT_TYPE inp)
 /// @param[in] agg aggregate function
 /// @param[in] inp input value
 static void
-put_max(struct aggstat* agg, const AGGSTAT_TYPE inp)
+put_max(struct aggstat* agg, const AGGSTAT_FLT inp)
 {
   agg->ag_val[0] = AGGSTAT_FMAX(inp, agg->ag_val[0]);
 }
@@ -76,17 +76,17 @@ put_max(struct aggstat* agg, const AGGSTAT_TYPE inp)
 /// @param[in] agg aggregate function
 /// @param[in] inp input value
 static void
-set_tmp(struct aggstat* agg, const AGGSTAT_TYPE inp)
+set_tmp(struct aggstat* agg, const AGGSTAT_FLT inp)
 {
-  AGGSTAT_TYPE x;
-  AGGSTAT_TYPE y;
+  AGGSTAT_FLT x;
+  AGGSTAT_FLT y;
 
   x = inp - agg->ag_val[0];
-  y = x / (AGGSTAT_TYPE)(agg->ag_cnt[0] + 1);
+  y = x / (AGGSTAT_FLT)(agg->ag_cnt[0] + 1);
 
   agg->ag_val[4] = y;
   agg->ag_val[5] = y * y;
-  agg->ag_val[6] = x * y * (AGGSTAT_TYPE)agg->ag_cnt[0];
+  agg->ag_val[6] = x * y * (AGGSTAT_FLT)agg->ag_cnt[0];
 }
 
 /// Update the first moment.
@@ -113,7 +113,7 @@ snd_mnt(struct aggstat* agg)
 static void
 trd_mnt(struct aggstat* agg)
 {
-  agg->ag_val[2] += agg->ag_val[6] * agg->ag_val[4] * (AGGSTAT_TYPE)(agg->ag_cnt[0] - 1)
+  agg->ag_val[2] += agg->ag_val[6] * agg->ag_val[4] * (AGGSTAT_FLT)(agg->ag_cnt[0] - 1)
                   - AGGSTAT_3_0    * agg->ag_val[4] * agg->ag_val[1];
 }
 
@@ -123,9 +123,9 @@ trd_mnt(struct aggstat* agg)
 static void
 fth_mnt(struct aggstat* agg)
 {
-  AGGSTAT_TYPE x;
+  AGGSTAT_FLT x;
 
-  x = (AGGSTAT_TYPE)(agg->ag_cnt[0] + 1);
+  x = (AGGSTAT_FLT)(agg->ag_cnt[0] + 1);
   agg->ag_val[3] += agg->ag_val[6]
                   * agg->ag_val[5]
                   * (x * x - AGGSTAT_3_0 * x + AGGSTAT_3_0)
@@ -138,7 +138,7 @@ fth_mnt(struct aggstat* agg)
 /// @param[in] agg aggregate function
 /// @param[in] inp input value
 static void
-put_avg(struct aggstat* agg, const AGGSTAT_TYPE inp)
+put_avg(struct aggstat* agg, const AGGSTAT_FLT inp)
 {
   set_tmp(agg, inp);
   fst_mnt(agg);
@@ -149,7 +149,7 @@ put_avg(struct aggstat* agg, const AGGSTAT_TYPE inp)
 /// @param[in] agg aggregate function
 /// @param[in] inp input value
 static void
-put_var(struct aggstat* agg, const AGGSTAT_TYPE inp)
+put_var(struct aggstat* agg, const AGGSTAT_FLT inp)
 {
   set_tmp(agg, inp);
   fst_mnt(agg);
@@ -164,7 +164,7 @@ put_var(struct aggstat* agg, const AGGSTAT_TYPE inp)
 /// @param[in] agg aggregate function
 /// @param[in] inp input value
 static void
-put_dev(struct aggstat* agg, const AGGSTAT_TYPE inp)
+put_dev(struct aggstat* agg, const AGGSTAT_FLT inp)
 {
   put_var(agg, inp);
 }
@@ -174,7 +174,7 @@ put_dev(struct aggstat* agg, const AGGSTAT_TYPE inp)
 /// @param[in] agg aggregate function
 /// @param[in] inp input value
 static void
-put_skw(struct aggstat* agg, const AGGSTAT_TYPE inp)
+put_skw(struct aggstat* agg, const AGGSTAT_FLT inp)
 {
   set_tmp(agg, inp);
   fst_mnt(agg);
@@ -187,7 +187,7 @@ put_skw(struct aggstat* agg, const AGGSTAT_TYPE inp)
 /// @param[in] agg aggregate function
 /// @param[in] inp input value
 static void
-put_krt(struct aggstat* agg, const AGGSTAT_TYPE inp)
+put_krt(struct aggstat* agg, const AGGSTAT_FLT inp)
 {
   set_tmp(agg, inp);
   fst_mnt(agg);
@@ -205,10 +205,10 @@ put_krt(struct aggstat* agg, const AGGSTAT_TYPE inp)
 /// @param[in] agg aggregate function
 /// @param[in] idx index of the value to adjust
 /// @param[in] dir direction of the change
-static AGGSTAT_TYPE
+static AGGSTAT_FLT
 qnt_lin(struct aggstat* agg, const uint64_t idx, const int64_t dir)
 {
-  return agg->ag_val[idx]       + (AGGSTAT_TYPE)dir
+  return agg->ag_val[idx]       + (AGGSTAT_FLT)dir
       * (agg->ag_val[idx + dir] - agg->ag_val[idx])
       / (agg->ag_cnt[idx + dir] - agg->ag_cnt[idx]);
 }
@@ -222,23 +222,23 @@ qnt_lin(struct aggstat* agg, const uint64_t idx, const int64_t dir)
 /// @param[in] agg aggregate
 /// @param[in] idx index of
 /// @param[in] dir direction of the extrapolation
-static AGGSTAT_TYPE
+static AGGSTAT_FLT
 qnt_prb(struct aggstat* agg, const uint64_t idx, const int64_t dir)
 {
-  AGGSTAT_TYPE x;
-  AGGSTAT_TYPE y;
+  AGGSTAT_FLT x;
+  AGGSTAT_FLT y;
 
-  x = (AGGSTAT_TYPE)(agg->ag_cnt[idx]     - agg->ag_cnt[idx  - 1] + dir)
-    *               (agg->ag_val[idx + 1] - agg->ag_val[idx])
-    / (AGGSTAT_TYPE)(agg->ag_cnt[idx + 1] - agg->ag_cnt[idx]);
+  x = (AGGSTAT_FLT)(agg->ag_cnt[idx]     - agg->ag_cnt[idx  - 1] + dir)
+    *              (agg->ag_val[idx + 1] - agg->ag_val[idx])
+    / (AGGSTAT_FLT)(agg->ag_cnt[idx + 1] - agg->ag_cnt[idx]);
 
-  y = (AGGSTAT_TYPE)(agg->ag_cnt[idx + 1] - agg->ag_cnt[idx] - dir)
-    *               (agg->ag_val[idx]     - agg->ag_val[idx  - 1])
-    / (AGGSTAT_TYPE)(agg->ag_cnt[idx]     - agg->ag_cnt[idx  - 1]);
+  y = (AGGSTAT_FLT)(agg->ag_cnt[idx + 1] - agg->ag_cnt[idx] - dir)
+    *              (agg->ag_val[idx]     - agg->ag_val[idx  - 1])
+    / (AGGSTAT_FLT)(agg->ag_cnt[idx]     - agg->ag_cnt[idx  - 1]);
 
   return agg->ag_val[idx] + dir
        * (x + y)
-       / (AGGSTAT_TYPE)(agg->ag_cnt[idx + 1] - agg->ag_cnt[idx - 1]);
+       / (AGGSTAT_FLT)(agg->ag_cnt[idx + 1] - agg->ag_cnt[idx - 1]);
 }
 
 /// Readjust values after a new value was applied.
@@ -248,13 +248,13 @@ qnt_prb(struct aggstat* agg, const uint64_t idx, const int64_t dir)
 static void
 qnt_adj(struct aggstat* agg, const uint64_t idx)
 {
-  AGGSTAT_TYPE dlt;
-  AGGSTAT_TYPE par;
+  AGGSTAT_FLT dlt;
+  AGGSTAT_FLT par;
   int64_t      dir;
   bool         ord[2];
 
   // Compute the current differences.
-  dlt    = agg->ag_val[idx + 5] - (AGGSTAT_TYPE)agg->ag_cnt[idx];
+  dlt    = agg->ag_val[idx + 5] - (AGGSTAT_FLT)agg->ag_cnt[idx];
   ord[0] = agg->ag_cnt[idx + 1] > (agg->ag_cnt[idx] + 1);
   ord[1] = agg->ag_cnt[idx - 1] < (agg->ag_cnt[idx] - 1);
 
@@ -289,11 +289,11 @@ qnt_adj(struct aggstat* agg, const uint64_t idx)
 static int
 qnt_cmp(const void* a, const void* b)
 {
-  AGGSTAT_TYPE x;
-  AGGSTAT_TYPE y;
+  AGGSTAT_FLT x;
+  AGGSTAT_FLT y;
 
-  x = *(AGGSTAT_TYPE*)a;
-  y = *(AGGSTAT_TYPE*)b;
+  x = *(AGGSTAT_FLT*)a;
+  y = *(AGGSTAT_FLT*)b;
 
   return (x > y) - (x < y);
 }
@@ -303,7 +303,7 @@ qnt_cmp(const void* a, const void* b)
 /// @param[in] agg aggregate function
 /// @param[in] inp input value
 static void
-put_qnt(struct aggstat* agg, const AGGSTAT_TYPE inp)
+put_qnt(struct aggstat* agg, const AGGSTAT_FLT inp)
 {
   uint64_t inc[3];
 
@@ -320,7 +320,7 @@ put_qnt(struct aggstat* agg, const AGGSTAT_TYPE inp)
     agg->ag_val[4] = inp;
 
     // Sort the values.
-    (void)qsort(agg->ag_val, 5, sizeof(AGGSTAT_TYPE), qnt_cmp);
+    (void)qsort(agg->ag_val, 5, sizeof(AGGSTAT_FLT), qnt_cmp);
 
     // Initialise the counts.
     agg->ag_cnt[0] = 0; // Will get incremented by `aggstat_put`.
@@ -375,13 +375,13 @@ put_qnt(struct aggstat* agg, const AGGSTAT_TYPE inp)
 /// @param[in] agg aggregate function
 /// @param[in] inp input value
 static void
-put_med(struct aggstat* agg, const AGGSTAT_TYPE inp)
+put_med(struct aggstat* agg, const AGGSTAT_FLT inp)
 {
   put_qnt(agg, inp);
 }
 
 /// Function table for put_* functions based on ag_fnc.
-static void (*put_fnc[])(struct aggstat*, const AGGSTAT_TYPE) = {
+static void (*put_fnc[])(struct aggstat*, const AGGSTAT_FLT) = {
   NULL,
   put_fst,
   put_lst,
@@ -403,7 +403,7 @@ static void (*put_fnc[])(struct aggstat*, const AGGSTAT_TYPE) = {
 /// @param[in] agg aggregated value
 /// @param[in] inp input value
 void
-aggstat_put(struct aggstat* agg, const AGGSTAT_TYPE inp)
+aggstat_put(struct aggstat* agg, const AGGSTAT_FLT inp)
 {
   put_fnc[agg->ag_fnc](agg, inp);
   agg->ag_cnt[0]++;

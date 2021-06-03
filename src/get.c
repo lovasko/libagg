@@ -16,7 +16,7 @@
 /// @param[in]  agg aggregate function
 /// @param[out] out first value
 static bool
-get_fst(const struct aggstat *restrict agg, AGGSTAT_TYPE *restrict out)
+get_fst(const struct aggstat *restrict agg, AGGSTAT_FLT *restrict out)
 {
   *out = agg->ag_val[0];
   return agg->ag_cnt[0] > 0;
@@ -28,7 +28,7 @@ get_fst(const struct aggstat *restrict agg, AGGSTAT_TYPE *restrict out)
 /// @param[in]  agg aggregate function
 /// @param[out] out last value
 static bool
-get_lst(const struct aggstat *restrict agg, AGGSTAT_TYPE *restrict out)
+get_lst(const struct aggstat *restrict agg, AGGSTAT_FLT *restrict out)
 {
   *out = agg->ag_val[0];
   return agg->ag_cnt[0] > 0;
@@ -40,9 +40,9 @@ get_lst(const struct aggstat *restrict agg, AGGSTAT_TYPE *restrict out)
 /// @param[in]  agg aggregate function
 /// @param[out] out number of values
 static bool
-get_cnt(const struct aggstat *restrict agg, AGGSTAT_TYPE *restrict out)
+get_cnt(const struct aggstat *restrict agg, AGGSTAT_FLT *restrict out)
 {
-  *out = (AGGSTAT_TYPE)agg->ag_cnt[0];
+  *out = (AGGSTAT_FLT)agg->ag_cnt[0];
   return true;
 }
 
@@ -52,7 +52,7 @@ get_cnt(const struct aggstat *restrict agg, AGGSTAT_TYPE *restrict out)
 /// @param[in]  agg aggregate function
 /// @param[out] out sum of values
 static bool
-get_sum(const struct aggstat *restrict agg, AGGSTAT_TYPE *restrict out)
+get_sum(const struct aggstat *restrict agg, AGGSTAT_FLT *restrict out)
 {
   *out = agg->ag_val[0];
   return true;
@@ -64,7 +64,7 @@ get_sum(const struct aggstat *restrict agg, AGGSTAT_TYPE *restrict out)
 /// @param[in]  agg aggregate function
 /// @param[out] out minimal value
 static bool
-get_min(const struct aggstat *restrict agg, AGGSTAT_TYPE *restrict out)
+get_min(const struct aggstat *restrict agg, AGGSTAT_FLT *restrict out)
 {
   *out = agg->ag_val[0];
   return agg->ag_cnt[0] > 0;
@@ -76,7 +76,7 @@ get_min(const struct aggstat *restrict agg, AGGSTAT_TYPE *restrict out)
 /// @param[in]  agg aggregate function
 /// @param[out] out maximal value
 static bool
-get_max(const struct aggstat *restrict agg, AGGSTAT_TYPE *restrict out)
+get_max(const struct aggstat *restrict agg, AGGSTAT_FLT *restrict out)
 {
   *out = agg->ag_val[0];
   return agg->ag_cnt[0] > 0;
@@ -88,7 +88,7 @@ get_max(const struct aggstat *restrict agg, AGGSTAT_TYPE *restrict out)
 /// @param[in]  agg aggregate function
 /// @param[out] out average value
 static bool
-get_avg(const struct aggstat *restrict agg, AGGSTAT_TYPE *restrict out)
+get_avg(const struct aggstat *restrict agg, AGGSTAT_FLT *restrict out)
 {
   *out = agg->ag_val[0];
   return agg->ag_cnt[0] > 0;
@@ -100,13 +100,13 @@ get_avg(const struct aggstat *restrict agg, AGGSTAT_TYPE *restrict out)
 /// @param[in]  agg aggregate function
 /// @param[out] out variance of values
 static bool
-get_var(const struct aggstat *restrict agg, AGGSTAT_TYPE *restrict out)
+get_var(const struct aggstat *restrict agg, AGGSTAT_FLT *restrict out)
 {
   // The following potential division by zero might appear as a mistake; it is not. The division by
   // zero is a well-defined IEEE-745 operation yielding a positive/negative infinity. The value
   // itself in this case is wrong, but that does not matter, as the function returns `false` in
   // this case, meaning that the resulting value shall not be consulted.
-  *out = agg->ag_val[1] / (AGGSTAT_TYPE)(agg->ag_cnt[0] - 1);
+  *out = agg->ag_val[1] / (AGGSTAT_FLT)(agg->ag_cnt[0] - 1);
   return agg->ag_cnt[0] > 1;
 }
 
@@ -116,7 +116,7 @@ get_var(const struct aggstat *restrict agg, AGGSTAT_TYPE *restrict out)
 /// @param[in]  agg aggregate function
 /// @param[out] out standard deviation of values
 static bool
-get_dev(const struct aggstat *restrict agg, AGGSTAT_TYPE *restrict out)
+get_dev(const struct aggstat *restrict agg, AGGSTAT_FLT *restrict out)
 {
   bool ret;
 
@@ -131,9 +131,9 @@ get_dev(const struct aggstat *restrict agg, AGGSTAT_TYPE *restrict out)
 /// @param[in]  agg aggregate function
 /// @param[out] out skewness of values
 static bool
-get_skw(const struct aggstat *restrict agg, AGGSTAT_TYPE *restrict out)
+get_skw(const struct aggstat *restrict agg, AGGSTAT_FLT *restrict out)
 {
-  *out = AGGSTAT_SQRT((AGGSTAT_TYPE)agg->ag_cnt[0])
+  *out = AGGSTAT_SQRT((AGGSTAT_FLT)agg->ag_cnt[0])
        * agg->ag_val[2]
        / AGGSTAT_POW(agg->ag_val[1], AGGSTAT_1_5);
 
@@ -146,9 +146,9 @@ get_skw(const struct aggstat *restrict agg, AGGSTAT_TYPE *restrict out)
 /// @param[in]  agg aggregate function
 /// @param[out] out kurtosis of values
 static bool
-get_krt(const struct aggstat *restrict agg, AGGSTAT_TYPE *restrict out)
+get_krt(const struct aggstat *restrict agg, AGGSTAT_FLT *restrict out)
 {
-  *out = (AGGSTAT_TYPE)(agg->ag_cnt[0])
+  *out = (AGGSTAT_FLT)(agg->ag_cnt[0])
        * agg->ag_val[3]
        / (agg->ag_val[1] * agg->ag_val[1])
        - AGGSTAT_3_0;
@@ -161,7 +161,7 @@ get_krt(const struct aggstat *restrict agg, AGGSTAT_TYPE *restrict out)
 /// @param[in]  agg aggregate function
 /// @param[out] out p-quantile of values
 static bool
-get_qtl(const struct aggstat *restrict agg, AGGSTAT_TYPE *restrict out)
+get_qtl(const struct aggstat *restrict agg, AGGSTAT_FLT *restrict out)
 {
   *out = agg->ag_val[2];
   return agg->ag_cnt[4] > 0;
@@ -173,13 +173,13 @@ get_qtl(const struct aggstat *restrict agg, AGGSTAT_TYPE *restrict out)
 /// @param[in]  agg aggregate function
 /// @param[out] out median of values
 static bool
-get_med(const struct aggstat *restrict agg, AGGSTAT_TYPE *restrict out)
+get_med(const struct aggstat *restrict agg, AGGSTAT_FLT *restrict out)
 {
   return get_qtl(agg, out);
 }
 
 /// Function table for get_* functions based on ag_fnc.
-static bool (*get_fnc[])(const struct aggstat*, AGGSTAT_TYPE*) = {
+static bool (*get_fnc[])(const struct aggstat*, AGGSTAT_FLT*) = {
   NULL,
   get_fst,
   get_lst,
@@ -202,7 +202,7 @@ static bool (*get_fnc[])(const struct aggstat*, AGGSTAT_TYPE*) = {
 /// @param[in]  agg aggregate function
 /// @param[out] out aggregate value
 bool
-aggstat_get(const struct aggstat *restrict agg, AGGSTAT_TYPE *restrict out)
+aggstat_get(const struct aggstat *restrict agg, AGGSTAT_FLT *restrict out)
 {
   return get_fnc[agg->ag_fnc](agg, out);
 }

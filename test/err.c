@@ -24,7 +24,7 @@
 
 /// Generate a next random number from the inclusive interval (0.0, 1.0).
 /// @return random number
-static AGGSTAT_TYPE
+static AGGSTAT_FLT
 random_number(void)
 {
   static uint32_t num = 77;
@@ -33,7 +33,7 @@ random_number(void)
   per = ((uint32_t)1 << 31) - 1;
   num = (num * 214013 + 2531011) & per;
 
-  return (AGGSTAT_TYPE)num / (AGGSTAT_TYPE)per * AGGSTAT_10_0;
+  return (AGGSTAT_FLT)num / (AGGSTAT_FLT)per * AGGSTAT_10_0;
 }
 
 /// Obtain the current time with minimal external effects.
@@ -59,18 +59,18 @@ time_now(void)
 /// @param[in]  idx test case index
 /// @param[in]  par function parameter
 static bool
-exec(      uint64_t*     onc,
-           uint64_t*     ofc,
-           AGGSTAT_TYPE* arr,
-     const uint64_t      len,
-     const uint8_t       fnc,
-     const uint64_t      idx,
-     const AGGSTAT_TYPE  par)
+exec(      uint64_t*    onc,
+           uint64_t*    ofc,
+           AGGSTAT_FLT* arr,
+     const uint64_t     len,
+     const uint8_t      fnc,
+     const uint64_t     idx,
+     const AGGSTAT_FLT  par)
 {
   struct aggstat agg;
   uint64_t       run;
-  AGGSTAT_TYPE   val[2];
-  AGGSTAT_TYPE   dif;
+  AGGSTAT_FLT    val[2];
+  AGGSTAT_FLT    dif;
   bool           ret[2];
   uint64_t       now[3];
 
@@ -121,15 +121,15 @@ exec(      uint64_t*     onc,
 /// @param[in]  fnc  aggregate function
 /// @param[in]  par  parameter
 static void
-test(bool* res, const uint8_t fnc, const AGGSTAT_TYPE par)
+test(bool* res, const uint8_t fnc, const AGGSTAT_FLT par)
 {
-  AGGSTAT_TYPE* arr;
-  uint64_t      ctr;
-  uint64_t      len;
-  uint64_t      idx;
-  bool          ret;
-  uint64_t      onc;
-  uint64_t      ofc;
+  AGGSTAT_FLT* arr;
+  uint64_t     ctr;
+  uint64_t     len;
+  uint64_t     idx;
+  bool         ret;
+  uint64_t     onc;
+  uint64_t     ofc;
 
   // Reset the clocks.
   onc = 0;

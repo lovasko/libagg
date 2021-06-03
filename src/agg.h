@@ -29,7 +29,7 @@
 // Determine the appropriate type-related constants and functions.
 #if AGGSTAT_BIT == 32
   // Types.
-  #define AGGSTAT_TYPE float
+  #define AGGSTAT_FLT float
 
   // Functions.
   #define AGGSTAT_SQRT sqrtf
@@ -47,7 +47,7 @@
   #define AGGSTAT_MAX  FLT_MAX
 #elif AGGSTAT_BIT == 64
   // Types.
-  #define AGGSTAT_TYPE double
+  #define AGGSTAT_FLT double
 
   // Functions.
   #define AGGSTAT_SQRT sqrt
@@ -65,7 +65,7 @@
   #define AGGSTAT_MAX  DBL_MAX
 #elif AGGSTAT_BIT == 80
   // Types.
-  #define AGGSTAT_TYPE long double
+  #define AGGSTAT_FLT long double
 
   // Functions.
   #define AGGSTAT_SQRT sqrtl
@@ -88,7 +88,7 @@
   #endif
 
   // Types.
-  #define AGGSTAT_TYPE __float128
+  #define AGGSTAT_FLT __float128
 
   // Functions.
   #define AGGSTAT_SQRT sqrtq
@@ -141,23 +141,23 @@
 
 /// Aggregate function.
 struct aggstat {
-  uint8_t      ag_fnc;     ///< Type.
-  uint8_t      ag_pad[7];  ///< Padding (unused).
-  uint64_t     ag_cnt[5];  ///< Number of observations.
-  AGGSTAT_TYPE ag_par;     ///< Function argument.
-  AGGSTAT_TYPE ag_val[10]; ///< State variables.
+  uint8_t     ag_fnc;     ///< Type.
+  uint8_t     ag_pad[7];  ///< Padding (unused).
+  uint64_t    ag_cnt[5];  ///< Number of observations.
+  AGGSTAT_FLT ag_par;     ///< Function argument.
+  AGGSTAT_FLT ag_val[10]; ///< State variables.
 };
 
 /// On-line algorithms.
-void aggstat_new(struct aggstat* agg, const uint8_t fnc, const AGGSTAT_TYPE par);
-void aggstat_put(struct aggstat* agg, const AGGSTAT_TYPE val);
-bool aggstat_get(const struct aggstat *restrict agg, AGGSTAT_TYPE *restrict val);
+void aggstat_new(struct aggstat* agg, const uint8_t fnc, const AGGSTAT_FLT par);
+void aggstat_put(struct aggstat* agg, const AGGSTAT_FLT val);
+bool aggstat_get(const struct aggstat *restrict agg, AGGSTAT_FLT *restrict val);
 
 /// Off-line algorithms.
-bool aggstat_run(      AGGSTAT_TYPE *restrict val,
-                 const AGGSTAT_TYPE *restrict arr,
-                 const uint64_t               len,
-                 const uint8_t                fnc,
-                 const AGGSTAT_TYPE           par);
+bool aggstat_run(      AGGSTAT_FLT *restrict val,
+                 const AGGSTAT_FLT *restrict arr,
+                 const uint64_t              len,
+                 const uint8_t               fnc,
+                 const AGGSTAT_FLT           par);
 
 #endif

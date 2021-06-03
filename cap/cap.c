@@ -13,12 +13,12 @@
 
 /// Settings.
 struct settings {
-  uintmax_t     s_len; ///< Length of the stream.
-  uintmax_t     s_rep; ///< Repetitions of the test measurements.
-  AGGSTAT_TYPE  s_scl; ///< Scale of the values. 
-  AGGSTAT_TYPE  s_off; ///< Offset of the values.
-  AGGSTAT_TYPE  s_par; ///< Aggregate function parameter.
-  uint8_t       s_fnc; ///< Aggregate function.
+  uintmax_t    s_len; ///< Length of the stream.
+  uintmax_t    s_rep; ///< Repetitions of the test measurements.
+  AGGSTAT_FLT  s_scl; ///< Scale of the values. 
+  AGGSTAT_FLT  s_off; ///< Offset of the values.
+  AGGSTAT_FLT  s_par; ///< Aggregate function parameter.
+  uint8_t      s_fnc; ///< Aggregate function.
 };
 
 /// Fill the array with random values.
@@ -28,16 +28,16 @@ struct settings {
 /// @param[in] mul value multiplier
 /// @param[in] off value offset
 static void
-fill_array(      AGGSTAT_TYPE* arr,
-           const uintmax_t     len,
-           const AGGSTAT_TYPE  mul,
-           const AGGSTAT_TYPE  off)
+fill_array(      AGGSTAT_FLT* arr,
+           const uintmax_t    len,
+           const AGGSTAT_FLT  mul,
+           const AGGSTAT_FLT  off)
 {
-  uintmax_t    idx;
-  AGGSTAT_TYPE val;
+  uintmax_t   idx;
+  AGGSTAT_FLT val;
 
   for (idx = 0; idx < len; idx++) {
-    val = (AGGSTAT_TYPE)rand() / (AGGSTAT_TYPE)RAND_MAX * mul + off;
+    val = (AGGSTAT_FLT)rand() / (AGGSTAT_FLT)RAND_MAX * mul + off;
     arr[idx] = val;
   }
 }
@@ -49,12 +49,12 @@ fill_array(      AGGSTAT_TYPE* arr,
 /// @param[in] len length of the array
 /// @param[in] fnc aggregate function
 /// @param[in] par parameter of the aggregate function
-static AGGSTAT_TYPE
-compute_online(AGGSTAT_TYPE* arr, const uintmax_t len, const uint8_t fnc, const AGGSTAT_TYPE par)
+static AGGSTAT_FLT
+compute_online(AGGSTAT_FLT* arr, const uintmax_t len, const uint8_t fnc, const AGGSTAT_FLT par)
 {
   struct aggstat agg;
   uintmax_t      idx;
-  AGGSTAT_TYPE   ret;
+  AGGSTAT_FLT    ret;
 
   // Push all values into the aggregate function that computes the estimate.
   aggstat_new(&agg, fnc, par);
@@ -73,12 +73,12 @@ compute_online(AGGSTAT_TYPE* arr, const uintmax_t len, const uint8_t fnc, const 
 /// @param[in] len length of the array
 /// @param[in] fnc aggregate function
 /// @param[in] par parameter of the aggregate function
-static AGG_TYPE
-compute_offline(AGG_TYPE* arr, const uintmax_t len, const uint8_t fnc, const AGG_TYPE par)
+static AGGSTAT_FLT
+compute_offline(AGGSTAT_FLT* arr, const uintmax_t len, const uint8_t fnc, const AGGSTAT_FLT par)
 {
-  AGG_TYPE ret;
+  AGGSTAT_FLT ret;
 
-  (void)agg_run(&ret, arr, len, fnc, par);
+  (void)aggstat_run(&ret, arr, len, fnc, par);
   return ret;
 }
 
@@ -217,16 +217,16 @@ read_exceptions(bool* ovr, bool* udr, bool* ine)
 /// @param[in] arr memory for stream emulation
 /// @param[in] stg settings
 static void
-run_comparisons(AGG_TYPE* arr, struct settings* stg)
+run_comparisons(AGGSTAT_FLT* arr, struct settings* stg)
 {
-  uintmax_t    idx;
-  AGGSTAT_TYPE max;
-  AGGSTAT_TYPE dif;
-  AGGSTAT_TYPE val[2];
-  bool         ovr[2];
-  bool         udr[2];
-  bool         ine[2];
-  bool         dum;
+  uintmax_t   idx;
+  AGGSTAT_FLT max;
+  AGGSTAT_FLT dif;
+  AGGSTAT_FLT val[2];
+  bool        ovr[2];
+  bool        udr[2];
+  bool        ine[2];
+  bool        dum;
 
   // Assume no exceptions.
   ovr[0] = false;
@@ -269,7 +269,7 @@ int
 main(int argc, char* argv[])
 {
   struct settings stg;
-  AGGSTAT_TYPE*   arr;
+  AGGSTAT_FLT*    arr;
   bool            ret;
 
   // Parse input from command-line.
@@ -282,7 +282,7 @@ main(int argc, char* argv[])
   srand(time(NULL));
 
   // Allocate the array of numbers.
-  arr = calloc(sizeof(AGGSTAT_TYPE), stg.s_len);
+  arr = calloc(sizeof(AGGSTAT_FLT), stg.s_len);
   if (arr == NULL) {
     perror("calloc");
     return EXIT_FAILURE;

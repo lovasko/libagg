@@ -37,7 +37,7 @@
 // iteration.
 #if AGGSTAT_BIT == 32
   #ifdef __FAST_MATH__
-    static const AGGSTAT_TYPE err[13][6] = {
+    static const AGGSTAT_FLT err[13][6] = {
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // fst
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // snd
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // cnt
@@ -53,7 +53,7 @@
       {P_01, Z_01, Z_01, M_01, M_01, M_01}, // med
     };
   #else
-    static const AGGSTAT_TYPE err[13][6] = {
+    static const AGGSTAT_FLT err[13][6] = {
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // fst
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // lst
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // cnt
@@ -71,7 +71,7 @@
   #endif
 #elif AGGSTAT_BIT == 64
   #ifdef __FAST_MATH__
-    static const AGGSTAT_TYPE err[13][6] = {
+    static const AGGSTAT_FLT err[13][6] = {
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // fst
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // lst
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // cnt
@@ -87,7 +87,7 @@
       {P_01, Z_01, Z_01, M_01, M_02, M_03}, // med
     };
   #else
-    static const AGGSTAT_TYPE err[13][6] = {
+    static const AGGSTAT_FLT err[13][6] = {
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // fst
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // lst
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // cnt
@@ -105,7 +105,7 @@
   #endif
 #elif AGGSTAT_BIT == 80
   #ifdef __FAST_MATH__
-    static const AGGSTAT_TYPE err[13][6] = {
+    static const AGGSTAT_FLT err[13][6] = {
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // fst
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // lst
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // cnt
@@ -121,7 +121,7 @@
       {P_01, Z_01, Z_01, M_01, M_02, M_03}, // med
     };
   #else
-    static const AGGSTAT_TYPE err[13][6] = {
+    static const AGGSTAT_FLT err[13][6] = {
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // fst
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // lst
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // cnt
