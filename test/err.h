@@ -4,40 +4,40 @@
 // Distributed under the terms of the 2-clause BSD License. The full
 // license is in the file LICENSE, distributed as part of this software.
 
-#ifndef AGGREGATE_TEST_ERR_H
-#define AGGREGATE_TEST_ERR_H
+#ifndef AGGSTAT_ERR_H
+#define AGGSTAT_ERR_H
 
 // Define error threshold constants.
-#define P_03 AGG_NUM(1, 0, +,  3)
-#define P_02 AGG_NUM(1, 0, +,  2)
-#define P_01 AGG_NUM(1, 0, +,  1)
-#define Z_01 AGG_NUM(1, 0, +,  0)
-#define Z_00 AGG_NUM(0, 0, +,  0)
-#define M_01 AGG_NUM(1, 0, -,  1)
-#define M_02 AGG_NUM(1, 0, -,  2)
-#define M_03 AGG_NUM(1, 0, -,  3)
-#define M_04 AGG_NUM(1, 0, -,  4)
-#define M_05 AGG_NUM(1, 0, -,  5)
-#define M_06 AGG_NUM(1, 0, -,  6)
-#define M_07 AGG_NUM(1, 0, -,  7)
-#define M_08 AGG_NUM(1, 0, -,  8)
-#define M_09 AGG_NUM(1, 0, -,  9)
-#define M_10 AGG_NUM(1, 0, -, 10)
-#define M_12 AGG_NUM(1, 0, -, 11)
-#define M_13 AGG_NUM(1, 0, -, 12)
-#define M_14 AGG_NUM(1, 0, -, 13)
-#define M_15 AGG_NUM(1, 0, -, 14)
-#define M_16 AGG_NUM(1, 0, -, 15)
-#define M_17 AGG_NUM(1, 0, -, 17)
-#define M_18 AGG_NUM(1, 0, -, 18)
+#define P_03 AGGSTAT_NUM(1, 0, +,  3)
+#define P_02 AGGSTAT_NUM(1, 0, +,  2)
+#define P_01 AGGSTAT_NUM(1, 0, +,  1)
+#define Z_01 AGGSTAT_NUM(1, 0, +,  0)
+#define Z_00 AGGSTAT_NUM(0, 0, +,  0)
+#define M_01 AGGSTAT_NUM(1, 0, -,  1)
+#define M_02 AGGSTAT_NUM(1, 0, -,  2)
+#define M_03 AGGSTAT_NUM(1, 0, -,  3)
+#define M_04 AGGSTAT_NUM(1, 0, -,  4)
+#define M_05 AGGSTAT_NUM(1, 0, -,  5)
+#define M_06 AGGSTAT_NUM(1, 0, -,  6)
+#define M_07 AGGSTAT_NUM(1, 0, -,  7)
+#define M_08 AGGSTAT_NUM(1, 0, -,  8)
+#define M_09 AGGSTAT_NUM(1, 0, -,  9)
+#define M_10 AGGSTAT_NUM(1, 0, -, 10)
+#define M_12 AGGSTAT_NUM(1, 0, -, 11)
+#define M_13 AGGSTAT_NUM(1, 0, -, 12)
+#define M_14 AGGSTAT_NUM(1, 0, -, 13)
+#define M_15 AGGSTAT_NUM(1, 0, -, 14)
+#define M_16 AGGSTAT_NUM(1, 0, -, 15)
+#define M_17 AGGSTAT_NUM(1, 0, -, 17)
+#define M_18 AGGSTAT_NUM(1, 0, -, 18)
 
 // The tables below denote the acceptable magnitudes of error for each
 // aggregate function. The corresponding length of the input list is
 // implied, starting with 10 elements and increasing tenfold in each
 // iteration.
-#if AGG_BIT == 32
+#if AGGSTAT_BIT == 32
   #ifdef __FAST_MATH__
-    static const AGG_TYPE err[13][6] = {
+    static const AGGSTAT_TYPE err[13][6] = {
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // fst
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // snd
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // cnt
@@ -53,7 +53,7 @@
       {P_01, Z_01, Z_01, M_01, M_01, M_01}, // med
     };
   #else
-    static const AGG_TYPE err[13][6] = {
+    static const AGGSTAT_TYPE err[13][6] = {
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // fst
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // lst
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // cnt
@@ -69,9 +69,9 @@
       {P_01, Z_01, Z_01, M_01, M_01, M_01}, // med
     };
   #endif
-#elif AGG_BIT == 64
+#elif AGGSTAT_BIT == 64
   #ifdef __FAST_MATH__
-    static const AGG_TYPE err[13][6] = {
+    static const AGGSTAT_TYPE err[13][6] = {
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // fst
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // lst
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // cnt
@@ -87,7 +87,7 @@
       {P_01, Z_01, Z_01, M_01, M_02, M_03}, // med
     };
   #else
-    static const AGG_TYPE err[13][6] = {
+    static const AGGSTAT_TYPE err[13][6] = {
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // fst
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // lst
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // cnt
@@ -103,9 +103,9 @@
       {P_01, Z_01, Z_01, M_01, M_02, M_03}, // med
     };
   #endif
-#elif AGG_BIT == 80
+#elif AGGSTAT_BIT == 80
   #ifdef __FAST_MATH__
-    static const AGG_TYPE err[13][6] = {
+    static const AGGSTAT_TYPE err[13][6] = {
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // fst
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // lst
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // cnt
@@ -121,7 +121,7 @@
       {P_01, Z_01, Z_01, M_01, M_02, M_03}, // med
     };
   #else
-    static const AGG_TYPE err[13][6] = {
+    static const AGGSTAT_TYPE err[13][6] = {
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // fst
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // lst
       {Z_00, Z_00, Z_00, Z_00, Z_00, Z_00}, // cnt
@@ -138,7 +138,7 @@
     };
   #endif
 #else
-  #error "AGG_BIT is not supported" AGG_BIT
+  #error "AGGSTAT_BIT is not supported" AGGSTAT_BIT
 #endif
 
 #endif

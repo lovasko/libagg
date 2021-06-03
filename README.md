@@ -65,11 +65,11 @@ The following constants are used to identify the aggregate functions by both par
 The following snippet computes the 99th percentile of values in an stream whilst retrieving numbers
 from the hypothetical stream by calling the `get_number` function.
 ```c
-struct agg agg;
-double     num;
-double     p99;
-bool       ret;
-uint8_t    idx;
+struct aggstat agg;
+double         num;
+double         p99;
+bool           ret;
+uint8_t        idx;
 
 agg_new(&agg, AGG_FNC_QTL, 0.99);
 

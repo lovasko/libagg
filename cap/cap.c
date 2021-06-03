@@ -13,12 +13,12 @@
 
 /// Settings.
 struct settings {
-  uintmax_t s_len; ///< Length of the stream.
-  uintmax_t s_rep; ///< Repetitions of the test measurements.
-  AGG_TYPE  s_scl; ///< Scale of the values. 
-  AGG_TYPE  s_off; ///< Offset of the values.
-  AGG_TYPE  s_par; ///< Aggregate function parameter.
-  uint8_t   s_fnc; ///< Aggregate function.
+  uintmax_t     s_len; ///< Length of the stream.
+  uintmax_t     s_rep; ///< Repetitions of the test measurements.
+  AGGSTAT_TYPE  s_scl; ///< Scale of the values. 
+  AGGSTAT_TYPE  s_off; ///< Offset of the values.
+  AGGSTAT_TYPE  s_par; ///< Aggregate function parameter.
+  uint8_t       s_fnc; ///< Aggregate function.
 };
 
 /// Fill the array with random values.
@@ -28,13 +28,16 @@ struct settings {
 /// @param[in] mul value multiplier
 /// @param[in] off value offset
 static void
-fill_array(AGG_TYPE* arr, const uintmax_t len, const AGG_TYPE mul, const AGG_TYPE off)
+fill_array(      AGGSTAT_TYPE* arr,
+           const uintmax_t     len,
+           const AGGSTAT_TYPE  mul,
+           const AGGSTAT_TYPE  off)
 {
-  uintmax_t idx;
-  AGG_TYPE val;
+  uintmax_t    idx;
+  AGGSTAT_TYPE val;
 
   for (idx = 0; idx < len; idx++) {
-    val = (AGG_TYPE)rand() / (AGG_TYPE)RAND_MAX * mul + off;
+    val = (AGGSTAT_TYPE)rand() / (AGGSTAT_TYPE)RAND_MAX * mul + off;
     arr[idx] = val;
   }
 }
@@ -46,20 +49,20 @@ fill_array(AGG_TYPE* arr, const uintmax_t len, const AGG_TYPE mul, const AGG_TYP
 /// @param[in] len length of the array
 /// @param[in] fnc aggregate function
 /// @param[in] par parameter of the aggregate function
-static AGG_TYPE
-compute_online(AGG_TYPE* arr, const uintmax_t len, const uint8_t fnc, const AGG_TYPE par)
+static AGGSTAT_TYPE
+compute_online(AGGSTAT_TYPE* arr, const uintmax_t len, const uint8_t fnc, const AGGSTAT_TYPE par)
 {
-  struct agg agg;
-  uintmax_t idx;
-  AGG_TYPE ret;
+  struct aggstat agg;
+  uintmax_t      idx;
+  AGGSTAT_TYPE   ret;
 
   // Push all values into the aggregate function that computes the estimate.
-  agg_new(&agg, fnc, par);
+  aggstat_new(&agg, fnc, par);
   for (idx = 0; idx < len; idx++) {
-    agg_put(&agg, arr[idx]);
+    aggstat_put(&agg, arr[idx]);
   }
 
-  (void)agg_get(&agg, &ret);
+  (void)aggstat_get(&agg, &ret);
   return ret;
 }
 
@@ -128,7 +131,7 @@ parse_settings(struct settings* stg, int argc, char* argv[])
       stg->s_fnc = parse_function(optarg);
       if (stg->s_fnc == 0) {
         fprintf(stderr, "unable to parse the function from '%s'\n", optarg);
-	return false;
+        return false;
       }
     }
 
@@ -216,14 +219,14 @@ read_exceptions(bool* ovr, bool* udr, bool* ine)
 static void
 run_comparisons(AGG_TYPE* arr, struct settings* stg)
 {
-  uintmax_t idx;
-  AGG_TYPE max;
-  AGG_TYPE dif;
-  AGG_TYPE val[2];
-  bool ovr[2];
-  bool udr[2];
-  bool ine[2];
-  bool dum;
+  uintmax_t    idx;
+  AGGSTAT_TYPE max;
+  AGGSTAT_TYPE dif;
+  AGGSTAT_TYPE val[2];
+  bool         ovr[2];
+  bool         udr[2];
+  bool         ine[2];
+  bool         dum;
 
   // Assume no exceptions.
   ovr[0] = false;
@@ -234,7 +237,7 @@ run_comparisons(AGG_TYPE* arr, struct settings* stg)
   ine[1] = false;
   
   // Repeatedly generate a new array and compute both values.
-  max = AGG_NUM(0, 0, +, 0);
+  max = AGGSTAT_NUM(0, 0, +, 0);
   for (idx = 0; idx < stg->s_rep; idx++) {
     // Prepare the array and clear any exceptions that might have been caused
     // by the random number generation.
@@ -250,13 +253,13 @@ run_comparisons(AGG_TYPE* arr, struct settings* stg)
     read_exceptions(&ovr[1], &udr[1], &ine[1]);
 
     // Potentially set the new maximum.
-    dif = AGG_ABS(val[0] - val[1]);
+    dif = AGGSTAT_ABS(val[0] - val[1]);
     if (dif > max) {
       max = dif;
     }
   }
 
-  (void)printf(AGG_FMT "(%s%s%s)(%s%s%s) ",
+  (void)printf(AGGSTAT_FMT "(%s%s%s)(%s%s%s) ",
     max,
     ovr[0] ? "o" : "", udr[0] ? "u" : "", ine[0] ? "i" : "",
     ovr[1] ? "o" : "", udr[1] ? "u" : "", ine[1] ? "i" : "");
@@ -266,8 +269,8 @@ int
 main(int argc, char* argv[])
 {
   struct settings stg;
-  AGG_TYPE* arr;
-  bool ret;
+  AGGSTAT_TYPE*   arr;
+  bool            ret;
 
   // Parse input from command-line.
   ret = parse_settings(&stg, argc, argv);
@@ -279,7 +282,7 @@ main(int argc, char* argv[])
   srand(time(NULL));
 
   // Allocate the array of numbers.
-  arr = calloc(sizeof(AGG_TYPE), stg.s_len);
+  arr = calloc(sizeof(AGGSTAT_TYPE), stg.s_len);
   if (arr == NULL) {
     perror("calloc");
     return EXIT_FAILURE;
