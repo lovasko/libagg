@@ -206,7 +206,7 @@ put_krt(struct aggstat* agg, const AGGSTAT_FLT inp)
 /// @param[in] idx index of the value to adjust
 /// @param[in] dir direction of the change
 static AGGSTAT_FLT
-qnt_lin(struct aggstat* agg, const uint64_t idx, const int64_t dir)
+qnt_lin(struct aggstat* agg, const AGGSTAT_INT idx, const int8_t dir)
 {
   return agg->ag_val[idx]       + (AGGSTAT_FLT)dir
       * (agg->ag_val[idx + dir] - agg->ag_val[idx])
@@ -223,7 +223,7 @@ qnt_lin(struct aggstat* agg, const uint64_t idx, const int64_t dir)
 /// @param[in] idx index of
 /// @param[in] dir direction of the extrapolation
 static AGGSTAT_FLT
-qnt_prb(struct aggstat* agg, const uint64_t idx, const int64_t dir)
+qnt_prb(struct aggstat* agg, const AGGSTAT_INT idx, const int8_t dir)
 {
   AGGSTAT_FLT x;
   AGGSTAT_FLT y;
@@ -246,12 +246,12 @@ qnt_prb(struct aggstat* agg, const uint64_t idx, const int64_t dir)
 /// @param[in] agg aggregate
 /// @param[in] idx index of the value to readjust
 static void
-qnt_adj(struct aggstat* agg, const uint64_t idx)
+qnt_adj(struct aggstat* agg, const AGGSTAT_INT idx)
 {
   AGGSTAT_FLT dlt;
   AGGSTAT_FLT par;
-  int64_t      dir;
-  bool         ord[2];
+  int8_t      dir;
+  bool        ord[2];
 
   // Compute the current differences.
   dlt    = agg->ag_val[idx + 5] - (AGGSTAT_FLT)agg->ag_cnt[idx];
@@ -261,7 +261,7 @@ qnt_adj(struct aggstat* agg, const uint64_t idx)
   // Only continue with the readjustment if the values are out of order.
   if ((dlt >= AGGSTAT_1_0 && ord[0]) || (dlt <= -AGGSTAT_1_0 && ord[1])) {
     // Decide the movement direction.
-    dir = (int64_t)AGGSTAT_SIGN(AGGSTAT_1_0, dlt);
+    dir = (int8_t)AGGSTAT_SIGN(AGGSTAT_1_0, dlt);
 
     // Determine which estimation to use.
     par = qnt_prb(agg, idx, dir);
@@ -305,7 +305,7 @@ qnt_cmp(const void* a, const void* b)
 static void
 put_qnt(struct aggstat* agg, const AGGSTAT_FLT inp)
 {
-  uint64_t inc[3];
+  AGGSTAT_INT inc[3];
 
   // Perform a sorted insert of the first 5 elements.
   if (agg->ag_cnt[4] < 4) {

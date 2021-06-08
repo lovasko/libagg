@@ -26,6 +26,16 @@
   #define AGGSTAT_FLT_BIT 64
 #endif
 
+// This constant selects the width of the unsigned integer type used by the
+// library in all computations. The default value is 64, which denotes the
+// `uint64_t` type. Other permissible values are 32 for `uint32_t` and 16 for
+// `uint16_t`. Furthermore, value 128 results in the `__uint128_t` type which
+// is a non-standard extension that will result in compile-time error unless
+// the `AGGSTAT_STD` macro evaluates to `0`.
+#ifndef AGGSTAT_INT_BIT
+  #define AGGSTAT_INT_BIT 64
+#endif
+
 // Determine the appropriate type-related constants and functions.
 #if AGGSTAT_FLT_BIT == 32
   // Types.
@@ -108,6 +118,26 @@
   #error "invalid value of AGGSTAT_FLT_BIT: " AGGSTAT_FLT_BIT
 #endif
 
+#if AGGSTAT_INT_BIT == 16
+  #define AGGSTAT_INT     uint16_t
+  #define AGGSTAT_INT_MAX UINT16_MAX
+#elif AGGSTAT_INT_BIT == 32
+  #define AGGSTAT_INT     uint32_t
+  #define AGGSTAT_INT_MAX UINT32_MAX
+#elif AGGSTAT_INT_BIT == 64
+  #define AGGSTAT_INT     uint64_t
+  #define AGGSTAT_INT_MAX UINT64_MAX
+#elif AGGSTAT_INT_BIT == 128
+  // Ensure that the type cannot be selected when a strict standard-compliance is requested.
+  #if AGGSTAT_STD == 1
+    #error "AGGSTAT_INT_BIT == 128 is a non-standard extension"
+  #endif
+  #define AGGSTAT_INT     __uint128_t
+  #define AGGSTAT_INT_MAX UINT128_MAX
+#else
+  #error "invalid value of AGGSTAT_INT_BIT: " AGGSTAT_INT_BIT
+#endif
+
 // Numerical constants.
 #define AGGSTAT_0_0  AGGSTAT_NUM(0,  0, +, 0)
 #define AGGSTAT_0_1  AGGSTAT_NUM(0,  1, +, 0)
@@ -143,7 +173,7 @@
 struct aggstat {
   uint8_t     ag_fnc;     ///< Type.
   uint8_t     ag_pad[7];  ///< Padding (unused).
-  uint64_t    ag_cnt[5];  ///< Number of observations.
+  AGGSTAT_INT ag_cnt[5];  ///< Number of observations.
   AGGSTAT_FLT ag_par;     ///< Function argument.
   AGGSTAT_FLT ag_val[10]; ///< State variables.
 };
@@ -156,7 +186,7 @@ bool aggstat_get(const struct aggstat *restrict agg, AGGSTAT_FLT *restrict val);
 /// Off-line algorithms.
 bool aggstat_run(      AGGSTAT_FLT *restrict val,
                  const AGGSTAT_FLT *restrict arr,
-                 const uint64_t              len,
+                 const AGGSTAT_INT           len,
                  const uint8_t               fnc,
                  const AGGSTAT_FLT           par);
 

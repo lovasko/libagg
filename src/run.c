@@ -20,7 +20,7 @@
 static bool
 run_fst(      AGGSTAT_FLT *restrict out,
         const AGGSTAT_FLT *restrict arr,
-        const uint64_t              len,
+        const AGGSTAT_INT           len,
         const AGGSTAT_FLT           par)
 {
   (void)par;
@@ -43,7 +43,7 @@ run_fst(      AGGSTAT_FLT *restrict out,
 static bool
 run_lst(      AGGSTAT_FLT *restrict out,
         const AGGSTAT_FLT *restrict arr,
-        const uint64_t              len,
+        const AGGSTAT_INT           len,
         const AGGSTAT_FLT           par)
 {
   (void)par;
@@ -66,7 +66,7 @@ run_lst(      AGGSTAT_FLT *restrict out,
 static bool
 run_cnt(      AGGSTAT_FLT *restrict out,
         const AGGSTAT_FLT *restrict arr,
-        const uint64_t              len,
+        const AGGSTAT_INT           len,
         const AGGSTAT_FLT           par)
 {
   (void)arr;
@@ -86,10 +86,10 @@ run_cnt(      AGGSTAT_FLT *restrict out,
 static bool
 run_sum(      AGGSTAT_FLT *restrict out,
         const AGGSTAT_FLT *restrict arr,
-        const uint64_t              len,
+        const AGGSTAT_INT           len,
         const AGGSTAT_FLT           par)
 {
-  uint64_t    idx;
+  AGGSTAT_INT idx;
   AGGSTAT_FLT sum;
 
   (void)par;
@@ -113,10 +113,10 @@ run_sum(      AGGSTAT_FLT *restrict out,
 static bool
 run_min(      AGGSTAT_FLT *restrict out,
         const AGGSTAT_FLT *restrict arr,
-        const uint64_t              len,
+        const AGGSTAT_INT           len,
         const AGGSTAT_FLT           par)
 {
-  uint64_t    idx;
+  AGGSTAT_INT idx;
   AGGSTAT_FLT min;
 
   (void)par;
@@ -144,10 +144,10 @@ run_min(      AGGSTAT_FLT *restrict out,
 static bool
 run_max(      AGGSTAT_FLT *restrict out,
         const AGGSTAT_FLT *restrict arr,
-        const uint64_t              len,
+        const AGGSTAT_INT           len,
         const AGGSTAT_FLT           par)
 {
-  uint64_t    idx;
+  AGGSTAT_INT idx;
   AGGSTAT_FLT max;
 
   // Ignore the parameter.
@@ -176,7 +176,7 @@ run_max(      AGGSTAT_FLT *restrict out,
 static bool
 run_avg(      AGGSTAT_FLT *restrict out,
         const AGGSTAT_FLT *restrict arr,
-        const uint64_t              len,
+        const AGGSTAT_INT           len,
         const AGGSTAT_FLT           par)
 {
   AGGSTAT_FLT sum;
@@ -202,12 +202,12 @@ run_avg(      AGGSTAT_FLT *restrict out,
 static bool
 run_var(      AGGSTAT_FLT *restrict out,
         const AGGSTAT_FLT *restrict arr,
-        const uint64_t              len,
+        const AGGSTAT_INT           len,
         const AGGSTAT_FLT           par)
 {
   AGGSTAT_FLT avg;
   AGGSTAT_FLT var;
-  uint64_t    idx;
+  AGGSTAT_INT idx;
 
   if (len == 0) {
     return false;
@@ -239,7 +239,7 @@ run_var(      AGGSTAT_FLT *restrict out,
 static bool
 run_dev(      AGGSTAT_FLT *restrict out,
         const AGGSTAT_FLT *restrict arr,
-        const uint64_t              len,
+        const AGGSTAT_INT           len,
         const AGGSTAT_FLT           par)
 {
   AGGSTAT_FLT var;
@@ -263,10 +263,10 @@ run_dev(      AGGSTAT_FLT *restrict out,
 static bool
 run_skw(      AGGSTAT_FLT *restrict out,
         const AGGSTAT_FLT *restrict arr,
-        const uint64_t              len,
+        const AGGSTAT_INT           len,
         const AGGSTAT_FLT           par)
 {
-  uint64_t    idx;
+  AGGSTAT_INT idx;
   AGGSTAT_FLT avg;
   AGGSTAT_FLT dev;
   AGGSTAT_FLT skw;
@@ -298,10 +298,10 @@ run_skw(      AGGSTAT_FLT *restrict out,
 static bool
 run_krt(      AGGSTAT_FLT *restrict out,
         const AGGSTAT_FLT *restrict arr,
-        const uint64_t              len,
+        const AGGSTAT_INT           len,
         const AGGSTAT_FLT           par)
 {
-  uint64_t    idx;
+  AGGSTAT_INT idx;
   AGGSTAT_FLT avg;
   AGGSTAT_FLT dev;
   AGGSTAT_FLT krt;
@@ -353,10 +353,10 @@ qnt_cmp(const void* a, const void* b)
 static bool
 run_qnt(      AGGSTAT_FLT *restrict out,
         const AGGSTAT_FLT *restrict arr,
-        const uint64_t              len,
+        const AGGSTAT_INT           len,
         const AGGSTAT_FLT           par)
 {
-  uint64_t    idx;
+  AGGSTAT_INT idx;
   AGGSTAT_FLT inp;
   AGGSTAT_FLT frp;
 
@@ -376,7 +376,7 @@ run_qnt(      AGGSTAT_FLT *restrict out,
   // Select the appropriate field. This is achieved by finding the precise decimal index, followed
   // by decomposition of the number into the integral and fractional parts.
   frp = AGGSTAT_MODF((len - 1) * par, &inp);
-  idx = (uint64_t)inp;
+  idx = (AGGSTAT_INT)inp;
 
   // Perform linear interpolation between the two candidate values. The first of the values
   // corresponds to the integral part, whereas the parameter for the linear interpolation is the
@@ -400,7 +400,7 @@ run_qnt(      AGGSTAT_FLT *restrict out,
 static bool
 run_med(      AGGSTAT_FLT *restrict out,
         const AGGSTAT_FLT *restrict arr,
-        const uint64_t              len,
+        const AGGSTAT_INT           len,
         const AGGSTAT_FLT           par)
 {
   (void)par;
@@ -408,7 +408,7 @@ run_med(      AGGSTAT_FLT *restrict out,
 }
 
 /// Function table for push_* functions based on ag_typ.
-static bool (*run_fnc[])(AGGSTAT_FLT*, const AGGSTAT_FLT*, const uint64_t, const AGGSTAT_FLT) = {
+static bool (*run_fnc[])(AGGSTAT_FLT*, const AGGSTAT_FLT*, const AGGSTAT_INT, const AGGSTAT_FLT) = {
   NULL,
   run_fst,
   run_lst,
@@ -436,7 +436,7 @@ static bool (*run_fnc[])(AGGSTAT_FLT*, const AGGSTAT_FLT*, const uint64_t, const
 bool
 aggstat_run(      AGGSTAT_FLT *restrict val,
             const AGGSTAT_FLT *restrict arr,
-            const uint64_t              len,
+            const AGGSTAT_INT           len,
             const uint8_t               fnc,
             const AGGSTAT_FLT           par)
 {
