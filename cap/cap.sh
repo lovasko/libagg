@@ -19,6 +19,10 @@ REPEAT=1000
 SCALE=100.0
 OFFSET=0.0
 
+# Execute the testing for a selected aggregate function.
+# param 1: floating-point bit width
+# param 2: aggregate function name (fst, lst, ...)
+# param 3: aggregate function argument
 run_for_func() {
   echo -n "$2 "
   ./cap_$1 -f$2 -p$3 -s${SCALE} -o${OFFSET} -r${REPEAT} -l10
@@ -33,6 +37,8 @@ run_for_func() {
   echo
 }
 
+# Execute all error detections for a particular bit width configuration.
+# param 1: floating-point bit width
 run_for_bits() {
   run_for_func $1 fst 0.0  > "$1_fst" &
   run_for_func $1 lst 0.0  > "$1_lst" &
