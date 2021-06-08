@@ -36,7 +36,7 @@ fill_array(      AGGSTAT_FLT* arr,
   uintmax_t   idx;
   AGGSTAT_FLT val;
 
-  for (idx = 0; idx < len; idx++) {
+  for (idx = 0; idx < len; idx += 1) {
     val = (AGGSTAT_FLT)rand() / (AGGSTAT_FLT)RAND_MAX * mul + off;
     arr[idx] = val;
   }
@@ -58,7 +58,7 @@ compute_online(AGGSTAT_FLT* arr, const uintmax_t len, const uint8_t fnc, const A
 
   // Push all values into the aggregate function that computes the estimate.
   aggstat_new(&agg, fnc, par);
-  for (idx = 0; idx < len; idx++) {
+  for (idx = 0; idx < len; idx += 1) {
     aggstat_put(&agg, arr[idx]);
   }
 
@@ -238,7 +238,7 @@ run_comparisons(AGGSTAT_FLT* arr, struct settings* stg)
   
   // Repeatedly generate a new array and compute both values.
   max = AGGSTAT_NUM(0, 0, +, 0);
-  for (idx = 0; idx < stg->s_rep; idx++) {
+  for (idx = 0; idx < stg->s_rep; idx += 1) {
     // Prepare the array and clear any exceptions that might have been caused
     // by the random number generation.
     fill_array(arr, stg->s_len, stg->s_scl, stg->s_off);

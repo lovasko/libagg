@@ -310,7 +310,7 @@ put_qnt(struct aggstat* agg, const AGGSTAT_FLT inp)
   // Perform a sorted insert of the first 5 elements.
   if (agg->ag_cnt[4] < 4) {
     agg->ag_val[agg->ag_cnt[4]] = inp;
-    agg->ag_cnt[4]++;
+    agg->ag_cnt[4] += 1;
 
     return;
   }
@@ -348,7 +348,7 @@ put_qnt(struct aggstat* agg, const AGGSTAT_FLT inp)
   agg->ag_cnt[1] += inc[0];
   agg->ag_cnt[2] += inc[0] || inc[1];
   agg->ag_cnt[3] += inc[0] || inc[1] || inc[2];
-  agg->ag_cnt[4]++;
+  agg->ag_cnt[4] += 1;
 
   // Adjust minimum and maximum.
   agg->ag_val[0] = AGGSTAT_FMIN(agg->ag_val[0], inp);
@@ -406,5 +406,5 @@ void
 aggstat_put(struct aggstat* agg, const AGGSTAT_FLT inp)
 {
   put_fnc[agg->ag_fnc](agg, inp);
-  agg->ag_cnt[0]++;
+  agg->ag_cnt[0] += 1;
 }

@@ -75,14 +75,14 @@ exec(      uint64_t*    onc,
   uint64_t       now[3];
 
   // Populate the array.
-  for (run = 0; run < len; run++) {
+  for (run = 0; run < len; run += 1) {
     arr[run] = random_number();
   }
 
   // Run the on-line algorithm.
   now[0] = time_now();
   aggstat_new(&agg, fnc, par);
-  for (run = 0; run < len; run++) {
+  for (run = 0; run < len; run += 1) {
     aggstat_put(&agg, arr[run]);
   }
   ret[0] = aggstat_get(&agg, &val[0]);
@@ -137,7 +137,7 @@ test(bool* res, const uint8_t fnc, const AGGSTAT_FLT par)
 
   // Run the test with various input sizes.
   len = 10;
-  for (idx = 0; idx < TEST_LEN; idx++) {
+  for (idx = 0; idx < TEST_LEN; idx += 1) {
     (void)printf("%*" PRIu64 " -> ", 9, len);
 
     // Allocate the array.
@@ -149,7 +149,7 @@ test(bool* res, const uint8_t fnc, const AGGSTAT_FLT par)
 
     // Run each test multiple times to ensure that it satisfies the margin of
     // error under various inputs.
-    for (ctr = 0; ctr < TEST_TRY; ctr++) {
+    for (ctr = 0; ctr < TEST_TRY; ctr += 1) {
       ret = exec(&onc, &ofc, arr, len, fnc, idx, par);
       if (ret == false) {
         printf("\n");

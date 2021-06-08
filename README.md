@@ -73,7 +73,7 @@ uint8_t        idx;
 
 agg_new(&agg, AGG_FNC_QTL, 0.99);
 
-for (idx = 0; idx < 32; idx++) {
+for (idx = 0; idx < 32; idx += 1) {
   num = get_number();
   agg_put(&agg, num);
 }
@@ -89,7 +89,7 @@ double  var;
 bool    ret;
 uint8_t idx;
 
-for (idx = 0; idx < 32; idx++) {
+for (idx = 0; idx < 32; idx += 1) {
   num[idx] = get_number();
 }
 

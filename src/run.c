@@ -95,7 +95,7 @@ run_sum(      AGGSTAT_FLT *restrict out,
   (void)par;
 
   sum = AGGSTAT_0_0;
-  for (idx = 0; idx < len; idx++) {
+  for (idx = 0; idx < len; idx += 1) {
     sum += arr[idx];
   }
 
@@ -126,7 +126,7 @@ run_min(      AGGSTAT_FLT *restrict out,
   }
 
   min = arr[0];
-  for (idx = 1; idx < len; idx++) {
+  for (idx = 1; idx < len; idx += 1) {
     min = AGGSTAT_FMIN(min, arr[idx]);
   }
 
@@ -158,7 +158,7 @@ run_max(      AGGSTAT_FLT *restrict out,
   }
 
   max = arr[0];
-  for (idx = 1; idx < len; idx++) {
+  for (idx = 1; idx < len; idx += 1) {
     max = AGGSTAT_FMAX(max, arr[idx]);
   }
 
@@ -220,7 +220,7 @@ run_var(      AGGSTAT_FLT *restrict out,
 
   (void)run_avg(&avg, arr, len, par);
   var = AGGSTAT_0_0;
-  for (idx = 0; idx < len; idx++) {
+  for (idx = 0; idx < len; idx += 1) {
     var += AGGSTAT_POW(arr[idx] - avg, AGGSTAT_2_0);
   }
   var /= (AGGSTAT_FLT)len - AGGSTAT_1_0;
@@ -279,7 +279,7 @@ run_skw(      AGGSTAT_FLT *restrict out,
   (void)run_dev(&dev, arr, len, par);
 
   skw = AGGSTAT_0_0;
-  for (idx = 0; idx < len; idx++) {
+  for (idx = 0; idx < len; idx += 1) {
     skw += AGGSTAT_POW(arr[idx] - avg, AGGSTAT_3_0) / (AGGSTAT_FLT)len;
   }
   skw /= AGGSTAT_POW(dev, AGGSTAT_3_0);
@@ -314,7 +314,7 @@ run_krt(      AGGSTAT_FLT *restrict out,
   (void)run_dev(&dev, arr, len, par);
 
   krt = AGGSTAT_0_0;
-  for (idx = 0; idx < len; idx++) {
+  for (idx = 0; idx < len; idx += 1) {
     krt += AGGSTAT_POW(arr[idx] - avg, AGGSTAT_4_0) / (AGGSTAT_FLT)len;
   }
   krt /= AGGSTAT_POW(dev, AGGSTAT_4_0);
