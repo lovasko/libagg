@@ -167,6 +167,12 @@ test(bool* res, const uint8_t fnc, const AGGSTAT_FLT par)
 
     // Increase the array length.
     len = len * 10;
+    
+    // Ensure that we stop in case the integer width is not sufficient to hold
+    // the new input length.
+    if (len > AGGSTAT_INT_MAX) {
+      break;
+    }
   }
 
   (void)printf("\n");
