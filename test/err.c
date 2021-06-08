@@ -62,13 +62,13 @@ static bool
 exec(      uint64_t*    onc,
            uint64_t*    ofc,
            AGGSTAT_FLT* arr,
-     const uint64_t     len,
+     const AGGSTAT_INT  len,
      const uint8_t      fnc,
-     const uint64_t     idx,
+     const AGGSTAT_INT  idx,
      const AGGSTAT_FLT  par)
 {
   struct aggstat agg;
-  uint64_t       run;
+  AGGSTAT_INT    run;
   AGGSTAT_FLT    val[2];
   AGGSTAT_FLT    dif;
   bool           ret[2];
@@ -182,6 +182,8 @@ main(void)
   bool res;
 
   res = true;
+
+  (void)printf(" *** FLT=%d INT=%d *** \n\n", AGGSTAT_FLT_BIT, AGGSTAT_INT_BIT);
 
   (void)printf("fst\n");
   test(&res, AGGSTAT_FNC_FST, AGGSTAT_0_0);
