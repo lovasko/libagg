@@ -91,19 +91,70 @@ parse_function(const char* str)
 {
   int ret;
 
-  ret = strcmp(str, "fst"); if (ret == 0) { return AGG_FNC_FST; }
-  ret = strcmp(str, "lst"); if (ret == 0) { return AGG_FNC_LST; }
-  ret = strcmp(str, "cnt"); if (ret == 0) { return AGG_FNC_CNT; }
-  ret = strcmp(str, "sum"); if (ret == 0) { return AGG_FNC_SUM; }
-  ret = strcmp(str, "min"); if (ret == 0) { return AGG_FNC_MIN; }
-  ret = strcmp(str, "max"); if (ret == 0) { return AGG_FNC_MAX; }
-  ret = strcmp(str, "avg"); if (ret == 0) { return AGG_FNC_AVG; }
-  ret = strcmp(str, "var"); if (ret == 0) { return AGG_FNC_VAR; }
-  ret = strcmp(str, "dev"); if (ret == 0) { return AGG_FNC_DEV; }
-  ret = strcmp(str, "skw"); if (ret == 0) { return AGG_FNC_SKW; }
-  ret = strcmp(str, "krt"); if (ret == 0) { return AGG_FNC_KRT; }
-  ret = strcmp(str, "qnt"); if (ret == 0) { return AGG_FNC_QNT; }
-  ret = strcmp(str, "med"); if (ret == 0) { return AGG_FNC_MED; }
+  ret = strcmp(str, "fst");
+  if (ret == 0) {
+    return AGGSTAT_FNC_FST;
+  }
+
+  ret = strcmp(str, "lst");
+  if (ret == 0) {
+    return AGGSTAT_FNC_LST;
+  }
+
+  ret = strcmp(str, "cnt");
+  if (ret == 0) {
+    return AGGSTAT_FNC_CNT;
+  }
+
+  ret = strcmp(str, "sum");
+  if (ret == 0) {
+    return AGGSTAT_FNC_SUM;
+  }
+
+  ret = strcmp(str, "min");
+  if (ret == 0) {
+    return AGGSTAT_FNC_MIN;
+  }
+
+  ret = strcmp(str, "max");
+  if (ret == 0) {
+    return AGGSTAT_FNC_MAX;
+  }
+
+  ret = strcmp(str, "avg");
+  if (ret == 0) {
+    return AGGSTAT_FNC_AVG;
+  }
+
+  ret = strcmp(str, "var");
+  if (ret == 0) {
+    return AGGSTAT_FNC_VAR;
+  }
+
+  ret = strcmp(str, "dev");
+  if (ret == 0) {
+    return AGGSTAT_FNC_DEV;
+  }
+
+  ret = strcmp(str, "skw");
+  if (ret == 0) {
+    return AGGSTAT_FNC_SKW;
+  }
+
+  ret = strcmp(str, "krt");
+  if (ret == 0) {
+    return AGGSTAT_FNC_KRT;
+  }
+
+  ret = strcmp(str, "qnt");
+  if (ret == 0) {
+    return AGGSTAT_FNC_QNT;
+  }
+
+  ret = strcmp(str, "med");
+  if (ret == 0) {
+    return AGGSTAT_FNC_MED;
+  }
 
   return 0;
 }
