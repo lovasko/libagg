@@ -13,7 +13,7 @@
 
 /// Settings.
 struct settings {
-  uintmax_t    s_len; ///< Length of the stream.
+  AGGSTAT_INT  s_len; ///< Length of the stream.
   uintmax_t    s_rep; ///< Repetitions of the test measurements.
   AGGSTAT_FLT  s_scl; ///< Scale of the values. 
   AGGSTAT_FLT  s_off; ///< Offset of the values.
@@ -29,11 +29,11 @@ struct settings {
 /// @param[in] off value offset
 static void
 fill_array(      AGGSTAT_FLT* arr,
-           const uintmax_t    len,
+           const AGGSTAT_INT  len,
            const AGGSTAT_FLT  mul,
            const AGGSTAT_FLT  off)
 {
-  uintmax_t   idx;
+  AGGSTAT_INT idx;
   AGGSTAT_FLT val;
 
   for (idx = 0; idx < len; idx += 1) {
@@ -50,10 +50,10 @@ fill_array(      AGGSTAT_FLT* arr,
 /// @param[in] fnc aggregate function
 /// @param[in] par parameter of the aggregate function
 static AGGSTAT_FLT
-compute_online(AGGSTAT_FLT* arr, const uintmax_t len, const uint8_t fnc, const AGGSTAT_FLT par)
+compute_online(AGGSTAT_FLT* arr, const AGGSTAT_INT len, const uint8_t fnc, const AGGSTAT_FLT par)
 {
   struct aggstat agg;
-  uintmax_t      idx;
+  AGGSTAT_INT    idx;
   AGGSTAT_FLT    ret;
 
   // Push all values into the aggregate function that computes the estimate.
@@ -74,7 +74,7 @@ compute_online(AGGSTAT_FLT* arr, const uintmax_t len, const uint8_t fnc, const A
 /// @param[in] fnc aggregate function
 /// @param[in] par parameter of the aggregate function
 static AGGSTAT_FLT
-compute_offline(AGGSTAT_FLT* arr, const uintmax_t len, const uint8_t fnc, const AGGSTAT_FLT par)
+compute_offline(AGGSTAT_FLT* arr, const AGGSTAT_INT len, const uint8_t fnc, const AGGSTAT_FLT par)
 {
   AGGSTAT_FLT ret;
 
@@ -117,8 +117,9 @@ parse_function(const char* str)
 static bool
 parse_settings(struct settings* stg, int argc, char* argv[])
 {
-  int opt;
-  int ret;
+  int       opt;
+  int       ret;
+  uintmax_t val;
 
   while (true) {
     opt = getopt(argc, argv, "f:l:o:p:r:s:");
@@ -137,28 +138,35 @@ parse_settings(struct settings* stg, int argc, char* argv[])
 
     // Length of the stream of values.
     if (opt == 'l') {
-      stg->s_len = strtoumax(optarg, NULL, 10);
-      if (stg->s_len == 0 && errno != 0) {
+      val = strtoumax(optarg, NULL, 10);
+      if (val == 0 && errno != 0) {
         fprintf(stderr, "unable to parse the stream length from '%s'\n", optarg);
         return false;	
       }
+
+      if (val > AGGSTAT_INT_MAX) {
+        (void)fprintf(stderr, "value too large for AGGSTAT_INT\n");
+        return false;
+      }
+
+      stg->s_len = (AGGSTAT_INT)val;
     }
 
     // Offset of the tested values.
     if (opt == 'o') {
-      ret = sscanf(optarg, AGG_FMT, &stg->s_off);
+      ret = sscanf(optarg, AGGSTAT_FMT, &stg->s_off);
       if (ret != 1) {
         fprintf(stderr, "unable to parse offset from '%s'\n", optarg);
-	return false;
+        return false;
       }
     }
 
     // Parameter of the aggregate function.
     if (opt == 'p') {
-      ret = sscanf(optarg, AGG_FMT, &stg->s_par);
+      ret = sscanf(optarg, AGGSTAT_FMT, &stg->s_par);
       if (ret != 1) {
         fprintf(stderr, "unable to parse parameter from '%s'\n", optarg);
-	return false;
+        return false;
       }
     }
 
@@ -167,16 +175,16 @@ parse_settings(struct settings* stg, int argc, char* argv[])
       stg->s_rep = strtoumax(optarg, NULL, 10);
       if (stg->s_rep == 0 && errno != 0) {
         fprintf(stderr, "unable to parse the repetition count from '%s'\n", optarg);
-	return false;
+        return false;
       }
     }
 
     // Scale of the tested values.
     if (opt == 's') {
-      ret = sscanf(optarg, AGG_FMT, &stg->s_scl);
+      ret = sscanf(optarg, AGGSTAT_FMT, &stg->s_scl);
       if (ret != 1) {
         fprintf(stderr, "unable to parse scale from '%s'\n", optarg);
-	return false;
+        return false;
       }
     }
 
@@ -219,7 +227,7 @@ read_exceptions(bool* ovr, bool* udr, bool* ine)
 static void
 run_comparisons(AGGSTAT_FLT* arr, struct settings* stg)
 {
-  uintmax_t   idx;
+  uintmax_t   rep;
   AGGSTAT_FLT max;
   AGGSTAT_FLT dif;
   AGGSTAT_FLT val[2];
@@ -238,7 +246,7 @@ run_comparisons(AGGSTAT_FLT* arr, struct settings* stg)
   
   // Repeatedly generate a new array and compute both values.
   max = AGGSTAT_NUM(0, 0, +, 0);
-  for (idx = 0; idx < stg->s_rep; idx += 1) {
+  for (rep = 0; rep < stg->s_rep; rep += 1) {
     // Prepare the array and clear any exceptions that might have been caused
     // by the random number generation.
     fill_array(arr, stg->s_len, stg->s_scl, stg->s_off);
